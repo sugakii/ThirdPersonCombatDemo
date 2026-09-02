@@ -1,0 +1,68 @@
+# ================================
+# Unity generated directories
+# ================================
+
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# ================================
+# Build output
+# ================================
+
+[Bb]uild/
+[Bb]uilds/
+
+# ================================
+# IDE / editor generated files
+# ================================
+
+.vs/
+.vscode/
+.idea/
+
+*.csproj
+*.sln
+*.slnx
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# ================================
+# Unity / IDE temporary files
+# ================================
+
+*.tmp
+*.bak
+*.orig
+
+# ================================
+# Plastic SCM local files
+# ================================
+
+.plastic/
+ignore.conf
+
+# ================================
+# Operating system files
+# ================================
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ================================
+# Downloaded source asset packages
+# ================================
+
+MaterialPackage/
