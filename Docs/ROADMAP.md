@@ -2,6 +2,7 @@
 
 > 最后复核：2026-09-02  
 > 项目周期：2026-09-02 至 2026-09-30  
+> 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
 > 固定节奏：约 70% 开发学习，30% 测试、复盘、文档和 Git  
 > 项目目标：在 2026-09-30 前完成可玩、可测试、可解释的第三人称战斗 Vertical Slice
@@ -24,13 +25,13 @@
 - Unity `6000.5.6f1`，URP `17.5.0`。
 - 已安装 Input System `1.20.0`、AI Navigation `2.0.14`、Test Framework `1.7.0`。
 - `ProjectVersion.txt` 已生成；旧计划中“尚未生成”的描述已失效。
-- Cinemachine 尚未安装。
+- Cinemachine `3.1.7` 已安装。
 - Unity Assistant / MCP Bridge `2.18.0-pre.2` 已安装；Codex MCP 已指向当前 Quaternius 项目并完成 54 个工具的连接验证。
 - `SampleScene` 只有 Main Camera、Directional Light、Global Volume。
-- 当前没有 Gameplay 代码、asmdef、自动化测试、Player/Enemy Prefab 或已导入素材。
+- 已建立 Runtime、EditMode Tests、PlayMode Tests 三份 asmdef；当前仍没有 Gameplay 代码、自动化测试、Player/Enemy Prefab 或已导入素材。
 - 默认 Input Actions 已有 Move、Look、Attack、Sprint，但没有 Skill 和 Restart。
 - `MaterialPackage/` 有 6 个 Standard 包、1,213 个文件、233 个 FBX；正式项目只选择性导入审计清单。
-- 当前没有 Git 仓库或 Unity `.gitignore`；`ignore.conf` 是 Plastic ignore，不能替代 Git ignore。
+- Git 仓库与 Unity `.gitignore` 已建立，工程基线与 Cinemachine 已分别提交。
 - Unity 当前正在运行 Quaternius；2026-09-02 已完成包解析与 Unity MCP 连接预检。
 
 ## 3. 每日工作制度
@@ -118,12 +119,12 @@
 
 ### 每日检查点
 
-- **9/2**：干净启动预检；Git、`.gitignore`、Docs 基线；目录与 asmdef；安装 Cinemachine。
-- **9/3**：选择性导入、URP 材质、Rig/Avatar、动画预览、庭院 Blockout。
-- **9/4**：Input Actions、InputReader、基础 CharacterController 移动。
-- **9/5**：Cinemachine、镜头空间移动、重力、转向、Sprint。
-- **9/6**：Blend Tree、Player Prefab、楼梯与障碍碰撞。
-- **9/7**：停止扩功能；测试、修复、重构、Docs 与 Week 1 标签。
+- **Learning Day 1｜9/2**：干净启动预检；Git、`.gitignore`、Docs 基线；目录与 asmdef；安装 Cinemachine。
+- **Learning Day 2｜9/3**：选择性导入、URP 材质、Rig/Avatar、动画预览、庭院 Blockout。
+- **Learning Day 3｜9/4**：Input Actions、InputReader、基础 CharacterController 移动。
+- **Learning Day 4｜9/5**：Cinemachine、镜头空间移动、重力、转向、Sprint。
+- **Learning Day 5｜9/6**：Blend Tree、Player Prefab、楼梯与障碍碰撞。
+- **Learning Day 6｜9/7**：停止扩功能；测试、修复、重构、Docs 与 Week 1 标签。
 
 若 Package Manager 受网络影响，最多排查 30 分钟；可先用静态 Camera 推进 Input/Motor，Cinemachine 最迟在 Week 1 验收前补齐。`com.unity.ai.assistant` 当前承担 Unity MCP Bridge，使用 MCP 期间保留；只有 `com.unity.pipeline` 再次确认阻断解析时才移除。
 
@@ -192,13 +193,13 @@
 
 ### 每日检查点
 
-- **9/8**：Health 失败测试、DamageInfo、IDamageable、Health。
-- **9/9**：Player/Enemy 血条与 Presenter。
-- **9/10**：AttackDefinition、攻击动画与 Combo 状态。
-- **9/11**：输入缓存、伤害窗口与命中去重。
-- **9/12**：Puglin Prefab、NavMesh 与 Enemy 状态机。
-- **9/13**：3 Enemy 集成、AI/Combat 边界测试。
-- **9/14**：停止扩功能；回归、修复、架构复核、Docs 与 Week 2 标签。
+- **Learning Day 7｜9/8**：Health 失败测试、DamageInfo、IDamageable、Health。
+- **Learning Day 8｜9/9**：Player/Enemy 血条与 Presenter。
+- **Learning Day 9｜9/10**：AttackDefinition、攻击动画与 Combo 状态。
+- **Learning Day 10｜9/11**：输入缓存、伤害窗口与命中去重。
+- **Learning Day 11｜9/12**：Puglin Prefab、NavMesh 与 Enemy 状态机。
+- **Learning Day 12｜9/13**：3 Enemy 集成、AI/Combat 边界测试。
+- **Learning Day 13｜9/14**：停止扩功能；回归、修复、架构复核、Docs 与 Week 2 标签。
 
 ## 6. Week 3：火焰突进与完整游戏循环（9/15–9/21）
 
@@ -266,13 +267,13 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 
 ### 每日检查点
 
-- **9/15**：SkillDefinition、冷却状态与失败测试。
-- **9/16**：由 PlayerMotor 执行 Dash 位移与障碍处理。
-- **9/17**：技能伤害、多目标与单次释放去重。
-- **9/18**：ParticleSystem、TrailRenderer、对象池、冷却 UI。
-- **9/19**：GameFlow、胜负、重开、同帧死亡规则。
-- **9/20**：3 Enemy 压力测试与完整闭环。
-- **9/21**：停止扩功能；回归、修复、Docs 与 Week 3 标签。
+- **Learning Day 14｜9/15**：SkillDefinition、冷却状态与失败测试。
+- **Learning Day 15｜9/16**：由 PlayerMotor 执行 Dash 位移与障碍处理。
+- **Learning Day 16｜9/17**：技能伤害、多目标与单次释放去重。
+- **Learning Day 17｜9/18**：ParticleSystem、TrailRenderer、对象池、冷却 UI。
+- **Learning Day 18｜9/19**：GameFlow、胜负、重开、同帧死亡规则。
+- **Learning Day 19｜9/20**：3 Enemy 压力测试与完整闭环。
+- **Learning Day 20｜9/21**：停止扩功能；回归、修复、Docs 与 Week 3 标签。
 
 ## 7. Week 4：质量、作品集与发布（9/22–9/28）
 
@@ -327,17 +328,17 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 
 ### 每日检查点
 
-- **9/22**：架构、依赖、空引用、生命周期审查。
-- **9/23**：完整测试会与 Bug 分级。
-- **9/24**：P0/P1 修复、Profiler、资源优化。
-- **9/25**：Windows Build 与 Build 内专项测试。
-- **9/26**：README、架构图、测试报告、许可说明。
-- **9/27**：演示视频、简历描述、源码讲解。
-- **9/28**：停止所有新增内容；最终回归、Docs 同步、RC 标签。
+- **Learning Day 21｜9/22**：架构、依赖、空引用、生命周期审查。
+- **Learning Day 22｜9/23**：完整测试会与 Bug 分级。
+- **Learning Day 23｜9/24**：P0/P1 修复、Profiler、资源优化。
+- **Learning Day 24｜9/25**：Windows Build 与 Build 内专项测试。
+- **Learning Day 25｜9/26**：README、架构图、测试报告、许可说明。
+- **Learning Day 26｜9/27**：演示视频、简历描述、源码讲解。
+- **Learning Day 27｜9/28**：停止所有新增内容；最终回归、Docs 同步、RC 标签。
 
 ## 8. 最终交付（9/29–9/30）
 
-### 9/29
+### Learning Day 28｜9/29
 
 - 在 Windows Build 中连续完成 3 次完整游戏循环。
 - 复核全部测试用例和已修复 Bug 的 Regression。
@@ -345,7 +346,7 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 - 只允许修复阻断投递的 P0/P1，不再调整表现或范围。
 - 生成最终 Release Candidate。
 
-### 9/30
+### Learning Day 29｜9/30
 
 - 完成简历项目描述、作品链接、视频链接和代码仓库说明。
 - 进行一次 U3D 架构讲解与游戏测试模拟面试。
@@ -398,7 +399,7 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 每天开始：
 
 1. 读取 `PROJECT_STATUS.md`。
-2. 核对 Current Day、Known Bugs 和 Next Task 是否符合工程事实。
+2. 核对 Current Learning Day、Known Bugs 和 Next Task 是否符合工程事实。
 
 每天结束：
 

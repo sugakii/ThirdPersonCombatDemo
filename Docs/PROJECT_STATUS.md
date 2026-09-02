@@ -1,13 +1,13 @@
 # Current Project Status
 
 > Last Updated：2026-09-02  
-> Current Day：Day 2  
-> Current Phase：Week 1 / 工程基线与素材审计  
+> Current Learning Day：Learning Day 1（2026-09-02）
+> Current Phase：Week 1 / Learning Day 1 已验收
 > Source of Truth：Unity 工程 + Git + Docs
 
 ## Status Summary
 
-工程已成功创建为 Unity 6 URP 空模板，素材审计与四周计划已完成。Unity MCP 已重新配置并与当前 Quaternius Editor 完成端到端连接验证。**Gameplay 尚未开始实现。** 当前首要工作不是继续增加设计，而是建立可追踪的 Git/Docs 工程基线。
+Learning Day 1 的工程基线任务已通过验收：Unity 可正常编译，Git、`.gitignore`、Docs、目标目录、三份 asmdef 与 Cinemachine 均已落地，Unity MCP 已连接当前 Quaternius Editor。**Gameplay 尚未开始实现。** 下一任务进入 Learning Day 2 的选择性素材导入与 Unity 内验证。
 
 ## Implemented
 
@@ -28,14 +28,19 @@
 - 2026-09-02 已在运行中的 Quaternius Editor 完成 Package resolve；Assistant/MCP 包已进入 `packages-lock.json`。
 - Codex `unityMCP` 配置已从 Tiny Swords 切换到 `D:\Unity Project\Quaternius`。
 - Unity MCP Named Pipe 握手成功：`unity-mcp 2.0`，发现 54 个 Unity 工具，服务状态为 `connected=true`。
+- Git `main` 当前工作区干净；基线提交 `fd3b1f6`，Cinemachine 提交 `fc2eb58`。
+- Unity `.gitignore` 已排除生成目录、Build、IDE 文件、`MaterialPackage/` 等非仓库内容。
+- 已建立 `Game.Runtime`、`Game.Tests.EditMode`、`Game.Tests.PlayMode` 三份 asmdef。
+- Cinemachine `3.1.7` 已安装并写入 Package lock。
+- Learning Day 1 验收时 Unity Console 为 0 Error、0 Warning。
 
 ## Not Implemented
 
 - 尚未把选定 Quaternius 素材导入 `Assets/`。
 - 尚未生成或验证 Imp/Puglin 的 Unity Humanoid Avatar。
 - 没有 Player/Enemy Prefab、Material、Animator Controller 或正式场景。
-- 没有 `_Game`、`ThirdParty`、Runtime、Data、Prefabs、Tests 等目标目录。
-- 没有 Gameplay asmdef 或自动化测试。
+- 目标目录与测试目录已建立，但尚未填入 Gameplay 内容。
+- Gameplay 与 Tests asmdef 已建立，但尚未编写自动化测试。
 - 没有 `PlayerInputReader`、`PlayerMotor`、CharacterController 角色或第三人称镜头。
 - 没有 Combat、Health、Enemy AI、Skill、UI、GameFlow 或 VFX 实现。
 - 没有 NavMesh 烘焙数据。
@@ -54,6 +59,15 @@ SampleScene
 
 Assembly-CSharp
 └─ Unity 模板 Readme.cs
+
+Game.Runtime
+└─ Gameplay Runtime（当前为空）
+
+Game.Tests.EditMode
+└─ 引用 Game.Runtime（当前无测试）
+
+Game.Tests.PlayMode
+└─ 引用 Game.Runtime（当前无测试）
 ```
 
 目标架构尚未落地，详见 [`PROJECT_ARCHITECTURE.md`](PROJECT_ARCHITECTURE.md)。
@@ -62,6 +76,9 @@ Assembly-CSharp
 
 - `Assets/Scenes/SampleScene.unity`
 - `Assets/InputSystem_Actions.inputactions`
+- `Assets/_Game/Runtime/Game.Runtime.asmdef`
+- `Assets/_Game/Tests/EditMode/Game.Tests.EditMode.asmdef`
+- `Assets/_Game/Tests/PlayMode/Game.Tests.PlayMode.asmdef`
 - `Assets/TutorialInfo/Scripts/Readme.cs`
 - `Assets/TutorialInfo/Scripts/Editor/ReadmeEditor.cs`
 - `Packages/manifest.json`
@@ -84,7 +101,7 @@ Assembly-CSharp
 
 ## Package Status
 
-- Cinemachine：未安装，是第一周第三人称镜头任务的待办依赖。
+- Cinemachine `3.1.7`：已安装并完成 Package resolve。
 - `com.unity.ai.assistant 2.18.0-pre.2`：已安装，作为 Unity MCP Editor Bridge 的开发工具依赖。
 - 历史日志曾记录 Package Manager `ECONNRESET`；之后 Pipeline 已成功解析并参与编译，因此不能把它写成当前已确认阻塞。
 - Unity 当前正以 Quaternius 项目运行；包解析和 MCP 连接验证已完成。
@@ -96,7 +113,7 @@ Assembly-CSharp
 - Unity Editor Bridge：由 `com.unity.ai.assistant` 启动，使用本机 Named Pipe 连接。
 - 连接授权：已在 Unity 的 New MCP Connection 窗口允许 Codex 访问当前项目。
 - 验证结果：当前 Codex 任务已实际注册 54 个 `unityMCP` 工具；已通过 `Unity_GetProjectData` 读取到 Quaternius 的 `Assets/_Game`、`Assets/ThirdParty/Quaternius` 和 URP Settings 目录。
-- Unity Console 联机检查结果：编译错误 `0`；现有 `1` 条 Pipeline 自动化模式提示，不阻断编辑器或 MCP 使用。
+- Unity Console 最新联机检查结果：`0 Error / 0 Warning`。
 
 ## Known Bugs
 
@@ -105,22 +122,19 @@ Assembly-CSharp
 
 ## Risks / Blockers
 
-- 当前没有 Git 仓库，也没有 Unity `.gitignore`；`ignore.conf` 是 Plastic ignore，不能替代 Git 配置。
-- 当前文档目录在磁盘上的实际名称为小写 `docs/`；后续应统一为约定的 `Docs/` 大小写并由 Git 记录。
-- Cinemachine 尚未安装。
 - Skill 与 Restart Input Action 尚未添加。
 - `MaterialPackage/` 位于 `Assets/` 外；Avatar、材质、朝向和动画重定向尚未在 Unity 中验证。
 - Bestiary 使用的 QAL Standard 许可不允许公开重新分发原始资产，Git 导入策略必须先确定。
 
 ## Next Task
 
-**唯一下一任务：建立版本控制与文档基线。**
+**Learning Day 2（2026-09-03）：选择性素材导入与 Unity 内验证。**
 
-1. 初始化 Git，并创建 Unity `.gitignore`。
-2. 统一 `Docs/` 目录大小写。
-3. 检查待提交文件，排除 `Library/`、`Temp/`、`Logs/`、`UserSettings/`、Build 输出、IDE 文件、根目录 `MaterialPackage/` 以及不得公开分发的 Bestiary 原始资产。
-4. 创建包含当前空模板、`Packages/`、`ProjectSettings/` 和四份 Docs 的基线提交。
-5. 完成后用实际 commit SHA 覆盖更新本文件，再开始 Cinemachine 与选择性素材导入。
+1. 严格按 `ASSET_AUDIT.md` 复制 Imp、动画和庭院所需文件，不整包导入。
+2. 配置红色 Imp 的 URP 材质、Humanoid Rig 与 Avatar。
+3. 在 Unity 中预览 Idle/Walk/Jog/Sprint 与选定战斗动画，记录重定向、朝向和循环属性。
+4. 搭建约 20×20m 庭院 Blockout，并配置基础碰撞。
+5. 将 Unity 内实测结果同步回 `ASSET_AUDIT.md` 与本文件。
 
 ## Update Rules
 
