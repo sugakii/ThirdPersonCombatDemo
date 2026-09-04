@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-04（验收归属 9/3）
+> 最后复核：2026-09-04（Learning Day 3；持久化已通过，保存后运行回归待确认）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
@@ -20,7 +20,7 @@
 
 ## 2. 当前工程基线
 
-9/4 实际扫描，按用户要求计入 9/3 成果：Imp 和 UAL1 已导入、Avatar 有效；InputReader 与镜头控制已有代码和场景绑定。动画状态机仍为空、正式材质尚待持久化、庭院/移动/测试未完成。Day 2 部分完成，详细证据与风险以 PROJECT_STATUS.md 为准。
+Day 3 实际复核：Idle 默认状态、独立 MI_Imp.mat、PlayerMotor 世界坐标移动/重力已实现；用户报告基础移动和碰撞测试通过。Unity Play 中存在 20×20m 地面、一面墙与校准胶囊，但磁盘场景已保存并核对一致，Day 3 最终收尾仅待重进 Play 回归。详细证据与风险以 PROJECT_STATUS.md 为准。
 
 工程基线已具备 Unity 6000.5.6f1、URP、Input System 1.20.0、Cinemachine 3.1.7、AI Navigation、Test Framework、Git 和三份 asmdef，无需重复安装或重新建立输入层。
 
@@ -118,8 +118,8 @@
 
 - **Learning Day 1｜9/2**：干净启动预检；Git、`.gitignore`、Docs 基线；目录与 asmdef；安装 Cinemachine。
 - **Learning Day 2｜9/3（部分完成）**：Imp/UAL1 导入、Avatar、输入读取和镜头原型；欠动画播放验证、材质持久化、庭院 Blockout。
-- **Learning Day 3｜9/4**：45 分钟动画链与 Idle；45 分钟共享材质、20×20m 基础体地面/墙与胶囊校准；60 分钟复用 MoveInput 实现基础移动/重力；45–60 分钟测试和记录。
-- **Learning Day 4｜9/5**：补齐镜头空间移动、转向、Sprint；确认 Walk/Jog/Sprint 循环和重定向；补全镜头运行回归。保留约 1 小时测试，不重新编写 InputReader。
+- **Learning Day 3｜9/4（功能阶段符合预期，持久化通过）**：Idle、独立材质、最小世界坐标 Motor 已实现；白盒与胶囊在 Play 内确认，用户已回归基本输入/碰撞。磁盘场景已同步；保存后运行回归待确认，暂不打最终通过标签。
+- **Learning Day 4｜9/5**：先用约 30 分钟完成 Day 3 保存后运行回归（场景持久化已通过）；60 分钟镜头空间移动/转向；40 分钟 Sprint；30 分钟 Walk/Jog/Sprint 循环与预览；50–60 分钟测试/Docs/Git。复用 InputReader，不提前做 Blend Tree。收尾超过 30 分钟时先保留镜头空间移动和测试，Sprint/动作预览顺延 Day 5，并减少障碍内容。
 - **Learning Day 5｜9/6**：Blend Tree、Player Prefab、楼梯斜坡和障碍碰撞；CameraController 移到 Runtime/Camera（保留 .meta）；输入采样/消费顺序和依赖保护仅做必要整理。时间不足先不导装饰模型。
 - **Learning Day 6｜9/7**：停止新增功能，执行至少 10 条移动/镜头用例和 2 个自动化测试，修复并回归；未满足门槛不打通过标签。
 

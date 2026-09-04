@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-04（验收归属 9/3）
+> 最后复核：2026-09-04（Day 3；保存后编辑态与磁盘核对一致）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -24,26 +24,31 @@
 
 ## 3. Current Architecture（实际状态）
 
+本节结合代码、此前 Play 快照与保存后编辑态/磁盘复核；场景配置已落盘，保存后的运行回归待确认。
+
 ```text
 PlayerInput (InputSystem_Actions / Player map)
 └─ PlayerInputReader [Player，同对象 GetComponent]
-   ├─ LookInput → CameraController [Player] → CameraTarget.rotation
-   │                                        → CinemachineCamera → Main Camera Brain
-   └─ MoveInput → 尚无 PlayerMotor 消费
+   ├─ LookInput → CameraController [Player] → CameraTarget.rotation → Cinemachine
+   └─ MoveInput → PlayerMotor [Player] → CharacterController.Move
+                                   世界 XZ 限幅移动 + 重力
 
 Player
-├─ CharacterController（尚无移动代码）
-├─ Animator（Controller 存在但空状态机，Avatar=null）
-├─ Imp（Y=180，独立 Animator 有有效 Avatar，但 Controller=null）
-└─ CameraTarget（0,1.5,0）
+├─ CharacterController（编辑态与磁盘 center=(0,1,0)）
+├─ Animator（编辑态与磁盘均已禁用）
+├─ PlayerMotor（源码存在，编辑态与磁盘均已挂载）
+├─ Imp（启用的 Animator + ImpAvatar + PlayerAnimator；Root Motion=false）
+└─ CameraTarget
+Ground_Blockout / Wall_Blockout（编辑态存在，已保存）
 ```
 
-- Runtime/Input 内已有 CameraController 和 PlayerInputReader，Game.Runtime 引用 Input System；两份 Tests asmdef 已建立，无测试代码。
-- InputReader 与 CameraController 的职责已分开；当前通过两个 Update 采样和消费，顺序及生命周期仍待验证。目录迁移安排 Day 5，不提前重新设计。
-- Imp 与 UAL1 已导入；Animator 播放链未完成，不能标成动画系统已实现。
-- 无 PlayerMotor、Combat、Health、Enemy AI、Skill、UI、GameFlow、Player Prefab、庭院或 NavMesh。
-- 本节为实测结构；下文 Target Architecture 和核心类型表仍是目标契约，并非全部已实现。
-- 实际路径保留为 Art/Charactors 与 Animations/Source，不为了匹配目录示意图擅自搬动素材。
+- PlayerMotor 的当前职责仅为世界坐标移动、斜向限幅与重力；尚不支持相机朝向、角色转向、Sprint 或技能。
+- PlayerAnimator 当前只有默认 Idle 状态，无 Blend Tree；MI_Imp.mat 已独立落盘，Play 中五个渲染器共用。
+- CameraController 暂留 Runtime/Input；Day 5 才迁移，保留 .meta GUID。InputReader、CameraController、Motor 均使用 Update，顺序与生命周期待回归。
+- Imp 的编辑态与磁盘 local rotation=(0,0,0)，不是旧文档的 Y=180；移动/转向的视觉朝向继续在 Day 4 回归。
+- Game.Runtime 引用 Input System；两份 Tests asmdef 已建立，无测试代码。
+- 无 Combat、Health、Enemy AI、Skill、UI、GameFlow、Player Prefab、楼梯或 NavMesh。
+- 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
 
@@ -215,7 +220,7 @@ Docs/
 
 ### ADR-001：CharacterController + In-Place 动画
 
-- **状态**：Accepted / 尚未实现。
+- **状态**：Accepted / 基础 Motor 与 Idle 已实现，场景持久化已核对，保存后运行回归待确认。
 - **决定**：Player 使用 CharacterController；只导入非 RM 动画；Gameplay 位移由代码控制。
 - **原因**：素材缺少完整八方向动画；代码位移更容易测试速度、碰撞、Dash 和异常状态。
 - **收益**：单一位移所有者、可预测、便于自动化测试。
