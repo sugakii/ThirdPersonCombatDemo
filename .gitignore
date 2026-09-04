@@ -66,3 +66,7 @@ Desktop.ini
 # ================================
 
 MaterialPackage/
+
+# Bestiary source assets: keep local, do not redistribute
+/Assets/_Game/Art/Charactors/Player/Model/*.fbx
+/Assets/_Game/Art/Charactors/Player/Textures/*.png
