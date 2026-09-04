@@ -384,6 +384,7 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 
 ### Git
 
+- 默认提交范围包含全部自有代码及对应 .meta、程序集配置、相关场景和文档，不再只给 Docs 提交指令；仍排除受限原始素材、凭据和生成文件。未验收的代码可作为明确标注的 WIP 保存，不等于功能通过。提供指令不等于自动执行 commit/push。
 - 9/2 初始化 Git，并创建 Unity `.gitignore`；现有 `ignore.conf` 不能代替。
 - 忽略 `Library/`、`Temp/`、`Logs/`、`UserSettings/`、Build 输出、IDE 文件、根目录 `MaterialPackage/` 和 Bestiary 原始模型/纹理。
 - 素材导入、代码功能、测试、Docs 分成可解释的小提交。
