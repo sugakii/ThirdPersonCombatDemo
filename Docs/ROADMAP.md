@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-02  
+> 最后复核：2026-09-04（验收归属 9/3）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
@@ -20,19 +20,9 @@
 
 ## 2. 当前工程基线
 
-2026-09-02 实际扫描确认：
+9/4 实际扫描，按用户要求计入 9/3 成果：Imp 和 UAL1 已导入、Avatar 有效；InputReader 与镜头控制已有代码和场景绑定。动画状态机仍为空、正式材质尚待持久化、庭院/移动/测试未完成。Day 2 部分完成，详细证据与风险以 PROJECT_STATUS.md 为准。
 
-- Unity `6000.5.6f1`，URP `17.5.0`。
-- 已安装 Input System `1.20.0`、AI Navigation `2.0.14`、Test Framework `1.7.0`。
-- `ProjectVersion.txt` 已生成；旧计划中“尚未生成”的描述已失效。
-- Cinemachine `3.1.7` 已安装。
-- Unity Assistant / MCP Bridge `2.18.0-pre.2` 已安装；Codex MCP 已指向当前 Quaternius 项目并完成 54 个工具的连接验证。
-- `SampleScene` 只有 Main Camera、Directional Light、Global Volume。
-- 已建立 Runtime、EditMode Tests、PlayMode Tests 三份 asmdef；当前仍没有 Gameplay 代码、自动化测试、Player/Enemy Prefab 或已导入素材。
-- 默认 Input Actions 已有 Move、Look、Attack、Sprint，但没有 Skill 和 Restart。
-- `MaterialPackage/` 有 6 个 Standard 包、1,213 个文件、233 个 FBX；正式项目只选择性导入审计清单。
-- Git 仓库与 Unity `.gitignore` 已建立，工程基线与 Cinemachine 已分别提交。
-- Unity 当前正在运行 Quaternius；2026-09-02 已完成包解析与 Unity MCP 连接预检。
+工程基线已具备 Unity 6000.5.6f1、URP、Input System 1.20.0、Cinemachine 3.1.7、AI Navigation、Test Framework、Git 和三份 asmdef，无需重复安装或重新建立输入层。
 
 ## 3. 每日工作制度
 
@@ -50,6 +40,13 @@
 - 每个功能执行“需求 → 验收标准 → 失败测试/用例 → 实现 → 边界与异常测试 → Bug → 修复 → 回归”。
 - 未通过本周验收门槛，不进入下一周系统。
 
+### 教学代码披露规则
+
+- 当助手判断某段代码在学习者当前能力范围内时，第一轮只说明职责、相关 API 的用途与用法、输入输出、约束和验收标准，不直接给出完整实现。
+- 学习者根据这些信息独立写完其余代码并自行运行验证。
+- 首次失败后，助手先根据实际代码和报错提供定位提示或最小修改建议；学习者再次尝试。
+- 只有在学习者尝试后仍无法完成，或明确请求完整代码时，助手才提供完整实现，并要求学习者能够逐段解释。
+
 ## 4. Week 1：工程底座与角色控制（9/2–9/7）
 
 ### 开发
@@ -58,8 +55,8 @@
 - 安装与 Unity 6000.5.6f1 兼容的 Cinemachine。
 - 按 `ASSET_AUDIT.md` 只导入：
   - `Imp.fbx` 与红色外观所需纹理。
-  - `UAL1_Standard.fbx`、`UAL2_Standard.fbx`。
-  - 庭院正式清单中的 12 个 FBX 与必要纹理。
+  - `UAL1_Standard.fbx`；UAL2 延到 Week 2 攻击任务前按需导入验证。
+  - 庭院先使用基础体完成碰撞白盒；正式清单中必要的地面/墙/楼梯模型待控制验收后替换，12 件不是本周硬性数量门槛。
 - 配置 Imp Humanoid Avatar、Bake Axis Conversion、非 RM 动画重定向和 `applyRootMotion=false`。
 - 创建/整理 Player Actions：Move、Look、Sprint、Attack、Skill、Restart。
 - 实现 `PlayerInputReader`。
@@ -120,12 +117,14 @@
 ### 每日检查点
 
 - **Learning Day 1｜9/2**：干净启动预检；Git、`.gitignore`、Docs 基线；目录与 asmdef；安装 Cinemachine。
-- **Learning Day 2｜9/3**：选择性导入、URP 材质、Rig/Avatar、动画预览、庭院 Blockout。
-- **Learning Day 3｜9/4**：Input Actions、InputReader、基础 CharacterController 移动。
-- **Learning Day 4｜9/5**：Cinemachine、镜头空间移动、重力、转向、Sprint。
-- **Learning Day 5｜9/6**：Blend Tree、Player Prefab、楼梯与障碍碰撞。
-- **Learning Day 6｜9/7**：停止扩功能；测试、修复、重构、Docs 与 Week 1 标签。
+- **Learning Day 2｜9/3（部分完成）**：Imp/UAL1 导入、Avatar、输入读取和镜头原型；欠动画播放验证、材质持久化、庭院 Blockout。
+- **Learning Day 3｜9/4**：45 分钟动画链与 Idle；45 分钟共享材质、20×20m 基础体地面/墙与胶囊校准；60 分钟复用 MoveInput 实现基础移动/重力；45–60 分钟测试和记录。
+- **Learning Day 4｜9/5**：补齐镜头空间移动、转向、Sprint；确认 Walk/Jog/Sprint 循环和重定向；补全镜头运行回归。保留约 1 小时测试，不重新编写 InputReader。
+- **Learning Day 5｜9/6**：Blend Tree、Player Prefab、楼梯斜坡和障碍碰撞；CameraController 移到 Runtime/Camera（保留 .meta）；输入采样/消费顺序和依赖保护仅做必要整理。时间不足先不导装饰模型。
+- **Learning Day 6｜9/7**：停止新增功能，执行至少 10 条移动/镜头用例和 2 个自动化测试，修复并回归；未满足门槛不打通过标签。
 
+本次重排原则：保留 70% 开发学习、30% 测试，优先可玩白盒而非完整美术庭院；环境美术替换与 UAL2 的最终使用验证移到 Week 2 相关任务。仅保留必要地面、墙和楼梯，纯装饰延后，不把欠项全部挤到 9/4。
+若 9/7 未通过 Week 1 门槛，9/8 先补阻断项，Health/UI 合并到 9/9 按实测进度执行；优先删第三段 Combo 和装饰，不删测试。Week 2–4 为暂定安排，每日验收后确认，不以加班假设保证原日期。
 若 Package Manager 受网络影响，最多排查 30 分钟；可先用静态 Camera 推进 Input/Motor，Cinemachine 最迟在 Week 1 验收前补齐。`com.unity.ai.assistant` 当前承担 Unity MCP Bridge，使用 MCP 期间保留；只有 `com.unity.pipeline` 再次确认阻断解析时才移除。
 
 ## 5. Week 2：生命、近战与 Enemy AI（9/8–9/14）
@@ -195,9 +194,9 @@
 
 - **Learning Day 7｜9/8**：Health 失败测试、DamageInfo、IDamageable、Health。
 - **Learning Day 8｜9/9**：Player/Enemy 血条与 Presenter。
-- **Learning Day 9｜9/10**：AttackDefinition、攻击动画与 Combo 状态。
+- **Learning Day 9｜9/10**：UAL2 导入与攻击动作预检；AttackDefinition、攻击动画与 Combo 状态。
 - **Learning Day 10｜9/11**：输入缓存、伤害窗口与命中去重。
-- **Learning Day 11｜9/12**：Puglin Prefab、NavMesh 与 Enemy 状态机。
+- **Learning Day 11｜9/12**：必要庭院地面/墙/楼梯美术替换（保持白盒碰撞）；Puglin Prefab、NavMesh 与 Enemy 状态机。时间不足保留白盒，不阻塞 AI。
 - **Learning Day 12｜9/13**：3 Enemy 集成、AI/Combat 边界测试。
 - **Learning Day 13｜9/14**：停止扩功能；回归、修复、架构复核、Docs 与 Week 2 标签。
 

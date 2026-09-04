@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-02  
+> 最后复核：2026-09-04（验收归属 9/3）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -11,7 +11,7 @@
 - Player：红色 `Imp`。
 - Enemy：3 个 `Puglin` 实例。
 - 玩法：镜头空间移动、冲刺、三段普攻、Enemy AI、生命与血条、火焰突进技能、胜负与重开。
-- 技术：Unity `6000.5.6f1`、URP、Input System、CharacterController、AI Navigation、Cinemachine（待安装）、Unity Test Framework。
+- 技术：Unity `6000.5.6f1`、URP、Input System、CharacterController、AI Navigation、Cinemachine 3.1.7、Unity Test Framework。
 - 交付：Windows Build、源码、README、架构说明、测试用例、Bug Report 和演示视频。
 
 ## 2. 架构状态标记
@@ -25,32 +25,25 @@
 ## 3. Current Architecture（实际状态）
 
 ```text
-InputSystem_Actions.inputactions
-└─ 已注册为全局 Action Asset，但没有 Runtime consumer
+PlayerInput (InputSystem_Actions / Player map)
+└─ PlayerInputReader [Player，同对象 GetComponent]
+   ├─ LookInput → CameraController [Player] → CameraTarget.rotation
+   │                                        → CinemachineCamera → Main Camera Brain
+   └─ MoveInput → 尚无 PlayerMotor 消费
 
-SampleScene
-├─ Main Camera
-├─ Directional Light
-└─ Global Volume
-
-URP Settings
-├─ PC Render Pipeline Asset / Renderer
-├─ Mobile Render Pipeline Asset / Renderer
-└─ Volume Profiles
-
-Assembly-CSharp
-└─ Unity 模板 Readme.cs
+Player
+├─ CharacterController（尚无移动代码）
+├─ Animator（Controller 存在但空状态机，Avatar=null）
+├─ Imp（Y=180，独立 Animator 有有效 Avatar，但 Controller=null）
+└─ CameraTarget（0,1.5,0）
 ```
 
-实际扫描结论：
-
-- 当前是 URP Empty Template，尚未开始 Gameplay 实现。
-- 没有 asmdef；仅有的模板 Runtime 脚本进入默认 `Assembly-CSharp`。
-- 没有 Player、Enemy、Health、Combat、Skill、UI、GameFlow 或测试代码。
-- 没有 Gameplay ScriptableObject、领域接口、事件、状态机或对象池。
-- `SampleScene` 没有 NavMesh 数据，场景内也没有 Player/Enemy Prefab。
-- `MaterialPackage/` 位于 `Assets/` 外；Imp、Puglin、动画和环境模型均未被 Unity 导入。
-- Cinemachine 尚未安装。
+- Runtime/Input 内已有 CameraController 和 PlayerInputReader，Game.Runtime 引用 Input System；两份 Tests asmdef 已建立，无测试代码。
+- InputReader 与 CameraController 的职责已分开；当前通过两个 Update 采样和消费，顺序及生命周期仍待验证。目录迁移安排 Day 5，不提前重新设计。
+- Imp 与 UAL1 已导入；Animator 播放链未完成，不能标成动画系统已实现。
+- 无 PlayerMotor、Combat、Health、Enemy AI、Skill、UI、GameFlow、Player Prefab、庭院或 NavMesh。
+- 本节为实测结构；下文 Target Architecture 和核心类型表仍是目标契约，并非全部已实现。
+- 实际路径保留为 Art/Charactors 与 Animations/Source，不为了匹配目录示意图擅自搬动素材。
 
 ## 4. 功能需求
 
@@ -82,6 +75,7 @@ Input System
     │
     ▼
 PlayerInputReader
+    ├──────────────► CameraController ────► CameraTarget / Cinemachine
     ├──────────────► PlayerMotor ─────────► CharacterController
     ├──────────────► PlayerCombat ────────► MeleeHitbox
     ├──────────────► SkillController ─────► PlayerMotor / SkillHitDetector
@@ -129,6 +123,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | 类型 | 唯一职责 | 允许依赖 | 禁止事项 |
 |---|---|---|---|
 | `PlayerInputReader` | 将 Input System 转换为 Move、Look、Sprint、Attack、Skill、Restart 意图 | Input Actions | 直接移动角色、扣血或控制 UI |
+| `CameraController` | 消费 Look 意图并旋转 `CameraTarget`，让 Cinemachine 计算最终机位 | PlayerInputReader、CameraTarget | 直接读取具体输入设备；直接写 CinemachineCamera Transform |
 | `PlayerMotor` | CharacterController 位移、重力、面向和所有受控突进位移的唯一入口 | CharacterController、相机朝向、移动配置 | 读取具体键盘按键；直接处理攻击 |
 | `DamageInfo` | 携带伤害值、来源、命中点和方向 | 值类型/Unity 基础类型 | 持有目标行为或产生副作用 |
 | `IDamageable` | 为命中系统提供统一伤害入口 | `DamageInfo` | 暴露具体 Player/Enemy 实现 |
@@ -149,6 +144,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 
 - Gameplay 代码不使用 `Keyboard.current` 或 `Mouse.current` 读取具体按键。
 - `PlayerInputReader` 是唯一 Input System 边界；下游只消费意图和值。
+- `CameraController` 属于 Camera 模块；当前教学阶段暂放 `Runtime/Input`，Learning Day 5 移至 `Runtime/Camera`。
 - 默认 Input Asset 已有 Move、Look、Attack、Sprint；Skill(Q) 与 Restart(R) 尚待添加。
 
 ### 位移与动画
@@ -183,6 +179,7 @@ Assets/
 ├─ _Game/
 │  ├─ Runtime/
 │  │  ├─ Common/
+│  │  ├─ Camera/
 │  │  ├─ Input/
 │  │  ├─ Player/
 │  │  ├─ Combat/
@@ -268,4 +265,3 @@ Docs/
 - 实现进度只写入 `PROJECT_STATUS.md`，不在本文维护进度日记。
 - 新类型第一次落地后，将其状态由 Planned 改为 Implemented，并核对代码路径和测试。
 - 架构图必须反映工程真实依赖；聊天中的建议不能直接覆盖本文件。
-

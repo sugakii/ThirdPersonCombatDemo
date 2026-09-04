@@ -2,7 +2,7 @@
 
 > 扫描日期：2026-09-02  
 > 扫描源：`MaterialPackage/` 实际本地文件、FBX/GLB 结构、随包 README/导入图和许可证  
-> 工程状态：所选素材尚未导入 `Assets/`；所有 Unity Avatar、材质、动画导入设置和场景表现仍待 Unity 验证
+> 工程复核：2026-09-04（成果归入 9/3）；Imp/UAL1 已导入且 Avatar 有效，动画播放、完整材质与环境验证未完成。源素材目录树仍为 9/2 扫描快照。
 
 ## 1. 审计原则
 
@@ -27,14 +27,14 @@
 | Universal Animation Library[Standard] | 9 | 2 FBX、2 GLB、3 PNG、2 TXT |
 | Universal Base Characters[Standard] | 112 | 26 FBX、18 glTF、18 BIN、48 PNG、2 TXT |
 
-当前 Unity `Assets/` 中：
+当前 Unity 工程复核（9/4 快照，计入 9/3）：
 
-- FBX：0
-- 为这些模型生成的 Avatar：0
-- 正式 `.mat`：0
-- Animator Controller：0
-
-所以当前审计能确认源文件内容，但不能声称 Unity 中已经完成 Humanoid、材质、Loop、重定向、朝向、缩放或碰撞验证。
+- FBX：Imp 与 UAL1，共 2 个；两者 Humanoid Avatar 均 valid=true、human=true。
+- Imp：`Assets/_Game/Art/Charactors/Player/Model/Imp.fbx`，Bake Axis Conversion=true，场景 Imp 子对象 Y=180。
+- 纹理：红色 BaseColor 1、Normal、Emissive、ORM 已复制。渲染器引用 MI_Imp（URP/Lit），主纹理为红色 BaseColor；无独立 .mat，材质路径仍指向 FBX，持久化与其他贴图效果待验证。
+- UAL1：`Assets/_Game/Animations/Source/UAL1_Standard.fbx`，43 条 Clip；实际名称保留 `Armature|` 前缀。Idle_Loop 循环=true；Walk_Loop、Jog_Fwd_Loop、Sprint_Loop 循环=false。Bake Axis Conversion=false，后续根据预览验证。
+- PlayerAnimator.controller 已创建，但 Base Layer 没有状态；Player/Imp 两个 Animator 的 Avatar 与 Controller 分置，播放链未完成。
+- UAL2、Puglin、环境尚未导入；无 Player Prefab 或庭院。有效 Avatar 不等于动作重定向与视觉效果已通过。
 
 ## 3. 正式使用清单
 
@@ -71,7 +71,7 @@
 
 ### Avatar
 
-- 当前工程中 **尚无 Imp Avatar**。
+- 当前已生成 ImpAvatar，Unity 查询 valid=true、human=true；动画播放与变形仍待验证。
 - 预期通过 Unity Humanoid 映射 UAL 动画，但“预期可重定向”不等于已经兼容。
 - 导入后必须进入 Configure 确认 Avatar 为绿色有效状态，并逐条检查手臂、手指、脚、脊柱和武器位置。
 
@@ -164,11 +164,11 @@ UAL1 非 RM FBX 有 43 个 AnimationStack/Take；UAL2 非 RM FBX也有 43 个。
 
 ### Animation Properties
 
-- **Humanoid / Generic**：源 FBX 不能证明 Unity 导入类型已经设置；随包说明要求 Unity 设置为 Humanoid。当前尚未配置。
+- **Humanoid / Generic**：源 FBX 不能证明 Unity 导入类型已经设置；随包说明要求 Unity 设置为 Humanoid。UAL1 已设为 Humanoid 且 Avatar 有效；UAL2 尚未导入。
 - **Root Motion**：README 明确 `_RM` 文件把 root motion 烘焙进每条动画；无 `_RM` 文件禁用 root motion。
 - **In-Place**：本项目选择的两个非 RM FBX为原地版本；抽查 GLB root translation 恒为 `(0,0,0)`。
 - **代码位移**：统一由 CharacterController/PlayerMotor 执行，`Animator.applyRootMotion = false`。
-- **Loop**：随包说明要求所有以 `_Loop` 结尾的动作在 Unity 中手工开启 Loop Time；当前只是命名和导入要求，尚未配置。
+- **Loop**：随包说明要求所有以 `_Loop` 结尾的动作在 Unity 中手工开启 Loop Time；当前 UAL1 Idle_Loop 已开启；Walk/Jog/Sprint 等选用循环还未全部配置。
 - **Root Motion Node**：随包 Unity 设置图指定 `Rig/root`；当前非 RM 项目不以此驱动 Gameplay。
 - **Forward Axis**：FBX GlobalSettings 为 `UpAxis=2/+1`、`FrontAxis=1/+1`、`CoordAxis=0/-1`；RM GLB 位移方向实测为 +Z。随包要求 Bake Axis Conversion。角色在 Unity Scene 中是否最终面向 `Transform.forward (+Z)` 仍必须导入后验证。
 
@@ -454,7 +454,7 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 
 ## 10. Problems Found
 
-1. **Unity 验证尚未发生**：素材仍在 `Assets/` 外；Avatar、材质、Clip 名称、Loop、重定向、朝向、比例、Pivot、碰撞和 NavMesh 均未在工程中确认。
+1. **Unity 验证部分完成**：Imp/UAL1 Avatar 与部分导入属性已确认；动画播放链、完整材质、循环、重定向表现、比例、碰撞和 NavMesh 未通过验收。
 2. **骨骼数量不同**：Imp/Puglin 是 55 骨，UAL 是 65 骨；缺 pinky/ball_leaf。Humanoid 预期可行，但必须以 Configure 和逐条动作预览为准。
 3. **Locomotion 不完整**：没有 backward、strafe left/right，因此本月不做 Lock-On 八方向移动。
 4. **没有专用 Dodge**：只有 `Roll` 可替代，本月明确排除 Dodge。
@@ -471,8 +471,8 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 
 完成选择性导入后，必须把结果回写本文件：
 
-- [ ] Imp Model Importer 开启 Bake Axis Conversion。
-- [ ] Imp Rig = Humanoid，Avatar Configure 有效。
+- [x] Imp Model Importer 开启 Bake Axis Conversion（Unity 查询确认）。
+- [x] Imp Rig = Humanoid，Avatar.isValid/isHuman=true（配置有效；动作表现仍待预览）。
 - [ ] Puglin Rig = Humanoid，Avatar Configure 有效。
 - [ ] UAL1/UAL2 Rig = Humanoid，并使用可复用 Avatar/正确映射。
 - [ ] Unity 中实际 Clip 名称与本文映射一致。
