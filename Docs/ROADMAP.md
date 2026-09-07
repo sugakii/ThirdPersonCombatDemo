@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-07（Learning Day 4；16/16 用例通过）
+> 最后复核：2026-09-07（Learning Day 5；16/16 用例通过）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
@@ -20,7 +20,7 @@
 
 ## 2. 当前工程基线
 
-Day 4 已通过：PlayerInputReader 输出 SprintHeld；PlayerMotor 已实现镜头空间移动、转向、反向转向和 Sprint；Main Camera 引用及速度参数已保存；Idle/Walk/Jog/Sprint Loop Time 正确。用户完成全部 Day 4 手工测试，16/16 通过。Blend Tree、Prefab、楼梯和自动化测试仍未完成。详细证据以 PROJECT_STATUS.md 为准。
+Day 5 已通过：Speed 1D Blend Tree、PlayerAnimatorDriver、Player Prefab、CameraController 模块迁移、RequireComponent 与三个 Inspector 引用保护均已完成；用户执行 16 条 Day 5 用例并全部通过。楼梯、最小障碍和 2 个自动化测试留在 Day 6。详细证据以 PROJECT_STATUS.md 为准。
 
 工程基线已具备 Unity 6000.5.6f1、URP、Input System 1.20.0、Cinemachine 3.1.7、AI Navigation、Test Framework、Git 和三份 asmdef，无需重复安装或重新建立输入层。
 
@@ -120,11 +120,11 @@ Day 4 已通过：PlayerInputReader 输出 SprintHeld；PlayerMotor 已实现镜
 - **Learning Day 2｜9/3（部分完成）**：Imp/UAL1 导入、Avatar、输入读取和镜头原型；欠动画播放验证、材质持久化、庭院 Blockout。
 - **Learning Day 3｜9/4（功能阶段符合预期，持久化通过）**：Idle、独立材质、最小世界坐标 Motor 已实现；白盒与胶囊在 Play 内确认，用户已回归基本输入/碰撞。磁盘场景已同步；保存后运行回归待确认，暂不打最终通过标签。
 - **Learning Day 4｜原计划 9/5，9/7 验收通过**：镜头空间移动、转向、反向转向、Sprint 和 locomotion Loop 配置已落地；16/16 用例通过。`BUG-001`、`BUG-002` 均已回归关闭。
-- **Learning Day 5｜下一学习日**：实现 Idle/Walk/Jog/Sprint Blend Tree、Animator 速度参数和 Player Prefab；将 CameraController 移到 Runtime/Camera（保留 `.meta`）；只做必要的组件/引用保护。时间不足时把保护整理留到 Day 6，不压缩测试。
+- **Learning Day 5｜9/7 验收通过**：Idle/Walk/Jog/Sprint Blend Tree、实际速度 Animator Driver、Player Prefab、CameraController 模块迁移和必要引用保护全部完成；16/16 用例通过。
 - **Learning Day 6｜Day 5 后一学习日**：停止新增玩法；补楼梯斜坡与最小障碍，执行至少 10 条移动/镜头/动画用例；完成 2 个最小 PlayMode 自动化测试，修复并回归。未满足 Week 1 门槛，不开始 Combat。
 
 本次重排原则：学习日编号继续按任务顺序推进，不用日历日期冒充完成进度。保留 70% 开发学习、30% 测试，优先可玩白盒；环境美术替换与 UAL2 最终验证移到 Week 2。仅保留必要地面、墙和楼梯，纯装饰延后。
-由于 9/7 尚未通过 Week 1 门槛，9/8 不直接开始 Health/Combat；先完成 Learning Day 5 和 Day 6。Week 2–4 日期均视为目标窗口，后续每日验收按实际进度顺延；优先删第三段 Combo 和装饰，不删测试。
+Day 5 已通过，但 Week 1 仍缺楼梯/障碍与 2 个自动化测试；下一学习日先完成 Day 6，不直接开始 Health/Combat。Week 2–4 日期均视为目标窗口，后续按实际进度顺延；优先删第三段 Combo 和装饰，不删测试。
 若 Package Manager 受网络影响，最多排查 30 分钟；可先用静态 Camera 推进 Input/Motor，Cinemachine 最迟在 Week 1 验收前补齐。`com.unity.ai.assistant` 当前承担 Unity MCP Bridge，使用 MCP 期间保留；只有 `com.unity.pipeline` 再次确认阻断解析时才移除。
 
 ## 5. Week 2：生命、近战与 Enemy AI（9/8–9/14）

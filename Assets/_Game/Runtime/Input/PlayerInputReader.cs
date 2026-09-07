@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerInput))]
+
 public class PlayerInputReader : MonoBehaviour
 {
     public Vector2 LookInput { get; private set; }

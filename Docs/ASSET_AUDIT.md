@@ -2,7 +2,7 @@
 
 > 扫描日期：2026-09-02  
 > 扫描源：`MaterialPackage/` 实际本地文件、FBX/GLB 结构、随包 README/导入图和许可证  
-> 工程复核：2026-09-07（Day 4 通过）；Idle 和独立材质已配置，用户完成 Idle/Walk/Jog/Sprint 视觉回归；UAL1 循环设置已核对。源素材目录树仍为 9/2 扫描快照。
+> 工程复核：2026-09-07（Day 5 通过）；Idle/Walk/Jog/Sprint Blend Tree、Player Prefab 和独立材质已配置并回归；UAL1 循环设置已核对。源素材目录树仍为 9/2 扫描快照。
 
 ## 1. 审计原则
 
@@ -33,8 +33,8 @@
 - Imp：`Assets/_Game/Art/Charactors/Player/Model/Imp.fbx`，Bake Axis Conversion=true，编辑态与磁盘 Imp local rotation=(0,0,0)，不沿用旧 Y=180 结论。
 - 纹理：红色 BaseColor 1、Normal、Emissive、ORM 已复制。渲染器引用 MI_Imp（URP/Lit），主纹理为红色 BaseColor；独立资产 Assets/_Game/Materials/MI_Imp.mat 已落盘，Play 中五个 Renderer 共用它；场景绑定已保存，完整贴图视觉效果待验证。
 - UAL1：`Assets/_Game/Animations/Source/UAL1_Standard.fbx`，43 条 Clip；实际名称保留 `Armature|` 前缀。Idle、Walk、Jog、Sprint 的 Loop Time 均为 true；Walk 的 Loop Pose 为 true，Idle/Jog/Sprint 为 false。`A_TPose` 的 Loop Time/Loop Pose 均为 false。用户完成四个 locomotion Clip 的视觉回归，`BUG-001`、`BUG-002` 均 Closed。Bake Axis Conversion=false。
-- PlayerAnimator.controller 已包含默认 Armature|Idle_Loop。Play 中根 Animator 禁用、Imp Animator 启用并绑定 ImpAvatar/Controller，Root Motion=false；用户报告 Idle 视觉回归通过。磁盘场景已保存，根 Animator 禁用与 Imp 播放链一致；重进 Play 回归待确认。
-- UAL2、Puglin、正式环境尚未导入，无 Player Prefab。Play 中已有基础体地面和墙，不能标成完整美术庭院。Idle 的结果不能推广到其他动作。
+- PlayerAnimator.controller 已使用 Speed 1D Blend Tree：Idle=0、Walk=2.5、Jog=5、Sprint=10。Imp Animator 启用并绑定 ImpAvatar/Controller，Root Motion=false；用户完成静止、普通移动、冲刺、松键和撞墙动画回归。
+- Player Prefab 已创建并保存内部 CameraTarget/Imp Animator 引用。UAL2、Puglin、正式环境尚未导入；现有基础体地面和墙不能标成完整美术庭院。
 
 ## 3. 正式使用清单
 

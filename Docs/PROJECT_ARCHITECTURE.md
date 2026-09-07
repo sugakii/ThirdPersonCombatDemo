@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-07（Day 4；实现、场景配置与用户运行验收均通过）
+> 最后复核：2026-09-07（Day 5；实现、Prefab 持久化、异常测试与用户运行回归均通过）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -34,21 +34,28 @@ PlayerInput (InputSystem_Actions / Player map)
    └─ SprintHeld ─┴→ PlayerMotor [Player] → CharacterController.Move
                           镜头空间限幅移动 + 重力 + 转向 + 速度切换
 
+PlayerMotor.CurrentMoveSpeed
+└─ PlayerAnimatorDriver [Player / LateUpdate]
+   └─ Animator.Speed → Idle / Walk / Jog / Sprint Blend Tree
+
 Player
 ├─ CharacterController（编辑态与磁盘 center=(0,1,0)）
 ├─ Animator（编辑态与磁盘均已禁用）
 ├─ PlayerMotor（源码存在，编辑态与磁盘均已挂载）
+├─ PlayerAnimatorDriver（将实际水平速度写入 Animator Speed）
 ├─ Imp（启用的 Animator + ImpAvatar + PlayerAnimator；Root Motion=false）
 └─ CameraTarget
 Ground_Blockout / Wall_Blockout（编辑态存在，已保存）
 ```
 
-- PlayerMotor 当前负责镜头空间移动、斜向限幅、重力、角色转向和 Sprint 速度切换；场景显式绑定 Main Camera，普通速度 5、冲刺速度 10、转向速度 720°/s、反向转向速度 1440°/s。相关 Day 4 运行用例均通过。
-- PlayerAnimator 当前只有默认 Idle 状态，无 Blend Tree；MI_Imp.mat 已独立落盘，Play 中五个渲染器共用。
-- CameraController 暂留 Runtime/Input；Day 5 才迁移，保留 .meta GUID。InputReader、CameraController、Motor 均使用 Update，顺序与生命周期待回归。
+- PlayerMotor 当前负责镜头空间移动、斜向限幅、重力、角色转向和 Sprint 速度切换；`cameraTransform` 指向 Prefab 内的 CameraTarget，普通速度 5、冲刺速度 10、转向速度 720°/s、反向转向速度 1440°/s。
+- PlayerAnimator 当前使用 Speed 驱动的 1D Blend Tree：Idle=0、Walk=2.5、Jog=5、Sprint=10。PlayerAnimatorDriver 在 LateUpdate 写入 CharacterController 实际水平速度，撞墙降速测试通过。
+- CameraController 已迁移到 `Runtime/Camera` 并保留 `.meta` GUID；Scene 与 Player Prefab 均无 Missing Script。
+- Player Prefab 已创建，cameraTransform/cameraTarget 均指向内部 CameraTarget，animator 指向内部 Imp Animator，不依赖场景 Main Camera。
+- PlayerInputReader、PlayerMotor、CameraController、PlayerAnimatorDriver 已声明必要 RequireComponent；三个 Inspector 引用缺失时会记录一次明确错误并禁用自身，异常测试通过。
 - Imp 的编辑态与磁盘 local rotation=(0,0,0)，不是旧文档的 Y=180；根 Player 由 PlayerMotor 转向，视觉朝向的 Day 4 手工回归通过。
 - Game.Runtime 引用 Input System；两份 Tests asmdef 已建立，无测试代码。
-- 无 Blend Tree、Combat、Health、Enemy AI、Skill、UI、GameFlow、Player Prefab、楼梯或 NavMesh。
+- 无 Combat、Health、Enemy AI、Skill、UI、GameFlow、楼梯或 NavMesh。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -150,7 +157,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 
 - Gameplay 代码不使用 `Keyboard.current` 或 `Mouse.current` 读取具体按键。
 - `PlayerInputReader` 是唯一 Input System 边界；下游只消费意图和值。
-- `CameraController` 属于 Camera 模块；当前教学阶段暂放 `Runtime/Input`，Learning Day 5 移至 `Runtime/Camera`。
+- `CameraController` 属于 Camera 模块，当前位于 `Runtime/Camera`；Input 模块只保留输入读取职责。
 - 默认 Input Asset 已有 Move、Look、Attack、Sprint；PlayerInputReader 当前输出 Move、Look、Sprint。Skill(Q) 与 Restart(R) 尚待添加。
 
 ### 位移与动画

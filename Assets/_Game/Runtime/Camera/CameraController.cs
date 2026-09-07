@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerInputReader))]
+
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
@@ -15,6 +17,13 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
+        if(cameraTarget == null)
+        {
+            Debug.LogError("CameraController: Camera Target is not assigned.", this);
+            enabled = false;
+            return;
+        }
+
         inputReader = GetComponent<PlayerInputReader>();
     }
 

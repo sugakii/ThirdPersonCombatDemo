@@ -1,36 +1,37 @@
 # Current Project Status
 
 > Last Updated：2026-09-07
-> Current Learning Day：Day 4 已完成
-> Current Phase：Week 1 / Day 4 全部验收通过
-> Next Learning Day：Day 5（按学习顺序，不用日历日期冒充进度）
+> Current Learning Day：Day 5 已完成
+> Current Phase：Week 1 / Day 5 全部验收通过
+> Next Learning Day：Day 6
 > Source of Truth：当前 Unity 工程 + Git + Docs
 
 ## 验收结论
 
-**Day 4：PASS。** 当前源码与场景配置已经实现镜头空间移动、角色转向、反向转向和 Sprint；用户完成全部 Day 4 手工用例并报告均符合预期。
+**Day 5：PASS（16/16）。** Blend Tree、实际速度动画驱动、Player Prefab、CameraController 模块迁移、组件依赖声明和 Inspector 引用保护均已实现。用户完成全部运行、异常与最终回归用例并报告通过；磁盘 Prefab/Scene 引用已核对。
 
-- 实现检查：PASS。
-- 场景与引用检查：PASS。
-- 编译/Console 检查：PASS（Gameplay 0 Error）。
-- Day 4 手工运行测试：PASS（12 条运行/视觉用例）。
-- Day 4 总体验收：PASS（16/16）。
+## Implemented
 
-## 验收证据
+- PlayerInputReader：输出 Move、Look、Sprint 意图，依赖 PlayerInput。
+- PlayerMotor：镜头空间移动、重力、转向、Reverse Turn、Sprint，并公开实际水平速度 CurrentMoveSpeed。
+- CameraController：位于 `Runtime/Camera`，消费 LookInput 并旋转 CameraTarget。
+- PlayerAnimatorDriver：在 LateUpdate 将实际水平速度写入 Animator 的 Speed 参数。
+- PlayerAnimator：1D Blend Tree，Idle=0、Walk=2.5、Jog=5、Sprint=10。
+- Player Prefab：保存 Player 全部组件与内部 CameraTarget、Imp Animator 引用。
+- 引用保护：三个 Inspector 引用缺失时记录明确错误、禁用对应脚本并停止继续执行。
 
-| 项目 | 当前事实 | 结果 |
-|---|---|---|
-| InputReader | 输出 MoveInput、LookInput、SprintHeld；Sprint 使用 Input Action，不直读键盘 | PASS（静态） |
-| 镜头空间移动 | Main Camera 的 forward/right 投影到 XZ，并对合成向量 ClampMagnitude | PASS（静态） |
-| 角色转向 | RotateTowards，常规 720°/s；反向输入使用 1440°/s 临时转向 | PASS（静态） |
-| Sprint | 普通速度 5，场景冲刺速度 10；松开后代码恢复普通速度 | PASS（静态） |
-| 位移所有权 | 仍由 PlayerMotor 调用 CharacterController.Move；Root Motion=false | PASS（静态） |
-| 场景绑定 | PlayerMotor.cameraTransform 已绑定 Main Camera；CharacterController Skin Width=0.05 | PASS |
-| 动画循环 | Idle/Walk/Jog/Sprint Loop Time=true；Walk Loop Pose=true | PASS（配置） |
-| A_TPose 循环配置 | Loop Time/Loop Pose 均为 false；误配置已修复 | PASS（静态） |
-| Animator | 仍只有 Idle 状态，没有 Blend Tree | NOT IMPLEMENTED |
-| Console | 0 Error；1 条 Pipeline 非自动模式警告；另有 Unity AI 生成器重试失败信息 | PASS（Gameplay） |
-| 自动化 / Build | 无测试代码；未执行 Windows Build | NOT RUN |
+## Test Evidence
+
+| 范围 | 结果 |
+|---|---|
+| Day 3 | 11/11 PASS |
+| Day 4 | 16/16 PASS |
+| Day 5 | 16/16 PASS |
+| CameraController.cameraTarget=None | 单次明确错误；脚本禁用；无持续 NullReferenceException |
+| PlayerAnimatorDriver.animator=None | 单次明确错误；脚本禁用；无持续 NullReferenceException |
+| PlayerMotor.cameraTransform=None | 单次明确错误；脚本禁用；无持续 NullReferenceException |
+| 恢复引用与持久化 | 用户确认完成；Prefab 三个内部引用在磁盘有效 |
+| 最终功能回归 | WASD、镜头、转向、Reverse Turn、Sprint、动画、撞墙和 Console 全部通过 |
 
 ## Current Architecture
 
@@ -41,56 +42,63 @@ PlayerInputReader
 ├─ LookInput ─────→ CameraController ─→ CameraTarget / Cinemachine
 ├─ MoveInput ─────┐
 └─ SprintHeld ────┴→ PlayerMotor ─────→ CharacterController.Move
-                         镜头空间移动 / 重力 / 转向 / Sprint
+                         │
+                         └─ CurrentMoveSpeed
+                                  ↓
+                     PlayerAnimatorDriver
+                                  ↓
+                  Animator.Speed / Locomotion Blend Tree
 ```
 
-- Player 根对象挂载 CharacterController、PlayerInput、PlayerInputReader、CameraController、PlayerMotor。
-- Imp 子对象 Animator 启用，Player 根 Animator 禁用；Root Motion=false。
-- CameraController 仍在 `Runtime/Input`，Day 5 移到 `Runtime/Camera` 并保留 `.meta`。
-- InputReader、CameraController、PlayerMotor 都在 Update；输入采样顺序尚未通过运行测试证明没有可感知延迟。
-- 尚无 Blend Tree、Player Prefab、楼梯、自动化测试、Combat、Health 或 AI。
+- `Player.prefab` 内部持有 CameraTarget 和 Imp Animator 引用，不依赖场景 Main Camera。
+- CharacterController 仍是 Gameplay 位移的唯一执行者；Animator Root Motion=false。
+- Input、Camera、Player 的当前目录职责已经分开。
+- Combat、Health、Enemy AI、Skill、UI、GameFlow 尚未实现。
 
 ## Files
 
 - `Assets/_Game/Runtime/Input/PlayerInputReader.cs`
-- `Assets/_Game/Runtime/Input/CameraController.cs`
+- `Assets/_Game/Runtime/Camera/CameraController.cs`
 - `Assets/_Game/Runtime/Player/PlayerMotor.cs`
-- `Assets/_Game/Animations/Source/UAL1_Standard.fbx.meta`
+- `Assets/_Game/Runtime/Player/PlayerAnimatorDriver.cs`
 - `Assets/_Game/Animations/Player/PlayerAnimator.controller`
+- `Assets/_Game/Prefabs/Player.prefab`
 - `Assets/_Game/Scenes/SampleScene.unity`
 - `Docs/ASSET_AUDIT.md`
 - `Docs/PROJECT_ARCHITECTURE.md`
 - `Docs/ROADMAP.md`
 - `Docs/PROJECT_STATUS.md`
 - `Docs/BUG_REPORTS.md`
-- `Docs/TEST_REPORT_DAY3.md`
+- `Docs/TEST_REPORT/TEST_CASE_DAY3.md`
+- `Docs/TEST_REPORT/TEST_CASE_DAY4.md`
+- `Docs/TEST_REPORT/TEST_CASE_DAY5.md`
 
 ## Known Bugs / Risks
 
-1. `BUG-001` Closed：旧 Imp Avatar/Rig 腿脚扭曲；Idle/Walk/Jog/Sprint 与 Console 回归通过。
-2. `BUG-002` Closed：A_TPose 已恢复为非循环，用户 Play Mode 回归通过。
-3. 反向转向的快速改变输入用例已通过；保留实现，不进行无依据重构。
-4. 必需组件与序列化引用缺少启动保护；只在 Day 5 做最小整理。
-5. 没有 Blend Tree、楼梯/斜坡和自动化测试，Week 1 总门槛尚未达到。
+1. `BUG-001` Closed：Imp Avatar/Rig 腿脚扭曲已完成 locomotion 回归。
+2. `BUG-002` Closed：A_TPose 循环误配置已修复并回归。
+3. 当前没有已知 Open Gameplay Bug。
+4. 尚无楼梯/斜坡、最小障碍和自动化测试，Week 1 总验收门槛仍未完成。
 
 ## Git
 
-- 当前分支：`main`；HEAD：`b051871`。
-- Day 4 Gameplay、场景、动画导入配置和六份 Docs 均尚未提交。
-- `ProjectSettings/Packages/com.unity.ai.assistant/Settings.json` 与 `ProjectSettings/SceneTemplateSettings.json` 是本地工具/编辑器状态，本次不提交。
-- Bestiary 原始 FBX/PNG 继续排除；默认提交全部自有代码及相应 `.meta`、场景和文档。
+- 当前分支：`main`；HEAD：`c9c355e`。
+- Day 5 代码、Animator、Prefab、Scene 和新测试文档尚未提交。
+- `ProjectSettings/Packages/com.unity.ai.assistant/Settings.json` 与 `ProjectSettings/SceneTemplateSettings.json` 是本地工具/编辑器状态，不作为 Day 5 成果提交。
+- 默认提交全部自有代码及 `.meta`、Animator、Prefab、Scene 和 Docs。
 
 ## Next Task
 
-### Learning Day 5（3–4 小时）
+### Learning Day 6
 
-- 建立 Idle/Walk/Jog/Sprint 1D Blend Tree 与速度参数。
-- 创建 Player Prefab。
-- 将 CameraController 移到 `Runtime/Camera`，保留 `.meta`。
-- 只做必要的组件/引用保护；完成后执行 Blend Tree、Prefab 和基础移动回归。楼梯与自动化测试留给 Day 6。
+- 停止新增玩法。
+- 创建楼梯斜坡与最小障碍，验证 CharacterController 上下楼、墙角和平台边缘。
+- 编写并执行至少 10 条 Week 1 移动/镜头/动画回归用例。
+- 完成 2 个最小 PlayMode 自动化测试：斜向限速、Sprint 速度恢复。
+- 修复真实失败项并回归；满足 Week 1 门槛后才进入 Combat/Health。
 
 ## Update Rules
 
-- 只记录最新版事实；区分静态检查、Unity 配置、用户手工测试和自动化结果。
-- 未运行的用例写 NOT RUN，不能用源码推断替代 PASS。
-- Day 结束后同步六份 Docs；架构无变化时不做无意义改写。
+- 未运行的用例写 NOT RUN；用户手工测试、静态检查与自动化结果分开记录。
+- Day 结束后同步工程、Git 和 Docs；聊天记录不能覆盖工程事实。
+- 已验收架构默认冻结，没有复现问题时不进行替代式重构。

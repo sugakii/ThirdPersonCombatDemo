@@ -1,7 +1,14 @@
 using UnityEngine;
 
+[RequireComponent(
+    typeof(CharacterController),
+    typeof(PlayerInputReader)
+    )]
+
 public class PlayerMotor : MonoBehaviour
 {
+    public float CurrentMoveSpeed { get; private set; }
+
     [SerializeField]
     private float moveSpeed = 5f;
 
@@ -18,7 +25,7 @@ public class PlayerMotor : MonoBehaviour
     private float reverseTurnSpeed = 1440f;
 
     [SerializeField]
-    private float sprintSpeed = 8f;
+    private float sprintSpeed = 10f;
 
     private float verticalVelocity;
     private CharacterController controller;
@@ -29,6 +36,13 @@ public class PlayerMotor : MonoBehaviour
 
     void Awake()
     {
+        if(cameraTransform == null)
+        {
+            Debug.LogError("PlayerMotor: Camera Transform is not assigned.", this);
+            enabled = false;
+            return;
+        }
+
         controller = GetComponent<CharacterController>();
         inputReader = GetComponent<PlayerInputReader>();
     }
@@ -113,5 +127,11 @@ public class PlayerMotor : MonoBehaviour
         velocity.y = verticalVelocity;
         
         controller.Move(velocity * Time.deltaTime);
+
+        Vector3 actualVelocity = controller.velocity;
+
+        actualVelocity.y = 0f;
+
+        CurrentMoveSpeed = actualVelocity.magnitude;
     }
 }
