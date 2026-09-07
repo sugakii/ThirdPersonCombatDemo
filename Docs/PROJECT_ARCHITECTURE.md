@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-04（Day 3；保存后编辑态与磁盘核对一致）
+> 最后复核：2026-09-07（Day 4 验收；实现与场景配置已核对，运行验收待执行）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -24,14 +24,15 @@
 
 ## 3. Current Architecture（实际状态）
 
-本节结合代码、此前 Play 快照与保存后编辑态/磁盘复核；场景配置已落盘，保存后的运行回归待确认。
+本节结合当前源码、场景 YAML、Unity 编辑态组件与 Console 复核；尚未把未执行的键鼠操作写成运行通过。
 
 ```text
 PlayerInput (InputSystem_Actions / Player map)
 └─ PlayerInputReader [Player，同对象 GetComponent]
    ├─ LookInput → CameraController [Player] → CameraTarget.rotation → Cinemachine
-   └─ MoveInput → PlayerMotor [Player] → CharacterController.Move
-                                   世界 XZ 限幅移动 + 重力
+   ├─ MoveInput ──┐
+   └─ SprintHeld ─┴→ PlayerMotor [Player] → CharacterController.Move
+                          镜头空间限幅移动 + 重力 + 转向 + 速度切换
 
 Player
 ├─ CharacterController（编辑态与磁盘 center=(0,1,0)）
@@ -42,12 +43,12 @@ Player
 Ground_Blockout / Wall_Blockout（编辑态存在，已保存）
 ```
 
-- PlayerMotor 的当前职责仅为世界坐标移动、斜向限幅与重力；尚不支持相机朝向、角色转向、Sprint 或技能。
+- PlayerMotor 当前负责镜头空间移动、斜向限幅、重力、角色转向和 Sprint 速度切换；场景显式绑定 Main Camera，普通速度 5、冲刺速度 10、转向速度 720°/s、反向转向速度 1440°/s。运行表现待手工验收。
 - PlayerAnimator 当前只有默认 Idle 状态，无 Blend Tree；MI_Imp.mat 已独立落盘，Play 中五个渲染器共用。
 - CameraController 暂留 Runtime/Input；Day 5 才迁移，保留 .meta GUID。InputReader、CameraController、Motor 均使用 Update，顺序与生命周期待回归。
-- Imp 的编辑态与磁盘 local rotation=(0,0,0)，不是旧文档的 Y=180；移动/转向的视觉朝向继续在 Day 4 回归。
+- Imp 的编辑态与磁盘 local rotation=(0,0,0)，不是旧文档的 Y=180；根 Player 由 PlayerMotor 转向，视觉朝向仍需 Day 4 手工回归。
 - Game.Runtime 引用 Input System；两份 Tests asmdef 已建立，无测试代码。
-- 无 Combat、Health、Enemy AI、Skill、UI、GameFlow、Player Prefab、楼梯或 NavMesh。
+- 无 Blend Tree、Combat、Health、Enemy AI、Skill、UI、GameFlow、Player Prefab、楼梯或 NavMesh。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -150,7 +151,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 - Gameplay 代码不使用 `Keyboard.current` 或 `Mouse.current` 读取具体按键。
 - `PlayerInputReader` 是唯一 Input System 边界；下游只消费意图和值。
 - `CameraController` 属于 Camera 模块；当前教学阶段暂放 `Runtime/Input`，Learning Day 5 移至 `Runtime/Camera`。
-- 默认 Input Asset 已有 Move、Look、Attack、Sprint；Skill(Q) 与 Restart(R) 尚待添加。
+- 默认 Input Asset 已有 Move、Look、Attack、Sprint；PlayerInputReader 当前输出 Move、Look、Sprint。Skill(Q) 与 Restart(R) 尚待添加。
 
 ### 位移与动画
 
@@ -220,7 +221,7 @@ Docs/
 
 ### ADR-001：CharacterController + In-Place 动画
 
-- **状态**：Accepted / 基础 Motor 与 Idle 已实现，场景持久化已核对，保存后运行回归待确认。
+- **状态**：Accepted / 基础 Motor、镜头空间移动、转向、Sprint 与 Idle 已实现；运行回归待确认。
 - **决定**：Player 使用 CharacterController；只导入非 RM 动画；Gameplay 位移由代码控制。
 - **原因**：素材缺少完整八方向动画；代码位移更容易测试速度、碰撞、Dash 和异常状态。
 - **收益**：单一位移所有者、可预测、便于自动化测试。
@@ -263,6 +264,8 @@ Docs/
 | Dash 穿墙或重复伤害 | 高速位移越过墙体、一个目标多次扣血 | 分段受控位移/碰撞检测；每次释放独立 HashSet 去重 |
 | 池化 VFX 状态污染 | Trail 残影、粒子永久存在 | Get/Release 时显式重置；连续释放测试 |
 | Package 解析复发 | Unity 启动时持续 UPM 错误 | 先验证核心包；Cinemachine 失败时短期用静态相机推进 Input/Motor；只移除确认阻断的非核心包 |
+| 输入采样晚一帧 | InputReader 与消费者同在 Update，执行顺序未固定 | 先用运行测试判断是否可感知；只有实际出现问题时再统一采样时机或设置执行顺序 |
+| 反向转向与输入改变不同步 | 180° 转向期间快速改变方向时视觉朝向偏离位移 | 用边界用例确认；仅在可复现时修改反向转向状态逻辑 |
 
 ## 12. 变更规则
 

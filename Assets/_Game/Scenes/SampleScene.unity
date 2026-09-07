@@ -185,7 +185,7 @@ CharacterController:
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.05
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &39567096
@@ -275,6 +275,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Runtime::PlayerMotor
   moveSpeed: 5
   gravity: -9.81
+  cameraTransform: {fileID: 330585546}
+  rotationSpeed: 720
+  reverseTurnSpeed: 1440
+  sprintSpeed: 10
 --- !u!1 &229019911
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,7 +575,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 846a3577d1f0c854082d507c8b2af0f0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 846a3577d1f0c854082d507c8b2af0f0, type: 3}
       propertyPath: m_LocalPosition.z

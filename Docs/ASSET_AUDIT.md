@@ -2,7 +2,7 @@
 
 > 扫描日期：2026-09-02  
 > 扫描源：`MaterialPackage/` 实际本地文件、FBX/GLB 结构、随包 README/导入图和许可证  
-> 工程复核：2026-09-04（Day 3）；Idle 和独立材质已配置，用户报告 Idle 视觉回归通过；白盒与动画配置已在保存后的编辑态和磁盘确认，保存后运行回归待执行。源素材目录树仍为 9/2 扫描快照。
+> 工程复核：2026-09-07（Day 4 验收）；Idle 和独立材质已配置，用户报告 Idle 视觉回归通过；本次复核了 UAL1 循环设置。源素材目录树仍为 9/2 扫描快照。
 
 ## 1. 审计原则
 
@@ -27,12 +27,12 @@
 | Universal Animation Library[Standard] | 9 | 2 FBX、2 GLB、3 PNG、2 TXT |
 | Universal Base Characters[Standard] | 112 | 26 FBX、18 glTF、18 BIN、48 PNG、2 TXT |
 
-当前 Unity 工程复核（9/4 / Day 3；保存后编辑态与磁盘已核对）：
+当前 Unity 工程复核（9/7 / Day 4；编辑态与磁盘已核对）：
 
 - FBX：Imp 与 UAL1，共 2 个；两者 Humanoid Avatar 均 valid=true、human=true。
 - Imp：`Assets/_Game/Art/Charactors/Player/Model/Imp.fbx`，Bake Axis Conversion=true，编辑态与磁盘 Imp local rotation=(0,0,0)，不沿用旧 Y=180 结论。
 - 纹理：红色 BaseColor 1、Normal、Emissive、ORM 已复制。渲染器引用 MI_Imp（URP/Lit），主纹理为红色 BaseColor；独立资产 Assets/_Game/Materials/MI_Imp.mat 已落盘，Play 中五个 Renderer 共用它；场景绑定已保存，完整贴图视觉效果待验证。
-- UAL1：`Assets/_Game/Animations/Source/UAL1_Standard.fbx`，43 条 Clip；实际名称保留 `Armature|` 前缀。Idle_Loop 循环=true；Walk_Loop、Jog_Fwd_Loop、Sprint_Loop 循环=false。Bake Axis Conversion=false，后续根据预览验证。
+- UAL1：`Assets/_Game/Animations/Source/UAL1_Standard.fbx`，43 条 Clip；实际名称保留 `Armature|` 前缀。Idle、Walk、Jog、Sprint 的 Loop Time 均为 true；Walk 的 Loop Pose 为 true，Idle/Jog/Sprint 为 false。`A_TPose` 被误设为 Loop Time/Loop Pose=true，见 `BUG-002`。Bake Axis Conversion=false，视觉预览仍待执行。
 - PlayerAnimator.controller 已包含默认 Armature|Idle_Loop。Play 中根 Animator 禁用、Imp Animator 启用并绑定 ImpAvatar/Controller，Root Motion=false；用户报告 Idle 视觉回归通过。磁盘场景已保存，根 Animator 禁用与 Imp 播放链一致；重进 Play 回归待确认。
 - UAL2、Puglin、正式环境尚未导入，无 Player Prefab。Play 中已有基础体地面和墙，不能标成完整美术庭院。Idle 的结果不能推广到其他动作。
 
@@ -168,7 +168,7 @@ UAL1 非 RM FBX 有 43 个 AnimationStack/Take；UAL2 非 RM FBX也有 43 个。
 - **Root Motion**：README 明确 `_RM` 文件把 root motion 烘焙进每条动画；无 `_RM` 文件禁用 root motion。
 - **In-Place**：本项目选择的两个非 RM FBX为原地版本；抽查 GLB root translation 恒为 `(0,0,0)`。
 - **代码位移**：统一由 CharacterController/PlayerMotor 执行，`Animator.applyRootMotion = false`。
-- **Loop**：随包说明要求所有以 `_Loop` 结尾的动作在 Unity 中手工开启 Loop Time；当前 UAL1 Idle_Loop 已开启；Walk/Jog/Sprint 等选用循环还未全部配置。
+- **Loop**：随包说明要求所有以 `_Loop` 结尾的动作在 Unity 中手工开启 Loop Time。当前选用的 Idle/Walk/Jog/Sprint 均已开启 Loop Time；Walk 还开启了 Loop Pose。`A_TPose` 不以 `_Loop` 结尾却被误开启循环，需修正并回归。
 - **Root Motion Node**：随包 Unity 设置图指定 `Rig/root`；当前非 RM 项目不以此驱动 Gameplay。
 - **Forward Axis**：FBX GlobalSettings 为 `UpAxis=2/+1`、`FrontAxis=1/+1`、`CoordAxis=0/-1`；RM GLB 位移方向实测为 +Z。随包要求 Bake Axis Conversion。角色在 Unity Scene 中是否最终面向 `Transform.forward (+Z)` 仍必须导入后验证。
 
@@ -454,7 +454,7 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 
 ## 10. Problems Found
 
-1. **Unity 验证部分完成**：Idle 播放链和独立材质已确认，用户报告基本碰撞与 Idle 视觉通过；磁盘场景已同步，保存后运行回归待确认。其他动作循环/重定向、完整贴图效果、楼梯和 NavMesh 尚待验收。
+1. **Unity 验证部分完成**：Idle 播放链和独立材质已确认，用户报告基本碰撞与 Idle 视觉通过；Walk/Jog/Sprint 已开启 Loop Time，但视觉预览、重定向、完整贴图效果、楼梯和 NavMesh 尚待验收。
 2. **骨骼数量不同**：Imp/Puglin 是 55 骨，UAL 是 65 骨；缺 pinky/ball_leaf。Humanoid 预期可行，但必须以 Configure 和逐条动作预览为准。
 3. **Locomotion 不完整**：没有 backward、strafe left/right，因此本月不做 Lock-On 八方向移动。
 4. **没有专用 Dodge**：只有 `Roll` 可替代，本月明确排除 Dodge。
@@ -466,6 +466,7 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 10. **URP 材质需手工建立**：源包无 `.mat`；纹理路径、Normal 与 ORM/Roughness 通道必须验证。
 11. **FBX 不等于 Collider/Prefab**：环境模型没有 Unity Prefab、Collider、LOD 或现成场景，必须在工程内配置。
 12. **许可限制影响仓库**：Bestiary 原始资产不能进入公开 Git 历史，应在第一次提交前配置忽略与放置策略。
+13. **A_TPose 循环误配置**：当前 `Armature|A_TPose` 的 Loop Time 与 Loop Pose 均为 true；它不是循环 Gameplay 动作，应关闭并确认未影响 Animator。
 
 ## 11. Unity 导入验证清单
 
@@ -476,7 +477,7 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 - [ ] Puglin Rig = Humanoid，Avatar Configure 有效。
 - [ ] UAL1/UAL2 Rig = Humanoid，并使用可复用 Avatar/正确映射。
 - [ ] Unity 中实际 Clip 名称与本文映射一致。
-- [ ] 所有 `_Loop` 动作开启 Loop Time，非循环动作未误开。
+- [ ] 所有已采用的 `_Loop` 动作开启 Loop Time，非循环动作未误开（采用的 Idle/Walk/Jog/Sprint 已开启；`A_TPose` 误开待修复）。
 - [ ] `Animator.applyRootMotion = false`，代码与动画没有重复位移。
 - [ ] Imp/Puglin 面向 Unity +Z，手脚和脊柱无明显变形。
 - [ ] Mace/Stick 在各攻击、受击、死亡动作中没有异常拉伸。

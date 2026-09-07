@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-04（Learning Day 3；持久化已通过，保存后运行回归待确认）
+> 最后复核：2026-09-07（Learning Day 4 验收；实现完成，运行用例待执行）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
@@ -20,7 +20,7 @@
 
 ## 2. 当前工程基线
 
-Day 3 实际复核：Idle 默认状态、独立 MI_Imp.mat、PlayerMotor 世界坐标移动/重力已实现；用户报告基础移动和碰撞测试通过。Unity Play 中存在 20×20m 地面、一面墙与校准胶囊，但磁盘场景已保存并核对一致，Day 3 最终收尾仅待重进 Play 回归。详细证据与风险以 PROJECT_STATUS.md 为准。
+Day 4 实际复核：PlayerInputReader 已输出 SprintHeld；PlayerMotor 已实现镜头空间移动、转向、反向转向和 Sprint；Main Camera 引用及速度参数已保存；Idle/Walk/Jog/Sprint Loop Time 已开启。当前 Console 无编译错误，但 Day 4 键鼠运行用例、动作视觉预览、Blend Tree、Prefab、楼梯和自动化测试仍未完成。详细证据与风险以 PROJECT_STATUS.md 为准。
 
 工程基线已具备 Unity 6000.5.6f1、URP、Input System 1.20.0、Cinemachine 3.1.7、AI Navigation、Test Framework、Git 和三份 asmdef，无需重复安装或重新建立输入层。
 
@@ -119,12 +119,12 @@ Day 3 实际复核：Idle 默认状态、独立 MI_Imp.mat、PlayerMotor 世界�
 - **Learning Day 1｜9/2**：干净启动预检；Git、`.gitignore`、Docs 基线；目录与 asmdef；安装 Cinemachine。
 - **Learning Day 2｜9/3（部分完成）**：Imp/UAL1 导入、Avatar、输入读取和镜头原型；欠动画播放验证、材质持久化、庭院 Blockout。
 - **Learning Day 3｜9/4（功能阶段符合预期，持久化通过）**：Idle、独立材质、最小世界坐标 Motor 已实现；白盒与胶囊在 Play 内确认，用户已回归基本输入/碰撞。磁盘场景已同步；保存后运行回归待确认，暂不打最终通过标签。
-- **Learning Day 4｜9/5**：先用约 30 分钟完成 Day 3 保存后运行回归（场景持久化已通过）；60 分钟镜头空间移动/转向；40 分钟 Sprint；30 分钟 Walk/Jog/Sprint 循环与预览；50–60 分钟测试/Docs/Git。复用 InputReader，不提前做 Blend Tree。收尾超过 30 分钟时先保留镜头空间移动和测试，Sprint/动作预览顺延 Day 5，并减少障碍内容。
-- **Learning Day 5｜9/6**：Blend Tree、Player Prefab、楼梯斜坡和障碍碰撞；CameraController 移到 Runtime/Camera（保留 .meta）；输入采样/消费顺序和依赖保护仅做必要整理。时间不足先不导装饰模型。
-- **Learning Day 6｜9/7**：停止新增功能，执行至少 10 条移动/镜头用例和 2 个自动化测试，修复并回归；未满足门槛不打通过标签。
+- **Learning Day 4｜原计划 9/5，9/7 验收**：镜头空间移动、转向、反向转向、Sprint 和选定 locomotion Loop Time 已落地；静态配置与编译检查通过。运行输入测试和动作预览未执行，因此结论为“实现完成，运行验收待完成”。发现 `A_TPose` 被误开循环，登记为 `BUG-002`。
+- **Learning Day 5｜下一学习日**：先用 45–60 分钟执行 Day 4 运行用例并修复 `BUG-002`；通过后实现 Idle/Walk/Jog/Sprint Blend Tree、Animator 速度参数和 Player Prefab；将 CameraController 移到 Runtime/Camera（保留 `.meta`）。时间不足时把依赖保护留到 Day 6，不压缩测试。
+- **Learning Day 6｜Day 5 后一学习日**：停止新增玩法；补楼梯斜坡与最小障碍，执行至少 10 条移动/镜头/动画用例；完成 2 个最小 PlayMode 自动化测试，修复并回归。未满足 Week 1 门槛，不开始 Combat。
 
-本次重排原则：保留 70% 开发学习、30% 测试，优先可玩白盒而非完整美术庭院；环境美术替换与 UAL2 的最终使用验证移到 Week 2 相关任务。仅保留必要地面、墙和楼梯，纯装饰延后，不把欠项全部挤到 9/4。
-若 9/7 未通过 Week 1 门槛，9/8 先补阻断项，Health/UI 合并到 9/9 按实测进度执行；优先删第三段 Combo 和装饰，不删测试。Week 2–4 为暂定安排，每日验收后确认，不以加班假设保证原日期。
+本次重排原则：学习日编号继续按任务顺序推进，不用日历日期冒充完成进度。保留 70% 开发学习、30% 测试，优先可玩白盒；环境美术替换与 UAL2 最终验证移到 Week 2。仅保留必要地面、墙和楼梯，纯装饰延后。
+由于 9/7 尚未通过 Week 1 门槛，9/8 不直接开始 Health/Combat；先完成 Learning Day 5 和 Day 6。Week 2–4 日期均视为目标窗口，后续每日验收按实际进度顺延；优先删第三段 Combo 和装饰，不删测试。
 若 Package Manager 受网络影响，最多排查 30 分钟；可先用静态 Camera 推进 Input/Motor，Cinemachine 最迟在 Week 1 验收前补齐。`com.unity.ai.assistant` 当前承担 Unity MCP Bridge，使用 MCP 期间保留；只有 `com.unity.pipeline` 再次确认阻断解析时才移除。
 
 ## 5. Week 2：生命、近战与 Enemy AI（9/8–9/14）
