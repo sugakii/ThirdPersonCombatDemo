@@ -1,20 +1,20 @@
 # Current Project Status
 
 > Last Updated：2026-09-07
-> Current Learning Day：Day 4 验收
-> Current Phase：Week 1 / Day 4 实现完成，运行验收待执行
+> Current Learning Day：Day 4 已完成
+> Current Phase：Week 1 / Day 4 全部验收通过
 > Next Learning Day：Day 5（按学习顺序，不用日历日期冒充进度）
 > Source of Truth：当前 Unity 工程 + Git + Docs
 
 ## 验收结论
 
-**Day 4 暂不判定 PASS。** 当前源码与场景配置已经实现镜头空间移动、角色转向、反向转向和 Sprint，Unity 无编译错误；但本轮没有模拟键鼠，也没有收到你的 Day 4 手工测试结果，因此运行行为不能提前写成通过。
+**Day 4：PASS。** 当前源码与场景配置已经实现镜头空间移动、角色转向、反向转向和 Sprint；用户完成全部 Day 4 手工用例并报告均符合预期。
 
 - 实现检查：PASS。
 - 场景与引用检查：PASS。
 - 编译/Console 检查：PASS（Gameplay 0 Error）。
-- Day 4 手工运行测试：NOT RUN。
-- Day 4 总体验收：PENDING。
+- Day 4 手工运行测试：PASS（12 条运行/视觉用例）。
+- Day 4 总体验收：PASS（16/16）。
 
 ## 验收证据
 
@@ -27,7 +27,7 @@
 | 位移所有权 | 仍由 PlayerMotor 调用 CharacterController.Move；Root Motion=false | PASS（静态） |
 | 场景绑定 | PlayerMotor.cameraTransform 已绑定 Main Camera；CharacterController Skin Width=0.05 | PASS |
 | 动画循环 | Idle/Walk/Jog/Sprint Loop Time=true；Walk Loop Pose=true | PASS（配置） |
-| 错误配置 | A_TPose 的 Loop Time/Loop Pose 被误开 | BUG-002 |
+| A_TPose 循环配置 | Loop Time/Loop Pose 均为 false；误配置已修复 | PASS（静态） |
 | Animator | 仍只有 Idle 状态，没有 Blend Tree | NOT IMPLEMENTED |
 | Console | 0 Error；1 条 Pipeline 非自动模式警告；另有 Unity AI 生成器重试失败信息 | PASS（Gameplay） |
 | 自动化 / Build | 无测试代码；未执行 Windows Build | NOT RUN |
@@ -67,12 +67,11 @@ PlayerInputReader
 
 ## Known Bugs / Risks
 
-1. `BUG-001` Resolved：旧 Imp Avatar/Rig 腿脚扭曲；Idle 已回归，Walk/Jog/Sprint 视觉回归仍未执行。
-2. `BUG-002` Open：A_TPose 被误开启 Loop Time 与 Loop Pose；当前不阻断 Gameplay。
-3. 镜头空间方向、斜向速度、转向、180°快速换向、Sprint 按下/释放和碰撞尚未运行验收。
-4. 反向转向期间会锁定开始时的 `reverseTurnDirection`；快速改变输入时是否产生视觉/位移分离需实测，不先登记为 Bug。
-5. 必需组件与序列化引用缺少启动保护；只在 Day 5 做最小整理。
-6. 没有 Blend Tree、楼梯/斜坡和自动化测试，Week 1 门槛未达到。
+1. `BUG-001` Closed：旧 Imp Avatar/Rig 腿脚扭曲；Idle/Walk/Jog/Sprint 与 Console 回归通过。
+2. `BUG-002` Closed：A_TPose 已恢复为非循环，用户 Play Mode 回归通过。
+3. 反向转向的快速改变输入用例已通过；保留实现，不进行无依据重构。
+4. 必需组件与序列化引用缺少启动保护；只在 Day 5 做最小整理。
+5. 没有 Blend Tree、楼梯/斜坡和自动化测试，Week 1 总门槛尚未达到。
 
 ## Git
 
@@ -83,20 +82,12 @@ PlayerInputReader
 
 ## Next Task
 
-### Day 4 运行收尾（Day 5 开始时，45–60 分钟）
-
-1. 修复 `BUG-002`：关闭 A_TPose 的 Loop Time/Loop Pose，Apply。
-2. 执行 `TEST_REPORT_DAY3.md` 中 D4-05 至 D4-16；记录实际结果。
-3. 重点检查相机旋转后 W 方向、W+D 速度、180°换向、Shift 按下/释放、贴墙冲刺和镜头俯仰极限。
-4. 预览 Idle/Walk/Jog/Sprint，确认腿脚、朝向、滑步和循环接缝。
-5. 若上述通过，把 Day 4 改为 PASS；失败项先进入 BUG_REPORTS，再修复回归。
-
-### Learning Day 5（剩余约 2–3 小时）
+### Learning Day 5（3–4 小时）
 
 - 建立 Idle/Walk/Jog/Sprint 1D Blend Tree 与速度参数。
 - 创建 Player Prefab。
 - 将 CameraController 移到 `Runtime/Camera`，保留 `.meta`。
-- 只做必要的组件/引用保护；楼梯与自动化测试留给 Day 6。
+- 只做必要的组件/引用保护；完成后执行 Blend Tree、Prefab 和基础移动回归。楼梯与自动化测试留给 Day 6。
 
 ## Update Rules
 

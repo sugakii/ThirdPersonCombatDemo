@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-07（Learning Day 4 验收；实现完成，运行用例待执行）
+> 最后复核：2026-09-07（Learning Day 4；16/16 用例通过）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
@@ -20,7 +20,7 @@
 
 ## 2. 当前工程基线
 
-Day 4 实际复核：PlayerInputReader 已输出 SprintHeld；PlayerMotor 已实现镜头空间移动、转向、反向转向和 Sprint；Main Camera 引用及速度参数已保存；Idle/Walk/Jog/Sprint Loop Time 已开启。当前 Console 无编译错误，但 Day 4 键鼠运行用例、动作视觉预览、Blend Tree、Prefab、楼梯和自动化测试仍未完成。详细证据与风险以 PROJECT_STATUS.md 为准。
+Day 4 已通过：PlayerInputReader 输出 SprintHeld；PlayerMotor 已实现镜头空间移动、转向、反向转向和 Sprint；Main Camera 引用及速度参数已保存；Idle/Walk/Jog/Sprint Loop Time 正确。用户完成全部 Day 4 手工测试，16/16 通过。Blend Tree、Prefab、楼梯和自动化测试仍未完成。详细证据以 PROJECT_STATUS.md 为准。
 
 工程基线已具备 Unity 6000.5.6f1、URP、Input System 1.20.0、Cinemachine 3.1.7、AI Navigation、Test Framework、Git 和三份 asmdef，无需重复安装或重新建立输入层。
 
@@ -119,8 +119,8 @@ Day 4 实际复核：PlayerInputReader 已输出 SprintHeld；PlayerMotor 已实
 - **Learning Day 1｜9/2**：干净启动预检；Git、`.gitignore`、Docs 基线；目录与 asmdef；安装 Cinemachine。
 - **Learning Day 2｜9/3（部分完成）**：Imp/UAL1 导入、Avatar、输入读取和镜头原型；欠动画播放验证、材质持久化、庭院 Blockout。
 - **Learning Day 3｜9/4（功能阶段符合预期，持久化通过）**：Idle、独立材质、最小世界坐标 Motor 已实现；白盒与胶囊在 Play 内确认，用户已回归基本输入/碰撞。磁盘场景已同步；保存后运行回归待确认，暂不打最终通过标签。
-- **Learning Day 4｜原计划 9/5，9/7 验收**：镜头空间移动、转向、反向转向、Sprint 和选定 locomotion Loop Time 已落地；静态配置与编译检查通过。运行输入测试和动作预览未执行，因此结论为“实现完成，运行验收待完成”。发现 `A_TPose` 被误开循环，登记为 `BUG-002`。
-- **Learning Day 5｜下一学习日**：先用 45–60 分钟执行 Day 4 运行用例并修复 `BUG-002`；通过后实现 Idle/Walk/Jog/Sprint Blend Tree、Animator 速度参数和 Player Prefab；将 CameraController 移到 Runtime/Camera（保留 `.meta`）。时间不足时把依赖保护留到 Day 6，不压缩测试。
+- **Learning Day 4｜原计划 9/5，9/7 验收通过**：镜头空间移动、转向、反向转向、Sprint 和 locomotion Loop 配置已落地；16/16 用例通过。`BUG-001`、`BUG-002` 均已回归关闭。
+- **Learning Day 5｜下一学习日**：实现 Idle/Walk/Jog/Sprint Blend Tree、Animator 速度参数和 Player Prefab；将 CameraController 移到 Runtime/Camera（保留 `.meta`）；只做必要的组件/引用保护。时间不足时把保护整理留到 Day 6，不压缩测试。
 - **Learning Day 6｜Day 5 后一学习日**：停止新增玩法；补楼梯斜坡与最小障碍，执行至少 10 条移动/镜头/动画用例；完成 2 个最小 PlayMode 自动化测试，修复并回归。未满足 Week 1 门槛，不开始 Combat。
 
 本次重排原则：学习日编号继续按任务顺序推进，不用日历日期冒充完成进度。保留 70% 开发学习、30% 测试，优先可玩白盒；环境美术替换与 UAL2 最终验证移到 Week 2。仅保留必要地面、墙和楼梯，纯装饰延后。

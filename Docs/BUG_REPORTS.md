@@ -33,7 +33,7 @@
 - 当前验证版本：`b051871` 之后的 Day 4 工作树
 - Unity：`6000.5.6f1`
 - 场景：`Assets/_Game/Scenes/SampleScene.unity`
-- 状态：Resolved
+- 状态：Closed
 - 严重程度：Major
 - 优先级：High
 - 复现率：首次排查时可稳定复现，未记录精确次数
@@ -98,12 +98,12 @@ Imp 能正常播放重定向后的 Idle 动画，腿、脚和武器没有明显�
 | Idle_Loop | PASS（用户手工测试） |
 | Root Motion 漂移 | 未观察到 |
 | 保存后的配置检查 | PASS |
-| Walk/Jog/Sprint | NOT RUN |
-| Console 中旧 Rig Error 是否再次出现 | 保存后 Play 回归待确认 |
+| Walk/Jog/Sprint | PASS（用户 Day 4 手工测试） |
+| Console 中旧 Rig Error 是否再次出现 | PASS（用户 Day 4 全量回归未报告复现） |
 
 ### 关闭条件
 
-保存后重新进入 Play，Idle 无明显变形且 Console 不再出现该 Rig Error；随后至少抽查 Walk、Jog、Sprint。条件全部满足后将状态改为 Closed。
+关闭条件已满足：用户在保存后的当前工程完成 Day 4 全量测试，Idle/Walk/Jog/Sprint 视觉测试通过，Console 未报告 Rig Error 再现。
 
 ---
 
@@ -115,7 +115,7 @@ Imp 能正常播放重定向后的 Idle 动画，腿、脚和武器没有明显�
 - 首次发现版本：Day 4 工作树，尚未提交
 - Unity：`6000.5.6f1`
 - 资源：`Assets/_Game/Animations/Source/UAL1_Standard.fbx`
-- 状态：Open
+- 状态：Closed
 - 严重程度：Minor
 - 优先级：Low
 - 复现率：静态配置稳定存在
@@ -141,9 +141,11 @@ Imp 能正常播放重定向后的 Idle 动画，腿、脚和武器没有明显�
 
 ### 修复与回归
 
-- [ ] 关闭 A_TPose 的 Loop Time 与 Loop Pose，并 Apply。
-- [ ] 确认 Idle/Walk/Jog/Sprint 的 Loop Time 仍为 true。
-- [ ] 确认 PlayerAnimator 默认状态和运行表现不受影响。
+- [x] 关闭 A_TPose 的 Loop Time 与 Loop Pose，并 Apply。
+- [x] 确认 Idle/Walk/Jog/Sprint 的 Loop Time 仍为 true。
+- [x] 确认 PlayerAnimator 默认状态和运行表现不受影响。
+
+当前磁盘复核：A_TPose 为 `loopTime=0 / loopBlend=0`；Idle、Walk、Jog、Sprint 均为 `loopTime=1`。用户已完成 Play Mode 回归，未报告 T Pose、默认状态异常或新增 Console 错误，Bug Closed。
 
 ---
 
