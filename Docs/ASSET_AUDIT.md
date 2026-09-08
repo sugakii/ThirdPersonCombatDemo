@@ -2,7 +2,7 @@
 
 > 扫描日期：2026-09-02  
 > 扫描源：`MaterialPackage/` 实际本地文件、FBX/GLB 结构、随包 README/导入图和许可证  
-> 工程复核：2026-09-07（Day 5 通过）；Idle/Walk/Jog/Sprint Blend Tree、Player Prefab 和独立材质已配置并回归；UAL1 循环设置已核对。源素材目录树仍为 9/2 扫描快照。
+> 工程复核：2026-09-08（Day 6 条件通过）；Idle/Walk/Jog/Sprint、Player Prefab 与材质保持有效，新增楼梯、30°/50°斜坡、墙角和平台白盒并完成手工碰撞回归。源素材目录树仍为 9/2 扫描快照。
 
 ## 1. 审计原则
 
@@ -27,14 +27,14 @@
 | Universal Animation Library[Standard] | 9 | 2 FBX、2 GLB、3 PNG、2 TXT |
 | Universal Base Characters[Standard] | 112 | 26 FBX、18 glTF、18 BIN、48 PNG、2 TXT |
 
-当前 Unity 工程复核（9/7 / Day 4；编辑态与磁盘已核对）：
+当前 Unity 工程复核（9/8 / Day 6；编辑态、磁盘和用户手工结果已核对）：
 
 - FBX：Imp 与 UAL1，共 2 个；两者 Humanoid Avatar 均 valid=true、human=true。
 - Imp：`Assets/_Game/Art/Charactors/Player/Model/Imp.fbx`，Bake Axis Conversion=true，编辑态与磁盘 Imp local rotation=(0,0,0)，不沿用旧 Y=180 结论。
 - 纹理：红色 BaseColor 1、Normal、Emissive、ORM 已复制。渲染器引用 MI_Imp（URP/Lit），主纹理为红色 BaseColor；独立资产 Assets/_Game/Materials/MI_Imp.mat 已落盘，Play 中五个 Renderer 共用它；场景绑定已保存，完整贴图视觉效果待验证。
 - UAL1：`Assets/_Game/Animations/Source/UAL1_Standard.fbx`，43 条 Clip；实际名称保留 `Armature|` 前缀。Idle、Walk、Jog、Sprint 的 Loop Time 均为 true；Walk 的 Loop Pose 为 true，Idle/Jog/Sprint 为 false。`A_TPose` 的 Loop Time/Loop Pose 均为 false。用户完成四个 locomotion Clip 的视觉回归，`BUG-001`、`BUG-002` 均 Closed。Bake Axis Conversion=false。
 - PlayerAnimator.controller 已使用 Speed 1D Blend Tree：Idle=0、Walk=2.5、Jog=5、Sprint=10。Imp Animator 启用并绑定 ImpAvatar/Controller，Root Motion=false；用户完成静止、普通移动、冲刺、松键和撞墙动画回归。
-- Player Prefab 已创建并保存内部 CameraTarget/Imp Animator 引用。UAL2、Puglin、正式环境尚未导入；现有基础体地面和墙不能标成完整美术庭院。
+- Player Prefab 已创建并保存内部 CameraTarget/Imp Animator 引用。楼梯、30°/50°斜坡、墙角和平台白盒已保存并通过手工碰撞回归。UAL2、Puglin、正式环境尚未导入；现有基础体不能标成完整美术庭院。
 
 ## 3. 正式使用清单
 
@@ -454,7 +454,7 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 
 ## 10. Problems Found
 
-1. **Unity 验证部分完成**：Idle 播放链和独立材质已确认；用户报告基本碰撞及 Idle/Walk/Jog/Sprint 视觉回归通过。完整贴图效果、楼梯和 NavMesh 尚待验收。
+1. **Unity 验证部分完成**：Idle/Walk/Jog/Sprint 播放链、独立材质、Player Prefab、楼梯、30°/50°斜坡、墙角与平台白盒碰撞已完成手工回归。正式环境模型替换、完整贴图效果和 NavMesh 尚待验收。
 2. **骨骼数量不同**：Imp/Puglin 是 55 骨，UAL 是 65 骨；缺 pinky/ball_leaf。Humanoid 预期可行，但必须以 Configure 和逐条动作预览为准。
 3. **Locomotion 不完整**：没有 backward、strafe left/right，因此本月不做 Lock-On 八方向移动。
 4. **没有专用 Dodge**：只有 `Roll` 可替代，本月明确排除 Dodge。

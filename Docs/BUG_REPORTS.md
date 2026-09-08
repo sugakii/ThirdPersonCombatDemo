@@ -2,7 +2,7 @@
 
 > 项目：Third-Person Combat Demo  
 > 维护规则：只记录实际复现的缺陷；修复后必须回归，不能仅凭代码修改关闭。
-> 最近回归：2026-09-07 / Day 5；三项引用缺失属于主动异常测试，保护按预期工作，未登记新 Bug。
+> 最近回归：2026-09-08 / Day 6；新增并关闭 PlayMode 初始化时序缺陷，另保留一项空中控制问题。
 
 ## 状态定义
 
@@ -147,6 +147,89 @@ Imp 能正常播放重定向后的 Idle 动画，腿、脚和武器没有明显�
 - [x] 确认 PlayerAnimator 默认状态和运行表现不受影响。
 
 当前磁盘复核：A_TPose 为 `loopTime=0 / loopBlend=0`；Idle、Walk、Jog、Sprint 均为 `loopTime=1`。用户已完成 Play Mode 回归，未报告 T Pose、默认状态异常或新增 Console 错误，Bug Closed。
+
+---
+
+## BUG-003：PlayMode 输入测试因场景初始化时序偶发假失败
+
+### 基本信息
+
+- 发现日期：2026-09-08
+- 首次发现版本：Day 6 工作树，尚未提交
+- Unity：`6000.5.6f1`
+- 测试：`Assets/_Game/Tests/PlayMode/PlayerMotorPlayModeTests.cs`
+- 状态：Closed
+- 严重程度：Minor
+- 优先级：High
+- 类型：Test Defect / Flaky Test
+
+### 复现步骤
+
+1. 使用 `SceneManager.LoadScene("SampleScene")` 加载场景。
+2. 只执行一次 `yield return null`。
+3. 立即通过虚拟 Keyboard 发送 W 输入并读取 `CurrentMoveSpeed`。
+4. 重复 Run All，或在 Unity 冷启动后首次运行。
+
+### 实际结果
+
+`normalSpeed` 偶发为 `0`，触发 `Expected: greater than 0.1; But was: 0.0`。相同代码重跑可能 PASS，属于假失败。
+
+### 预期结果
+
+测试必须在场景和 PlayerInput 完成初始化后发送虚拟输入；相同工程状态下结果稳定。
+
+### 根因
+
+测试把“加载场景后固定等待一帧”等同于“场景和输入系统已经准备完成”。这个时序假设偶尔不成立。
+
+### 修复
+
+改用 `SceneManager.LoadSceneAsync()`，`yield return loadOperation` 明确等待完成，再额外等待一帧后获取 Player 和发送输入。
+
+### 回归结果
+
+| 项目 | 结果 |
+|---|---|
+| 连续 Run All 5 次 | 2/2 PASS |
+| Unity 完全关闭后冷启动首次 Run All | 2/2 PASS |
+| 结论 | Closed；初始化稳定性恢复 |
+
+---
+
+## BUG-004：角色离地后仍保留完整水平控制速度
+
+### 基本信息
+
+- 发现日期：2026-09-08
+- 首次发现版本：Day 6 工作树，尚未提交
+- Unity：`6000.5.6f1`
+- 场景：`Assets/_Game/Scenes/SampleScene.unity`
+- 状态：Open
+- 严重程度：Minor
+- 优先级：Medium
+- 复现率：用户 Day 6 测试中可观察
+
+### 复现步骤
+
+1. 进入 `SampleScene`。
+2. 让 Player 从平台边缘走出。
+3. 离地期间继续输入方向，或快速改变方向。
+
+### 实际结果
+
+Player 离地后仍保留与地面相同的完整水平控制能力和速度。
+
+### 预期结果
+
+空中控制应有明确规则：保持离地瞬间水平速度，或只允许受限的空中修正；不应无意中沿用完整地面控制。
+
+### 影响范围
+
+当前项目不做跳跃，因此不阻断 Week 1 地面移动验收；后续平台掉落与 Dash 位移可能受影响。
+
+### 处理计划
+
+暂不在 Day 6 顺带修改 PlayerMotor。进入技能位移前确定最小空中控制规则，再实现并增加平台边缘回归用例。
 
 ---
 

@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-07（Day 5；实现、Prefab 持久化、异常测试与用户运行回归均通过）
+> 最后复核：2026-09-08（Day 6；物理白盒、手工回归及 PlayMode 测试结构已核对）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -45,7 +45,11 @@ Player
 ├─ PlayerAnimatorDriver（将实际水平速度写入 Animator Speed）
 ├─ Imp（启用的 Animator + ImpAvatar + PlayerAnimator；Root Motion=false）
 └─ CameraTarget
-Ground_Blockout / Wall_Blockout（编辑态存在，已保存）
+Ground_Blockout / Wall_Blockout
+├─ Stairs_Blockout
+├─ Slopes_Blockout（Slope_30 / Slope_50）
+├─ Corner_Blockout
+└─ Platform_Blockout（均已保存）
 ```
 
 - PlayerMotor 当前负责镜头空间移动、斜向限幅、重力、角色转向和 Sprint 速度切换；`cameraTransform` 指向 Prefab 内的 CameraTarget，普通速度 5、冲刺速度 10、转向速度 720°/s、反向转向速度 1440°/s。
@@ -54,8 +58,9 @@ Ground_Blockout / Wall_Blockout（编辑态存在，已保存）
 - Player Prefab 已创建，cameraTransform/cameraTarget 均指向内部 CameraTarget，animator 指向内部 Imp Animator，不依赖场景 Main Camera。
 - PlayerInputReader、PlayerMotor、CameraController、PlayerAnimatorDriver 已声明必要 RequireComponent；三个 Inspector 引用缺失时会记录一次明确错误并禁用自身，异常测试通过。
 - Imp 的编辑态与磁盘 local rotation=(0,0,0)，不是旧文档的 Y=180；根 Player 由 PlayerMotor 转向，视觉朝向的 Day 4 手工回归通过。
-- Game.Runtime 引用 Input System；两份 Tests asmdef 已建立，无测试代码。
-- 无 Combat、Health、Enemy AI、Skill、UI、GameFlow、楼梯或 NavMesh。
+- Game.Runtime 引用 Input System；PlayMode Tests asmdef 已引用 Game.Runtime、Unity Test Runner 与 Unity.InputSystem。
+- `PlayerMotorPlayModeTests` 使用虚拟 Keyboard 和真实 `SampleScene`；场景通过 `LoadSceneAsync` 完成初始化。斜向限速断言有效；Sprint 恢复测试仍缺功能断言。
+- 无 Combat、Health、Enemy AI、Skill、UI、GameFlow 或 NavMesh。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -273,6 +278,8 @@ Docs/
 | Package 解析复发 | Unity 启动时持续 UPM 错误 | 先验证核心包；Cinemachine 失败时短期用静态相机推进 Input/Motor；只移除确认阻断的非核心包 |
 | 输入采样晚一帧 | InputReader 与消费者同在 Update，执行顺序未固定 | 先用运行测试判断是否可感知；只有实际出现问题时再统一采样时机或设置执行顺序 |
 | 反向转向与输入改变不同步 | 180° 转向期间快速改变方向时视觉朝向偏离位移 | 用边界用例确认；仅在可复现时修改反向转向状态逻辑 |
+| 空中控制沿用地面速度 | Player 离开平台后仍可完整改变水平速度与方向 | Week 1 保留为 BUG-004；实现 Dash 前确定受限空中控制规则并回归 |
+| PlayMode 用例标题与断言不一致 | Test Runner 绿灯，但目标行为未真正执行或比较 | 验收时同时审查 Arrange/Act/Assert；补全 Sprint 按下、释放与恢复断言 |
 
 ## 12. 变更规则
 

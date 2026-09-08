@@ -1,24 +1,25 @@
 # Current Project Status
 
-> Last Updated：2026-09-07
-> Current Learning Day：Day 5 已完成
-> Current Phase：Week 1 / Day 5 全部验收通过
-> Next Learning Day：Day 6
+> Last Updated：2026-09-08
+> Current Learning Day：Day 6 条件通过
+> Current Phase：Week 1 验收收尾
+> Next Learning Day：补全 D6-AUT-02 后进入 Day 7
 > Source of Truth：当前 Unity 工程 + Git + Docs
 
 ## 验收结论
 
-**Day 5：PASS（16/16）。** Blend Tree、实际速度动画驱动、Player Prefab、CameraController 模块迁移、组件依赖声明和 Inspector 引用保护均已实现。用户完成全部运行、异常与最终回归用例并报告通过；磁盘 Prefab/Scene 引用已核对。
+**Day 6：CONDITIONAL PASS。** 楼梯、30°/50°斜坡、墙角、沿墙滑动、平台边缘和 Week 1 手工回归均通过；斜向限速自动化测试有效且稳定。场景加载时序导致的偶发假失败已修复，并通过连续 5 次和 Unity 冷启动首次运行回归。
+
+当前唯一未完成门槛是 `SprintRelease_RestoresNormalSpeed`：Test Runner 显示 PASS，但源码只断言普通移动速度大于 0，没有发送 Shift、释放 Shift 或比较恢复后的速度，因此不能作为 Sprint 恢复功能的有效自动化证据。
 
 ## Implemented
 
-- PlayerInputReader：输出 Move、Look、Sprint 意图，依赖 PlayerInput。
-- PlayerMotor：镜头空间移动、重力、转向、Reverse Turn、Sprint，并公开实际水平速度 CurrentMoveSpeed。
-- CameraController：位于 `Runtime/Camera`，消费 LookInput 并旋转 CameraTarget。
-- PlayerAnimatorDriver：在 LateUpdate 将实际水平速度写入 Animator 的 Speed 参数。
-- PlayerAnimator：1D Blend Tree，Idle=0、Walk=2.5、Jog=5、Sprint=10。
-- Player Prefab：保存 Player 全部组件与内部 CameraTarget、Imp Animator 引用。
-- 引用保护：三个 Inspector 引用缺失时记录明确错误、禁用对应脚本并停止继续执行。
+- Week 1 Player 控制底座：InputReader、镜头控制、CharacterController 移动、重力、转向、Reverse Turn 与 Sprint。
+- Idle/Walk/Jog/Sprint Blend Tree，并由实际水平速度驱动。
+- Player Prefab 与 Inspector 引用保护。
+- Day 6 物理测试白盒：楼梯、30°/50°斜坡、墙角和平台。
+- PlayMode 测试程序集接入 Input System，并建立虚拟键盘输入测试。
+- PlayMode 场景初始化改用 `LoadSceneAsync` 明确等待加载完成。
 
 ## Test Evidence
 
@@ -27,32 +28,33 @@
 | Day 3 | 11/11 PASS |
 | Day 4 | 16/16 PASS |
 | Day 5 | 16/16 PASS |
-| CameraController.cameraTarget=None | 单次明确错误；脚本禁用；无持续 NullReferenceException |
-| PlayerAnimatorDriver.animator=None | 单次明确错误；脚本禁用；无持续 NullReferenceException |
-| PlayerMotor.cameraTransform=None | 单次明确错误；脚本禁用；无持续 NullReferenceException |
-| 恢复引用与持久化 | 用户确认完成；Prefab 三个内部引用在磁盘有效 |
-| 最终功能回归 | WASD、镜头、转向、Reverse Turn、Sprint、动画、撞墙和 Console 全部通过 |
+| Day 6 手工回归 | 10/10 PASS |
+| 楼梯、30°/50°斜坡、墙角/沿墙、平台边缘 | PASS |
+| `DiagonalInput_DoesNotExceedMoveSpeed` | Stable PASS |
+| `SprintRelease_RestoresNormalSpeed` | INCOMPLETE：测试名与实际断言不一致 |
+| 自动化初始化稳定性 | 连续 5 次 + 冷启动首次运行，均 2/2 绿灯 |
+| Unity Console | 0 Error；1 条 Pipeline 非自动化模式警告 |
 
 ## Current Architecture
 
 ```text
-PlayerInput / InputSystem_Actions
+Input System / PlayerInput
         ↓
 PlayerInputReader
-├─ LookInput ─────→ CameraController ─→ CameraTarget / Cinemachine
-├─ MoveInput ─────┐
-└─ SprintHeld ────┴→ PlayerMotor ─────→ CharacterController.Move
-                         │
-                         └─ CurrentMoveSpeed
-                                  ↓
-                     PlayerAnimatorDriver
-                                  ↓
-                  Animator.Speed / Locomotion Blend Tree
+├─ LookInput → CameraController → CameraTarget / Cinemachine
+├─ MoveInput ──┐
+└─ SprintHeld ─┴→ PlayerMotor → CharacterController.Move
+                                      │
+                                      └→ CurrentMoveSpeed
+                                               ↓
+                                  PlayerAnimatorDriver → Animator
+
+PlayMode Tests
+└─ Virtual Keyboard → PlayerInput → real SampleScene Player
 ```
 
-- `Player.prefab` 内部持有 CameraTarget 和 Imp Animator 引用，不依赖场景 Main Camera。
-- CharacterController 仍是 Gameplay 位移的唯一执行者；Animator Root Motion=false。
-- Input、Camera、Player 的当前目录职责已经分开。
+- CharacterController 是 Player Gameplay 位移的唯一执行者；Animator Root Motion=false。
+- `PlayerMotorPlayModeTests` 使用独立虚拟 Keyboard，并在每个测试后移除设备。
 - Combat、Health、Enemy AI、Skill、UI、GameFlow 尚未实现。
 
 ## Files
@@ -61,44 +63,39 @@ PlayerInputReader
 - `Assets/_Game/Runtime/Camera/CameraController.cs`
 - `Assets/_Game/Runtime/Player/PlayerMotor.cs`
 - `Assets/_Game/Runtime/Player/PlayerAnimatorDriver.cs`
-- `Assets/_Game/Animations/Player/PlayerAnimator.controller`
-- `Assets/_Game/Prefabs/Player.prefab`
+- `Assets/_Game/Tests/PlayMode/PlayerMotorPlayModeTests.cs`
+- `Assets/_Game/Tests/PlayMode/Game.Tests.PlayMode.asmdef`
 - `Assets/_Game/Scenes/SampleScene.unity`
-- `Docs/ASSET_AUDIT.md`
-- `Docs/PROJECT_ARCHITECTURE.md`
-- `Docs/ROADMAP.md`
-- `Docs/PROJECT_STATUS.md`
-- `Docs/BUG_REPORTS.md`
-- `Docs/TEST_REPORT/TEST_CASE_DAY3.md`
-- `Docs/TEST_REPORT/TEST_CASE_DAY4.md`
-- `Docs/TEST_REPORT/TEST_CASE_DAY5.md`
+- `Docs/TEST_REPORT/TEST_CASE_DAY6.md`
 
 ## Known Bugs / Risks
 
-1. `BUG-001` Closed：Imp Avatar/Rig 腿脚扭曲已完成 locomotion 回归。
-2. `BUG-002` Closed：A_TPose 循环误配置已修复并回归。
-3. 当前没有已知 Open Gameplay Bug。
-4. 尚无楼梯/斜坡、最小障碍和自动化测试，Week 1 总验收门槛仍未完成。
+1. `BUG-003` Closed：PlayMode 测试只固定等待一帧导致偶发假失败；改用 `LoadSceneAsync` 后稳定回归通过。
+2. `BUG-004` Open：角色离地后仍保留完整水平控制速度；当前不阻断 Week 1 地面移动验收，进入技能位移前必须明确空中控制规则。
+3. `SprintRelease_RestoresNormalSpeed` 尚未覆盖其命名目标，不能用绿灯替代测试设计验收。
 
 ## Git
 
-- 当前分支：`main`；HEAD：`c9c355e`。
-- Day 5 代码、Animator、Prefab、Scene 和新测试文档尚未提交。
-- `ProjectSettings/Packages/com.unity.ai.assistant/Settings.json` 与 `ProjectSettings/SceneTemplateSettings.json` 是本地工具/编辑器状态，不作为 Day 5 成果提交。
-- 默认提交全部自有代码及 `.meta`、Animator、Prefab、Scene 和 Docs。
+- 当前分支：`main`；HEAD：`7e0182d`。
+- Day 6 场景、测试、代码注释和 Docs 尚未提交。
+- `ProjectSettings/Packages/com.unity.ai.assistant/Settings.json` 与 `ProjectSettings/SceneTemplateSettings.json` 属于本地工具/编辑器状态，本次不提交。
+- 默认提交全部自有代码及对应 `.meta`、程序集配置、Scene 与 Docs。
 
 ## Next Task
 
-### Learning Day 6
+### Day 6 收尾（先做）
 
-- 停止新增玩法。
-- 创建楼梯斜坡与最小障碍，验证 CharacterController 上下楼、墙角和平台边缘。
-- 编写并执行至少 10 条 Week 1 移动/镜头/动画回归用例。
-- 完成 2 个最小 PlayMode 自动化测试：斜向限速、Sprint 速度恢复。
-- 修复真实失败项并回归；满足 Week 1 门槛后才进入 Combat/Health。
+- 补全 `SprintRelease_RestoresNormalSpeed`：记录普通速度 → W+Shift 验证速度提高 → 释放 Shift 保留 W → 验证恢复到普通速度容差内。
+- 连续运行 5 次并执行一次 Unity 冷启动首次 Run All。
+- 通过后把 Day 6 和 Week 1 改为 PASS，并创建 `week-01-movement` 标签。
+
+### Learning Day 7（通过上项后）
+
+- 从失败测试开始实现 `DamageInfo`、`IDamageable` 与通用 `Health`。
+- 不在 Health 中引用 UI、Animator、Player 或 Enemy。
 
 ## Update Rules
 
-- 未运行的用例写 NOT RUN；用户手工测试、静态检查与自动化结果分开记录。
-- Day 结束后同步工程、Git 和 Docs；聊天记录不能覆盖工程事实。
-- 已验收架构默认冻结，没有复现问题时不进行替代式重构。
+- 未运行写 NOT RUN；测试名、步骤、断言和结果必须一致。
+- 绿灯只证明现有断言通过，不自动证明用例标题描述的行为已覆盖。
+- Day 结束后同步工程、Git 和 Docs；已验收架构默认冻结。
