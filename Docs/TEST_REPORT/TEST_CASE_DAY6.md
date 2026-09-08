@@ -23,7 +23,7 @@
 | D6-09 | Manual | 平台边缘掉落 | 从平台边缘走出 | 正常离地和下落，不悬空、不穿地 | 用户测试通过 | PASS |
 | D6-10 | Manual | 动画与 Console 回归 | 测试 Idle/Jog/Sprint、撞墙和停止 | 动画跟随实际速度；无 Gameplay Error | 用户测试通过；当前 Console 0 Error | PASS |
 | D6-AUT-01 | Automated | `DiagonalInput_DoesNotExceedMoveSpeed` | 虚拟键盘发送 W，再发送 W+D 并比较速度 | 前进速度 > 0；斜向速度 ≤ 前进速度 + 0.1 | 连续运行与冷启动运行均通过；源码断言覆盖目标 | STABLE PASS |
-| D6-AUT-02 | Automated | `SprintRelease_RestoresNormalSpeed` | 当前源码仅发送 W 并断言普通速度 > 0 | 应发送 W+Shift、验证加速、释放 Shift 后验证恢复 | Test Runner 为 PASS，但缺少 Sprint/释放阶段与恢复断言 | INCOMPLETE |
+| D6-AUT-02 | Automated | `SprintRelease_RestoresNormalSpeed` | 记录 W 普通速度；发送 W+Shift；释放 Shift 并保持 W | 普通速度 > 0；Sprint 明显加速；释放后在 0.1 容差内恢复 | 源码覆盖三个阶段；连续 5 轮均 PASS | STABLE PASS |
 
 ## 自动化稳定性缺陷回归
 
@@ -34,15 +34,15 @@
 | 修复 | 改用 `LoadSceneAsync()`，等待 `AsyncOperation` 完成后再额外等待一帧 |
 | 连续 Run All 5 次 | 2/2 绿灯 |
 | Unity 冷启动首次 Run All | 2/2 绿灯 |
-| 结论 | 初始化时序问题已关闭；不改变 D6-AUT-02 功能断言不完整的事实 |
+| 结论 | 初始化时序问题已关闭；补全 D6-AUT-02 后连续 5 轮完整断言均通过 |
 
 ## 结果汇总
 
 | 结果 | 数量 |
 |---|---:|
-| PASS / STABLE PASS | 11 |
-| INCOMPLETE | 1 |
+| PASS / STABLE PASS | 12 |
+| INCOMPLETE | 0 |
 | FAIL | 0 |
 | NOT RUN | 0 |
 
-结论：**CONDITIONAL PASS（11 项有效通过，1 项自动化覆盖未完成）**。手工回归和测试场景验收通过；补全 D6-AUT-02 的实际 Sprint 按下、释放与速度恢复断言后，才能关闭 Day 6 和 Week 1 自动化门槛。
+结论：**PASS（12/12）**。手工回归、物理白盒与两条 PlayMode 自动化均通过；完成 Sprint 断言后的自动化连续执行 5 轮，全部 2/2 PASS。Day 6 与 Week 1 验收门槛已满足。

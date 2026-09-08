@@ -87,7 +87,7 @@ public class PlayerMotorPlayModeTests
     }
 
     /// <summary>
-    /// 目标是验证松开 Sprint 后恢复普通速度；当前实现仍缺少 Sprint 与释放阶段断言。
+    /// 验证 Sprint 会提高移动速度，并在松开后恢复到原来的普通速度。
     /// </summary>
     [UnityTest]
     public IEnumerator SprintRelease_RestoresNormalSpeed()
@@ -96,7 +96,7 @@ public class PlayerMotorPlayModeTests
         AsyncOperation loadOperation = SceneManager.LoadSceneAsync("SampleScene");
 
         yield return loadOperation;
-        
+
         yield return null;
 
         PlayerMotor playerMotor = Object.FindAnyObjectByType<PlayerMotor>();
@@ -120,7 +120,45 @@ public class PlayerMotorPlayModeTests
 
         float normalSpeed = playerMotor.CurrentMoveSpeed;
 
-        // 当前断言只证明普通移动已经开始；Sprint 按下与松开恢复断言仍需补全。
+        // 先确认普通移动已经开始，避免后续速度比较出现假通过。
         Assert.Greater(normalSpeed, 0.1f);
+
+        // Act：保持 W 并按下 Shift，取得冲刺速度。
+        InputSystem.QueueStateEvent(
+            keyboard,
+            new KeyboardState(Key.W, Key.LeftShift)
+        );
+
+        InputSystem.Update();
+
+        yield return null;
+        yield return null;
+
+        float sprintSpeed = playerMotor.CurrentMoveSpeed;
+
+        // Assert：冲刺速度必须明显高于普通速度。
+        Assert.Greater(
+            sprintSpeed,
+            normalSpeed + 0.1f
+        );
+
+        // Act：保持 W、释放 Shift，取得恢复后的移动速度。
+        InputSystem.QueueStateEvent(
+            keyboard,
+            new KeyboardState(Key.W)
+        );
+
+        InputSystem.Update();
+
+        yield return null;
+        yield return null;
+
+        float restoredSpeed = playerMotor.CurrentMoveSpeed;
+
+        // Assert：允许少量帧时序误差，但最终必须恢复到原普通速度。
+        Assert.That(
+            restoredSpeed,
+            Is.EqualTo(normalSpeed).Within(0.1f)
+        );
     }
 }

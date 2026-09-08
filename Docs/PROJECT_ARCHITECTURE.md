@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-08（Day 6；物理白盒、手工回归及 PlayMode 测试结构已核对）
+> 最后复核：2026-09-08（Day 6 / Week 1 通过；物理白盒、手工回归和两条 PlayMode 测试均已核对）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -59,7 +59,7 @@ Ground_Blockout / Wall_Blockout
 - PlayerInputReader、PlayerMotor、CameraController、PlayerAnimatorDriver 已声明必要 RequireComponent；三个 Inspector 引用缺失时会记录一次明确错误并禁用自身，异常测试通过。
 - Imp 的编辑态与磁盘 local rotation=(0,0,0)，不是旧文档的 Y=180；根 Player 由 PlayerMotor 转向，视觉朝向的 Day 4 手工回归通过。
 - Game.Runtime 引用 Input System；PlayMode Tests asmdef 已引用 Game.Runtime、Unity Test Runner 与 Unity.InputSystem。
-- `PlayerMotorPlayModeTests` 使用虚拟 Keyboard 和真实 `SampleScene`；场景通过 `LoadSceneAsync` 完成初始化。斜向限速断言有效；Sprint 恢复测试仍缺功能断言。
+- `PlayerMotorPlayModeTests` 使用虚拟 Keyboard 和真实 `SampleScene`；场景通过 `LoadSceneAsync` 完成初始化。斜向限速与 Sprint 按下/释放/速度恢复断言均有效，连续 5 轮 2/2 PASS。
 - 无 Combat、Health、Enemy AI、Skill、UI、GameFlow 或 NavMesh。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
@@ -279,7 +279,7 @@ Docs/
 | 输入采样晚一帧 | InputReader 与消费者同在 Update，执行顺序未固定 | 先用运行测试判断是否可感知；只有实际出现问题时再统一采样时机或设置执行顺序 |
 | 反向转向与输入改变不同步 | 180° 转向期间快速改变方向时视觉朝向偏离位移 | 用边界用例确认；仅在可复现时修改反向转向状态逻辑 |
 | 空中控制沿用地面速度 | Player 离开平台后仍可完整改变水平速度与方向 | Week 1 保留为 BUG-004；实现 Dash 前确定受限空中控制规则并回归 |
-| PlayMode 用例标题与断言不一致 | Test Runner 绿灯，但目标行为未真正执行或比较 | 验收时同时审查 Arrange/Act/Assert；补全 Sprint 按下、释放与恢复断言 |
+| PlayMode 用例标题与断言不一致 | Test Runner 绿灯，但目标行为未真正执行或比较 | 验收时同时审查 Arrange/Act/Assert；Day 6 已补全 Sprint 按下、释放与恢复断言 |
 
 ## 12. 变更规则
 
