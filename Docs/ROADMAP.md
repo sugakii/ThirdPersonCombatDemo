@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-08（Learning Day 6 与 Week 1 正式通过；手工 10/10，自动化连续 5 轮 2/2 PASS）
+> 最后复核：2026-09-09（Learning Day 7 通过；Health EditMode 自动化 10/10 PASS）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
@@ -20,7 +20,7 @@
 
 ## 2. 当前工程基线
 
-Day 6 与 Week 1 已通过：楼梯、30°/50°斜坡、墙角、平台和 10 条手工回归通过；PlayMode 场景初始化 Flaky Test 已修复；斜向限速与 Sprint 释放恢复两条自动化测试均覆盖目标，补全后的完整断言连续 5 轮 2/2 PASS。详细证据以 PROJECT_STATUS.md 为准。
+Day 7 已通过：`DamageInfo`、`IDamageable` 与通用 `Health` 已实现，Health 不依赖 UI、Animator、Player 或 Enemy；10 条 EditMode 测试由当前 Unity 工程实际执行并全部通过。详细证据以 PROJECT_STATUS.md 为准。
 
 工程基线已具备 Unity 6000.5.6f1、URP、Input System 1.20.0、Cinemachine 3.1.7、AI Navigation、Test Framework、Git 和三份 asmdef，无需重复安装或重新建立输入层。
 
@@ -193,8 +193,8 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 
 ### 每日检查点
 
-- **Learning Day 7｜9/8**：Health 失败测试、DamageInfo、IDamageable、Health。
-- **Learning Day 8｜9/9**：Player/Enemy 血条与 Presenter。
+- **Learning Day 7｜9/9 验收通过**：完成只读 DamageInfo、IDamageable、Health 初始化/伤害/事件/恢复规则与 10 条 EditMode 测试；10/10 PASS。
+- **Learning Day 8｜下一学习日**：先将 `Health.Reset()` 改名为 `ResetHealth()` 并回归，再实现 Player/Enemy 血条与 Presenter。
 - **Learning Day 9｜9/10**：UAL2 导入与攻击动作预检；AttackDefinition、攻击动画与 Combo 状态。
 - **Learning Day 10｜9/11**：输入缓存、伤害窗口与命中去重。
 - **Learning Day 11｜9/12**：必要庭院地面/墙/楼梯美术替换（保持白盒碰撞）；Puglin Prefab、NavMesh 与 Enemy 状态机。时间不足保留白盒，不阻塞 AI。

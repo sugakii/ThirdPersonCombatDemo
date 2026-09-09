@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-08（Day 6 / Week 1 通过；物理白盒、手工回归和两条 PlayMode 测试均已核对）
+> 最后复核：2026-09-09（Day 7 通过；DamageInfo、IDamageable、Health 与 10 条 EditMode 测试已核对）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -50,6 +50,15 @@ Ground_Blockout / Wall_Blockout
 ├─ Slopes_Blockout（Slope_30 / Slope_50）
 ├─ Corner_Blockout
 └─ Platform_Blockout（均已保存）
+
+DamageInfo（当前只读 DamageAmount）
+        ↓
+IDamageable.TakeDamage(DamageInfo)
+        ↓
+Health
+├─ MaxHealth / CurrentHealth
+├─ HealthChanged(float)
+└─ Died()
 ```
 
 - PlayerMotor 当前负责镜头空间移动、斜向限幅、重力、角色转向和 Sprint 速度切换；`cameraTransform` 指向 Prefab 内的 CameraTarget，普通速度 5、冲刺速度 10、转向速度 720°/s、反向转向速度 1440°/s。
@@ -60,7 +69,8 @@ Ground_Blockout / Wall_Blockout
 - Imp 的编辑态与磁盘 local rotation=(0,0,0)，不是旧文档的 Y=180；根 Player 由 PlayerMotor 转向，视觉朝向的 Day 4 手工回归通过。
 - Game.Runtime 引用 Input System；PlayMode Tests asmdef 已引用 Game.Runtime、Unity Test Runner 与 Unity.InputSystem。
 - `PlayerMotorPlayModeTests` 使用虚拟 Keyboard 和真实 `SampleScene`；场景通过 `LoadSceneAsync` 完成初始化。斜向限速与 Sprint 按下/释放/速度恢复断言均有效，连续 5 轮 2/2 PASS。
-- 无 Combat、Health、Enemy AI、Skill、UI、GameFlow 或 NavMesh。
+- `DamageInfo`、`IDamageable` 与 `Health` 已实现；Health EditMode 测试 10/10 PASS。
+- 无 PlayerCombat、Enemy AI、Skill、UI Presenter、GameFlow 或 NavMesh。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -136,14 +146,16 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 
 约束：Domain 不反向引用 UI；Runtime 不引用 Tests 或 Editor；攻击方不依赖具体 Enemy 类型。
 
-## 7. 核心类型职责（Planned）
+## 7. 核心类型职责（Current / Planned）
+
+`DamageInfo`、`IDamageable`、`Health` 为 Current；其余尚未实现的类型为 Planned。
 
 | 类型 | 唯一职责 | 允许依赖 | 禁止事项 |
 |---|---|---|---|
 | `PlayerInputReader` | 将 Input System 转换为 Move、Look、Sprint、Attack、Skill、Restart 意图 | Input Actions | 直接移动角色、扣血或控制 UI |
 | `CameraController` | 消费 Look 意图并旋转 `CameraTarget`，让 Cinemachine 计算最终机位 | PlayerInputReader、CameraTarget | 直接读取具体输入设备；直接写 CinemachineCamera Transform |
 | `PlayerMotor` | CharacterController 位移、重力、面向和所有受控突进位移的唯一入口 | CharacterController、相机朝向、移动配置 | 读取具体键盘按键；直接处理攻击 |
-| `DamageInfo` | 携带伤害值、来源、命中点和方向 | 值类型/Unity 基础类型 | 持有目标行为或产生副作用 |
+| `DamageInfo` | 当前携带只读伤害值；来源、命中点和方向在 Combat 确实需要时扩展 | 值类型/Unity 基础类型 | 持有目标行为或产生副作用 |
 | `IDamageable` | 为命中系统提供统一伤害入口 | `DamageInfo` | 暴露具体 Player/Enemy 实现 |
 | `Health` | HP 钳制、初始化、`HealthChanged`、只触发一次的 `Died` | 生命配置 | 引用 UI、Animator、Player 或 Enemy |
 | `PlayerCombat` | Combo 状态、输入缓存、攻击切换与中断 | InputReader、Animator、AttackDefinition、MeleeHitbox | 在动画事件中查找目标或直接依赖 Enemy |
@@ -280,6 +292,7 @@ Docs/
 | 反向转向与输入改变不同步 | 180° 转向期间快速改变方向时视觉朝向偏离位移 | 用边界用例确认；仅在可复现时修改反向转向状态逻辑 |
 | 空中控制沿用地面速度 | Player 离开平台后仍可完整改变水平速度与方向 | Week 1 保留为 BUG-004；实现 Dash 前确定受限空中控制规则并回归 |
 | PlayMode 用例标题与断言不一致 | Test Runner 绿灯，但目标行为未真正执行或比较 | 验收时同时审查 Arrange/Act/Assert；Day 6 已补全 Sprint 按下、释放与恢复断言 |
+| Health 恢复 API 与 Unity 消息同名 | `Health.Reset()` 可能被误认为或触发为编辑器 `MonoBehaviour.Reset()` | Day 8 首个消费者接入前改名为 `ResetHealth()` 并回归现有 10 条测试 |
 
 ## 12. 变更规则
 
