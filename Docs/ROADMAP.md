@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-09（Learning Day 7 通过；Health EditMode 自动化 10/10 PASS）
+> 最后复核：2026-09-10（Learning Day 8 首轮验收未通过；等待修复 Presenter 重启用同步与 Enemy 血条朝向）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
@@ -194,7 +194,7 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 ### 每日检查点
 
 - **Learning Day 7｜9/9 验收通过**：完成只读 DamageInfo、IDamageable、Health 初始化/伤害/事件/恢复规则与 10 条 EditMode 测试；10/10 PASS。
-- **Learning Day 8｜下一学习日**：先将 `Health.Reset()` 改名为 `ResetHealth()` 并回归，再实现 Player/Enemy 血条与 Presenter。
+- **Learning Day 8｜9/10 首轮验收未通过**：`ResetHealth()`、Player/Enemy 血条和事件驱动 Presenter 已实现；扣血与恢复同步通过。`BUG-005`（Presenter 重启用显示旧值）和 `BUG-006`（Enemy 血条不随镜头朝向）待修复和回归后再关闭 Day 8。
 - **Learning Day 9｜9/10**：UAL2 导入与攻击动作预检；AttackDefinition、攻击动画与 Combo 状态。
 - **Learning Day 10｜9/11**：输入缓存、伤害窗口与命中去重。
 - **Learning Day 11｜9/12**：必要庭院地面/墙/楼梯美术替换（保持白盒碰撞）；Puglin Prefab、NavMesh 与 Enemy 状态机。时间不足保留白盒，不阻塞 AI。

@@ -21,8 +21,8 @@
 | D7-06 | `TakeDamage_InvokesDiedOnlyOnce` | 死亡后重复伤害不会重复触发 Died | Passed | PASS |
 | D7-07 | `TakeDamage_NegativeDamageDoesNotChangeHealth` | 负伤害不改变 HP | Passed | PASS |
 | D7-08 | `TakeDamage_ZeroDamageDoesNotChangeHealthOrInvokeHealthChanged` | 0 伤害不改变 HP，也不触发事件 | Passed | PASS |
-| D7-09 | `Reset_RestoresHealthAndAllowsDyingAgain` | 恢复满血后可以再次死亡 | Passed | PASS |
-| D7-10 | `Reset_InvokesHealthChangedWithMaxHealth` | 恢复时事件报告 MaxHealth | Passed | PASS |
+| D7-09 | `ResetHealth_RestoresHealthAndAllowsDyingAgain` | 恢复满血后可以再次死亡 | Passed | PASS |
+| D7-10 | `ResetHealth_InvokesHealthChangedWithMaxHealth` | 恢复时事件报告 MaxHealth | Passed | PASS |
 
 ## 静态与环境检查
 
@@ -43,4 +43,4 @@
 | NOT RUN | 0 |
 | BLOCKED | 0 |
 
-结论：**PASS（10/10）**。Day 7 的生命领域规则和事件行为满足当前验收范围。`Health.Reset()` 与 Unity 编辑器消息同名属于非阻断命名风险，计划在 Day 8 接入首个调用者前改名并回归。
+结论：**PASS（10/10）**。Day 7 的生命领域规则和事件行为满足当前验收范围。恢复 API 已在 Day 8 改名为 `ResetHealth()`，10 条规则回归仍全部通过。

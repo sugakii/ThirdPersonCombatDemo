@@ -19,6 +19,11 @@ public class Health : MonoBehaviour, IDamageable
     // 只在生命值首次从正数降到 0 时触发。
     public event Action Died;
 
+    // 场景和 Prefab 的默认生命上限；运行时测试仍可通过 Initialize 覆盖。
+    [SerializeField]
+    [Min(0f)]
+    private float initialMaxHealth = 100f;
+
     /// <summary>设置生命上限并以满血状态开始；负数按 0 处理。</summary>
     public void Initialize(float hp)
     {
@@ -60,6 +65,12 @@ public class Health : MonoBehaviour, IDamageable
         {
             Died?.Invoke();
         }
+    }
+
+    private void Awake()
+    {
+        // 在其他组件开始订阅和读取生命值前建立有效的初始状态。
+        Initialize(initialMaxHealth);
     }
 
     /// <summary>恢复到初始化时的生命上限，并通知生命值监听者。</summary>

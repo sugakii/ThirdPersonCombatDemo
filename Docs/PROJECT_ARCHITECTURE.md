@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-09（Day 7 通过；DamageInfo、IDamageable、Health 与 10 条 EditMode 测试已核对）
+> 最后复核：2026-09-10（Day 8 首轮验收；HealthBarPresenter 与两种血条已核对，BUG-005/006 待修复）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -70,7 +70,8 @@ Health
 - Game.Runtime 引用 Input System；PlayMode Tests asmdef 已引用 Game.Runtime、Unity Test Runner 与 Unity.InputSystem。
 - `PlayerMotorPlayModeTests` 使用虚拟 Keyboard 和真实 `SampleScene`；场景通过 `LoadSceneAsync` 完成初始化。斜向限速与 Sprint 按下/释放/速度恢复断言均有效，连续 5 轮 2/2 PASS。
 - `DamageInfo`、`IDamageable` 与 `Health` 已实现；Health EditMode 测试 10/10 PASS。
-- 无 PlayerCombat、Enemy AI、Skill、UI Presenter、GameFlow 或 NavMesh。
+- `HealthBarPresenter` 已实现并复用于 Player 屏幕空间血条和 Enemy 世界空间血条；它通过显式 Health/Slider 引用监听 `HealthChanged`，不轮询 Player 或 Enemy。
+- 无 PlayerCombat、Enemy AI、Skill、GameFlow 或 NavMesh。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -164,7 +165,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `SkillDefinition` | 保存伤害、冷却、距离、持续时间和表现资源 | ScriptableObject | 保存剩余冷却或当前释放状态 |
 | `SkillController` | 技能准入、冷却、释放流程和命中去重 | SkillDefinition、PlayerMotor、ObjectPool | 直接写 Transform；修改配置资产 |
 | `EnemyStateMachine` | 统一管理 Idle/Chase/Attack/Hit/Dead 迁移 | NavMeshAgent、Animator、EnemyCombat、Health | 用互相冲突的布尔变量替代状态 |
-| `HealthBarPresenter` | 订阅 Health 事件并更新血条 | Health、UI | 轮询具体 Player/Enemy 类 |
+| `HealthBarPresenter`（Current） | 订阅 Health 事件并更新 Player/Enemy 血条 | Health、Unity UI Slider | 轮询具体 Player/Enemy 类；持有生命规则 |
 | `CooldownPresenter` | 订阅技能冷却状态并更新 UI | SkillController、UI | 驱动技能逻辑 |
 | `GameFlowController` | 维护 Playing/Victory/GameOver、冻结战斗并重开 | Player/Enemy 死亡事件、场景加载 | 持有攻击或 AI 的业务细节 |
 
@@ -253,7 +254,7 @@ Docs/
 
 ### ADR-002：局部 C# 事件，不建全局事件总线
 
-- **状态**：Accepted / 尚未实现。
+- **状态**：Accepted / Health → HealthBarPresenter 已实现；GameFlow 尚未实现。
 - **决定**：Health、UI 和 GameFlow 通过显式引用与局部事件连接。
 - **原因**：当前规模小，显式依赖更容易追踪和调试。
 - **收益**：调用链清楚，测试替身简单。

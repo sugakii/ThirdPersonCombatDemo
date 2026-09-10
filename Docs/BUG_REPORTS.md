@@ -2,7 +2,7 @@
 
 > 项目：Third-Person Combat Demo  
 > 维护规则：只记录实际复现的缺陷；修复后必须回归，不能仅凭代码修改关闭。
-> 最近回归：2026-09-09 / Day 7；Health EditMode 测试 10/10 PASS，未发现新的运行缺陷；保留一项空中控制问题和一项 API 命名观察。
+> 最近回归：2026-09-10 / Day 8 首轮验收；Health 回归 10/10 PASS，发现 Presenter 重启用同步和 Enemy 血条朝向两个缺陷。
 
 ## 状态定义
 
@@ -234,6 +234,85 @@ Player 离地后仍保留与地面相同的完整水平控制能力和速度。
 
 ---
 
+## BUG-005：HealthBarPresenter 重新启用后显示旧生命值
+
+### 基本信息
+
+- 发现日期：2026-09-10
+- 首次发现版本：`8f8ada9` 之后的 Day 8 工作树
+- Unity：`6000.5.6f1`
+- 脚本：`Assets/_Game/Runtime/UI/HealthBarPresenter.cs`
+- 状态：Open
+- 严重程度：Minor
+- 优先级：High
+- 复现率：1/1
+
+### 复现步骤
+
+1. 进入 `SampleScene`，确认 Player Health 和 Slider 均为 100。
+2. 禁用 `PlayerHealthBar` 上的 `HealthBarPresenter`。
+3. 对 Player 造成 10 点伤害。
+4. 重新启用 `HealthBarPresenter`。
+
+### 实际结果
+
+Player 当前生命值为 90，但 Slider 仍显示 100，直到下一次 `HealthChanged` 事件发生才恢复同步。
+
+### 预期结果
+
+Presenter 每次启用时都应在完成订阅后，立即根据当前 `Health` 刷新 Slider 范围和值。
+
+### 根因
+
+`OnEnable()` 只订阅 `HealthChanged`；初始化同步仅在只执行一次的 `Start()` 中发生。组件禁用期间错过事件后，重新启用没有补做状态同步。
+
+### 关闭条件
+
+- 重新启用 Presenter 后 Slider 立即等于 `CurrentHealth`。
+- 正常扣血和 `ResetHealth()` 仍能同步 Player/Enemy 两条血条。
+- 多次启用/禁用不会重复订阅，Console 无 Gameplay Error。
+
+---
+
+## BUG-006：Enemy 世界空间血条不会随镜头朝向
+
+### 基本信息
+
+- 发现日期：2026-09-10
+- 首次发现版本：`8f8ada9` 之后的 Day 8 工作树
+- Unity：`6000.5.6f1`
+- 场景：`Assets/_Game/Scenes/SampleScene.unity`
+- 状态：Open
+- 严重程度：Minor
+- 优先级：High
+- 复现率：1/1
+
+### 复现步骤
+
+1. 进入 `SampleScene`。
+2. 将第三人称镜头水平旋转约 90°。
+3. 观察 `Enemy/HealthBarCanvas` 的朝向。
+
+### 实际结果
+
+Canvas 世界旋转保持 `(0, 0, 0)`；它与相机方向的最近面夹角达到约 `78.4°`，血条接近侧对相机。
+
+### 预期结果
+
+Enemy 世界空间血条在镜头移动和旋转后仍正对当前 Gameplay Camera，保持可读。
+
+### 根因
+
+当前 `HealthBarCanvas` 只有固定 Transform，没有任何朝向相机的更新逻辑。
+
+### 关闭条件
+
+- 前、后、左、右多个镜头角度下血条保持正对相机。
+- 血条位置仍跟随 Enemy，且不会反转、抖动或影响 HealthBarPresenter。
+- Console 无 Gameplay Error。
+
+---
+
 ## 不登记为 Bug 的观察项
 
 ### OBS-001：角色停止时镜头轻微追随
@@ -245,6 +324,6 @@ Player 离地后仍保留与地面相同的完整水平控制能力和速度。
 ### OBS-002：Health.Reset 与 Unity 编辑器消息同名
 
 - 现象：运行时恢复 API 命名为 `Reset()`，与 `MonoBehaviour.Reset()` 编辑器消息相同。
-- 当前结论：现有 10 条 Health 测试全部通过，尚未观察到运行缺陷，因此不登记为 Bug。
+- 当前结论：已在 Day 8 改名为 `ResetHealth()`；Health 回归 10/10 PASS，观察项关闭。
 - 风险：添加组件或执行 Inspector 的 Reset 操作时，Unity 可能自动调用该方法；同时容易让调用者误判它的生命周期语义。
-- 处理：Day 8 首个 UI/GameFlow 调用者接入前改名为 `ResetHealth()`，同步测试名并回归。
+- 处理：已完成改名、测试名同步和回归。
