@@ -1,9 +1,9 @@
 # Current Project Status
 
-> Last Updated：2026-09-09
-> Current Learning Day：Day 7 已完成
-> Current Phase：Week 2 / Health 领域基础通过
-> Next Learning Day：Day 8
+> Last Updated：2026-09-10
+> Current Learning Day：Day 8 进行中
+> Current Phase：Week 2 / Player 血条与 Presenter
+> Next Checkpoint：Day 8 验收
 > Source of Truth：当前 Unity 工程 + Git + Docs
 
 ## 验收结论
@@ -18,6 +18,8 @@
 - `HealthTests`：使用独立临时 GameObject 验证 10 条领域规则。
 - Player Scene 实例已保存 `Player` Tag。
 - Day 7 新增代码已补齐职责、关键事件语义和测试隔离注释。
+- Day 8 进行中：`Health.Reset()` 已改名为 `ResetHealth()`，两条相关测试调用和名称已同步。
+- Day 8 进行中：`SampleScene` 已建立 Canvas、PlayerHealthBar Slider、Background、Fill 和 EventSystem 基础结构。
 
 ## Test Evidence
 
@@ -66,22 +68,24 @@ Health
 ## Known Bugs / Risks
 
 1. `BUG-004` Open：角色离地后仍保留完整水平控制速度；进入技能位移前处理。
-2. `OBS-002`：运行时 API `Health.Reset()` 与 Unity 编辑器消息 `MonoBehaviour.Reset()` 同名。现有功能与测试正常，但应在 Day 8 首个调用者接入前改为 `ResetHealth()`。
+2. `OBS-002` Resolved / Pending Regression：API 已改为 `ResetHealth()`，等待 Day 8 回归后关闭观察项。
 
 ## Git
 
-- 当前分支：`main`；HEAD：`72c576f`。
-- Day 7 Common 代码、EditMode 测试、Player Tag、代码注释与 Docs 尚未提交。
+- 当前分支：`main`；HEAD：`bb2fb6e`。
+- Day 8 的 ResetHealth 改名、测试同步和 PlayerHealthBar 场景结构尚未提交。
 - 本次继续排除 `ProjectSettings/Packages/com.unity.ai.assistant/Settings.json` 和 `ProjectSettings/SceneTemplateSettings.json`。
 - 默认提交全部自有代码、对应 `.meta`、测试、Scene 与 Docs。
 
 ## Next Task
 
-### Learning Day 8
+### Learning Day 8 当前顺序
 
-1. 在第一个 UI 调用者出现前，将 `Health.Reset()` 与相应测试改名为 `ResetHealth()` 并回归 10 条测试。
-2. 实现 Player 屏幕血条和 Enemy 世界空间血条的 Presenter。
-3. Presenter 订阅 `HealthChanged`，不在 Update 中轮询 Health，也不把 UI 引用放进 Health。
+1. 重新运行 10 条 Health EditMode 测试，确认 `ResetHealth()` 改名无回归。
+2. 删除非交互血条不需要的 Slider Handle/Handle Slide Area；保留 Background 与 Fill。
+3. 先实现 Player `HealthBarPresenter`：初始化 Slider 范围和当前值，订阅/退订 `HealthChanged`。
+4. 将 Health 挂到 Player 并以明确生命值初始化；用测试伤害验证血条变化。
+5. Player 版本通过后，再复用同一 Presenter 制作 Enemy 世界空间血条；不复制第二套生命逻辑。
 
 ## Update Rules
 

@@ -63,7 +63,7 @@ public class Health : MonoBehaviour, IDamageable
     }
 
     /// <summary>恢复到初始化时的生命上限，并通知生命值监听者。</summary>
-    public void Reset()
+    public void ResetHealth()
     {
         CurrentHealth = MaxHealth;
 

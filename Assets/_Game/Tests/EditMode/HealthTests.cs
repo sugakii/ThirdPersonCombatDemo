@@ -116,7 +116,7 @@ public class HealthTests
     }
 
     [Test]
-    public void Reset_RestoresHealthAndAllowsDyingAgain()
+    public void ResetHealth_RestoresHealthAndAllowsDyingAgain()
     {
         health.Initialize(20);
 
@@ -126,7 +126,7 @@ public class HealthTests
 
         health.TakeDamage(damageInfo);
 
-        health.Reset();
+        health.ResetHealth();
 
         Assert.AreEqual(
             health.MaxHealth,
@@ -142,7 +142,7 @@ public class HealthTests
     }
 
     [Test]
-    public void Reset_InvokesHealthChangedWithMaxHealth()
+    public void ResetHealth_InvokesHealthChangedWithMaxHealth()
     {
         health.Initialize(20);
 
@@ -154,7 +154,7 @@ public class HealthTests
 
         reportedHealth = -1f;
 
-        health.Reset();
+        health.ResetHealth();
 
         Assert.AreEqual(
             20,
