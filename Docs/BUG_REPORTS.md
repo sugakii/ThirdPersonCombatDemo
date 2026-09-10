@@ -2,7 +2,7 @@
 
 > 项目：Third-Person Combat Demo  
 > 维护规则：只记录实际复现的缺陷；修复后必须回归，不能仅凭代码修改关闭。
-> 最近回归：2026-09-10 / Day 8 首轮验收；Health 回归 10/10 PASS，发现 Presenter 重启用同步和 Enemy 血条朝向两个缺陷。
+> 最近回归：2026-09-10 / Day 8 最终验收；Health 回归 10/10 PASS，BUG-005/006 修复后回归通过。
 
 ## 状态定义
 
@@ -242,7 +242,7 @@ Player 离地后仍保留与地面相同的完整水平控制能力和速度。
 - 首次发现版本：`8f8ada9` 之后的 Day 8 工作树
 - Unity：`6000.5.6f1`
 - 脚本：`Assets/_Game/Runtime/UI/HealthBarPresenter.cs`
-- 状态：Open
+- 状态：Closed
 - 严重程度：Minor
 - 优先级：High
 - 复现率：1/1
@@ -272,6 +272,12 @@ Presenter 每次启用时都应在完成订阅后，立即根据当前 `Health` 
 - 正常扣血和 `ResetHealth()` 仍能同步 Player/Enemy 两条血条。
 - 多次启用/禁用不会重复订阅，Console 无 Gameplay Error。
 
+### 修复与回归
+
+- `OnEnable()` 在订阅 `HealthChanged` 后调用 `SyncFromHealth()`，补回禁用期间错过的状态。
+- 原复现步骤回归：Health=90，Slider=90，PASS。
+- Player/Enemy 正常扣血与 `ResetHealth()` 回归通过。
+
 ---
 
 ## BUG-006：Enemy 世界空间血条不会随镜头朝向
@@ -282,7 +288,7 @@ Presenter 每次启用时都应在完成订阅后，立即根据当前 `Health` 
 - 首次发现版本：`8f8ada9` 之后的 Day 8 工作树
 - Unity：`6000.5.6f1`
 - 场景：`Assets/_Game/Scenes/SampleScene.unity`
-- 状态：Open
+- 状态：Closed
 - 严重程度：Minor
 - 优先级：High
 - 复现率：1/1
@@ -310,6 +316,12 @@ Enemy 世界空间血条在镜头移动和旋转后仍正对当前 Gameplay Came
 - 前、后、左、右多个镜头角度下血条保持正对相机。
 - 血条位置仍跟随 Enemy，且不会反转、抖动或影响 HealthBarPresenter。
 - Console 无 Gameplay Error。
+
+### 修复与回归
+
+- 新增 `WorldSpaceBillboard`，在 `LateUpdate()` 将 Canvas 旋转同步到显式绑定的 Main Camera。
+- 0°、90°、180°、270° 四个方向下，Canvas 与 Main Camera 的旋转差均为 0°。
+- Console 为 0 Gameplay Error，BUG-006 Closed。
 
 ---
 

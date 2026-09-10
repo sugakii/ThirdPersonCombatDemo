@@ -19,6 +19,7 @@ public class HealthBarPresenter : MonoBehaviour
     {
         // 组件启用期间监听变化，避免禁用后继续收到领域事件。
         health.HealthChanged += OnHealthChanged;
+        SyncFromHealth();
     }
 
     private void OnDisable()
@@ -32,11 +33,16 @@ public class HealthBarPresenter : MonoBehaviour
         slider.value = currentHealth;
     }
 
-    private void Start()
+    private void SyncFromHealth()
     {
-        // Health 已在 Awake 初始化；首次显示时同步范围和值，无需每帧轮询。
         slider.minValue = 0;
         slider.maxValue = health.MaxHealth;
         slider.value = health.CurrentHealth;
+    }
+
+    private void Start()
+    {
+        // Health 已在 Awake 初始化；首次显示时同步范围和值，无需每帧轮询。
+        SyncFromHealth();
     }
 }

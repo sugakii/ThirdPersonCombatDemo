@@ -6,7 +6,7 @@
 - Unity：`6000.5.6f1`
 - 测试类型：EditMode 规则回归、Play Mode 集成检查、场景静态检查
 - 测试对象：`Health`、`HealthBarPresenter`、Player/Enemy Health Bar
-- 当前结论：首轮验收未通过
+- 当前结论：最终验收通过
 
 ## 测试用例
 
@@ -21,9 +21,9 @@
 | D8-07 | `ResetHealth()` 更新血条 | Player/Enemy 均恢复到 MaxHealth | PASS |
 | D8-08 | 非交互 Slider 不保留 Handle | 两条血条的 `handleRect` 均为空 | PASS |
 | D8-09 | Presenter 使用显式 Health/Slider 引用 | 两套引用均完整；无场景查找 | PASS |
-| D8-10 | Presenter 禁用期间发生扣血后重新启用 | Health=90，Slider 仍为 100 | FAIL |
+| D8-10 | Presenter 禁用期间发生扣血后重新启用 | Health=90，Slider 立即同步为 90 | PASS |
 | D8-11 | Enemy 血条使用世界空间 Canvas | `RenderMode=WorldSpace` | PASS |
-| D8-12 | Enemy 血条随镜头角度始终面向相机 | 镜头转向后 Canvas 不旋转，最近面夹角 78.4° | FAIL |
+| D8-12 | Enemy 血条随镜头角度始终面向相机 | 0°/90°/180°/270° 下 Canvas 与 Main Camera 旋转差均为 0° | PASS |
 
 ## 静态与环境检查
 
@@ -31,17 +31,18 @@
 |---|---|
 | `Health.cs` Unity 静态验证 | 0 diagnostics |
 | `HealthBarPresenter.cs` Unity 静态验证 | 0 diagnostics |
+| `WorldSpaceBillboard.cs` Unity 静态验证 | 0 diagnostics |
 | 场景 Missing Script | 0 |
 | Unity Gameplay Error | 0 |
-| 编辑器服务 Warning | 2（Pipeline 自动化模式、AI Account 网络；与 Gameplay 无关） |
+| 编辑器服务 Warning | 1（Pipeline 自动化模式；与 Gameplay 无关） |
 
 ## 结果汇总
 
 | 结果 | 数量 |
 |---|---:|
-| PASS | 10 |
-| FAIL | 2 |
+| PASS | 12 |
+| FAIL | 0 |
 | NOT RUN | 0 |
 | BLOCKED | 0 |
 
-结论：**NOT PASS**。Player/Enemy 血条的初始化、事件更新和恢复路径成立，但 `BUG-005` 会让重新启用的 Presenter 显示旧状态，`BUG-006` 会让 Enemy 血条在镜头绕转后失去正面可读性。修复并回归 D8-10、D8-12 后再做 Day 8 最终验收。
+结论：**PASS（12/12）**。Player/Enemy 血条的初始化、事件更新、恢复、Presenter 重启用同步和 Enemy 世界空间朝向均满足 Day 8 验收标准；Health 规则回归仍为 10/10 PASS。
