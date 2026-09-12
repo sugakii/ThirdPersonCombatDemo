@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-10（Learning Day 8 验收通过；Health Bar 集成 12/12 PASS）
+> 最后复核：2026-09-12（Learning Day 9 复验通过；18/18 PASS）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
@@ -40,6 +40,7 @@ Day 7 已通过：`DamageInfo`、`IDamageable` 与通用 `Health` 已实现，He
 - 每个功能执行“需求 → 验收标准 → 失败测试/用例 → 实现 → 边界与异常测试 → Bug → 修复 → 回归”。
 - 未通过本周验收门槛，不进入下一周系统。
 - 每次收到“验收”请求时，先扫描本次涉及的自有代码并补齐必要注释，再执行验证、更新 Docs 和给出包含全部自有代码的 Git 指令。
+- 每次验收结束后，根据当天实际学习内容提出 3–5 个理解题；题目用于确认能否解释职责、API 与工程取舍，不替代工程验收结果。
 
 ### 教学代码披露规则
 
@@ -195,8 +196,8 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 
 - **Learning Day 7｜9/9 验收通过**：完成只读 DamageInfo、IDamageable、Health 初始化/伤害/事件/恢复规则与 10 条 EditMode 测试；10/10 PASS。
 - **Learning Day 8｜9/10 验收通过**：完成 `ResetHealth()`、Player/Enemy 血条、事件驱动 Presenter 与世界空间 Billboard；BUG-005/006 修复关闭，Health 回归 10/10、Day 8 集成 12/12 PASS。
-- **Learning Day 9｜9/10**：UAL2 导入与攻击动作预检；AttackDefinition、攻击动画与 Combo 状态。
-- **Learning Day 10｜9/11**：输入缓存、伤害窗口与命中去重。
+- **Learning Day 9｜9/12 验收通过**：UAL2 与三段动作预检、AttackDefinition、Attack 输入意图和 PlayerCombat 骨架完成；三个复现问题已修复关闭，18/18 PASS。
+- **Learning Day 10｜Day 9 通过后开始**：输入缓存、伤害窗口与命中去重。
 - **Learning Day 11｜9/12**：必要庭院地面/墙/楼梯美术替换（保持白盒碰撞）；Puglin Prefab、NavMesh 与 Enemy 状态机。时间不足保留白盒，不阻塞 AI。
 - **Learning Day 12｜9/13**：3 Enemy 集成、AI/Combat 边界测试。
 - **Learning Day 13｜9/14**：停止扩功能；回归、修复、架构复核、Docs 与 Week 2 标签。

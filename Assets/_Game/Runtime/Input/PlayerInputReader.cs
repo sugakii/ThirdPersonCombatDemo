@@ -12,11 +12,14 @@ public class PlayerInputReader : MonoBehaviour
     public Vector2 LookInput { get; private set; }
     public Vector2 MoveInput { get; private set; }
     public bool SprintHeld { get; private set; }
+    // 只在 Attack Action 本帧首次触发时为 true，供战斗系统消费一次性意图。
+    public bool AttackPressed { get; private set; }
 
     private PlayerInput playerInput;
     private InputAction lookAction;
     private InputAction moveAction;
     private InputAction sprintAction;
+    private InputAction attackAction;
 
     private void Awake()
     {
@@ -26,9 +29,10 @@ public class PlayerInputReader : MonoBehaviour
         lookAction = playerInput.actions["Look"];
         moveAction = playerInput.actions["Move"];
         sprintAction = playerInput.actions["Sprint"];
+        attackAction = playerInput.actions["Attack"];
     }
 
-    void Update()
+    private void Update()
     {
         // 每帧生成一次输入快照，供 CameraController 与 PlayerMotor 消费。
         LookInput = lookAction.ReadValue<Vector2>();
@@ -36,5 +40,8 @@ public class PlayerInputReader : MonoBehaviour
 
         // IsPressed 同时支持按下阈值和不同控制设备，不把逻辑绑定到具体按键。
         SprintHeld = sprintAction.IsPressed();
+
+        // WasPressedThisFrame 只报告按下边沿，避免按住按键时每帧重复发起攻击。
+        AttackPressed = attackAction.WasPressedThisFrame();
     }
 }

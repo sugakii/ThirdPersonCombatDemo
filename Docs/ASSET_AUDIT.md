@@ -2,7 +2,7 @@
 
 > 扫描日期：2026-09-02  
 > 扫描源：`MaterialPackage/` 实际本地文件、FBX/GLB 结构、随包 README/导入图和许可证  
-> 工程复核：2026-09-08（Day 6 / Week 1 通过）；Idle/Walk/Jog/Sprint、Player Prefab 与材质保持有效，楼梯、30°/50°斜坡、墙角和平台白盒已完成手工碰撞回归。源素材目录树仍为 9/2 扫描快照。
+> 工程复核：2026-09-12（Day 9 复验通过）；UAL2 为 Humanoid，43 个 Clip 及 A/B/C 攻击主体已确认，攻击 Motion/配置与 Player Art 目录均已回归。源素材目录树仍为 9/2 扫描快照。
 
 ## 1. 审计原则
 
@@ -29,12 +29,13 @@
 
 当前 Unity 工程复核（9/8 / Day 6；编辑态、磁盘和用户手工结果已核对）：
 
-- FBX：Imp 与 UAL1，共 2 个；两者 Humanoid Avatar 均 valid=true、human=true。
-- Imp：`Assets/_Game/Art/Charactors/Player/Model/Imp.fbx`，Bake Axis Conversion=true，编辑态与磁盘 Imp local rotation=(0,0,0)，不沿用旧 Y=180 结论。
+- FBX：Imp、UAL1 与 UAL2；三者均已由 Unity 识别为 Humanoid。
+- Imp 位于 `Assets/_Game/Art/Charactors/Player/Model/Imp.fbx`；Day 9 复验确认临时目录移动已恢复。Imp Bake Axis Conversion=true，编辑态与磁盘 local rotation=(0,0,0)。
 - 纹理：红色 BaseColor 1、Normal、Emissive、ORM 已复制。渲染器引用 MI_Imp（URP/Lit），主纹理为红色 BaseColor；独立资产 Assets/_Game/Materials/MI_Imp.mat 已落盘，Play 中五个 Renderer 共用它；场景绑定已保存，完整贴图视觉效果待验证。
 - UAL1：`Assets/_Game/Animations/Source/UAL1_Standard.fbx`，43 条 Clip；实际名称保留 `Armature|` 前缀。Idle、Walk、Jog、Sprint 的 Loop Time 均为 true；Walk 的 Loop Pose 为 true，Idle/Jog/Sprint 为 false。`A_TPose` 的 Loop Time/Loop Pose 均为 false。用户完成四个 locomotion Clip 的视觉回归，`BUG-001`、`BUG-002` 均 Closed。Bake Axis Conversion=false。
 - PlayerAnimator.controller 已使用 Speed 1D Blend Tree：Idle=0、Walk=2.5、Jog=5、Sprint=10。Imp Animator 启用并绑定 ImpAvatar/Controller，Root Motion=false；用户完成静止、普通移动、冲刺、松键和撞墙动画回归。
-- Player Prefab 已创建并保存内部 CameraTarget/Imp Animator 引用。楼梯、30°/50°斜坡、墙角和平台白盒已保存并通过手工碰撞回归。UAL2、Puglin、正式环境尚未导入；现有基础体不能标成完整美术庭院。
+- UAL2：`Assets/_Game/Animations/Source/UAL2_Standard.fbx`，Human / CreateFromThisModel，43 个 Clip；`Sword_Regular_A/B/C` 均存在且非 Loop。用户手工预览三段动作均无明显变形或异常位移。
+- Player Prefab 已创建并保存内部 CameraTarget/Imp Animator 引用。楼梯、30°/50°斜坡、墙角和平台白盒已保存并通过手工碰撞回归。Puglin、正式环境尚未导入；现有基础体不能标成完整美术庭院。
 
 ## 3. 正式使用清单
 
@@ -150,9 +151,10 @@ UAL1 非 RM FBX 有 43 个 AnimationStack/Take；UAL2 非 RM FBX也有 43 个。
 
 | 用途 | 最终映射 | 来源 | 备注 |
 |---|---|---|---|
-| Attack 01 | `Sword_Regular_A_Rec` | UAL2 | 采用；`_Rec` 语义未随包文档化，需预览 |
-| Attack 02 | `Sword_Regular_B_Rec` | UAL2 | 采用；`_Rec` 语义未随包文档化，需预览 |
+| Attack 01 | `Sword_Regular_A` | UAL2 | 采用；已在 Unity 中预览确认是第一段攻击主体 |
+| Attack 02 | `Sword_Regular_B` | UAL2 | 采用；已在 Unity 中预览确认是第二段攻击主体 |
 | Attack 03 | `Sword_Regular_C` | UAL2 | 采用；若延期则首先砍掉第三段 |
+| Attack Recovery | `Sword_Regular_A_Rec` / `Sword_Regular_B_Rec` | UAL2 | 已在 Unity 中确认 `_Rec` 是收招动作，不作为 Attack 01/02 主攻击 Clip |
 | Combo | `Sword_Regular_Combo` | UAL2 | 可用于动作参考；正式逻辑优先用三个独立 Clip + 输入缓存 |
 | Heavy Combo | `Sword_Heavy_Combo` | UAL2 | 本月不采用 |
 | Player Hit | `Hit_Chest` | UAL1 | 采用 |
@@ -164,7 +166,7 @@ UAL1 非 RM FBX 有 43 个 AnimationStack/Take；UAL2 非 RM FBX也有 43 个。
 
 ### Animation Properties
 
-- **Humanoid / Generic**：源 FBX 不能证明 Unity 导入类型已经设置；随包说明要求 Unity 设置为 Humanoid。UAL1 已设为 Humanoid 且 Avatar 有效；UAL2 尚未导入。
+- **Humanoid / Generic**：UAL1 与 UAL2 均已在 Unity 中确认为 Humanoid；UAL2 使用 Create From This Model。
 - **Root Motion**：README 明确 `_RM` 文件把 root motion 烘焙进每条动画；无 `_RM` 文件禁用 root motion。
 - **In-Place**：本项目选择的两个非 RM FBX为原地版本；抽查 GLB root translation 恒为 `(0,0,0)`。
 - **代码位移**：统一由 CharacterController/PlayerMotor 执行，`Animator.applyRootMotion = false`。
@@ -460,13 +462,15 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 4. **没有专用 Dodge**：只有 `Roll` 可替代，本月明确排除 Dodge。
 5. **没有独立剑模型**：Imp 是内嵌 Mace，Puglin 是内嵌 Stick；动画名里的 Sword 不能被当作武器资产证明。
 6. **没有武器挂点**：只有 `hand_r/hand_l` 骨；外部武器需以后自行创建 `WeaponSocket`。
-7. **`_Rec` 未文档化**：不能声称它一定代表回中、恢复或重定位；必须在 Unity 动画预览验证。
+7. **`_Rec` 已完成 Unity 预览**：`Sword_Regular_A_Rec/B_Rec` 确认为收招，不作为 Attack 01/02 主攻击 Clip。
 8. **重复格式很多**：同一环境模型以 FBX、OBJ、glTF/BIN 重复存在；Unity 工程只导入 FBX。
 9. **Standard 是部分内容**：宣传图展示内容多于本地免费子集，所有决策必须以文件扫描为准。
 10. **URP 材质需手工建立**：源包无 `.mat`；纹理路径、Normal 与 ORM/Roughness 通道必须验证。
 11. **FBX 不等于 Collider/Prefab**：环境模型没有 Unity Prefab、Collider、LOD 或现成场景，必须在工程内配置。
 12. **许可限制影响仓库**：Bestiary 原始资产不能进入公开 Git 历史，应在第一次提交前配置忽略与放置策略。
 13. **A_TPose 循环误配置已关闭**：`Armature|A_TPose` 的 Loop Time 与 Loop Pose 已恢复为 false；用户完成 Play Mode 回归，`BUG-002` Closed。
+14. **Day 9 攻击配置已闭环**：Attack_01/02/03 分别绑定 A/B/C，三个数据资产的状态名分别正确。
+15. **Player Art 目录异常已关闭**：`Assets/_Game/Art` 已恢复，Player Prefab 的 Imp/Animator/Avatar/Controller 引用有效且 Missing Script=0。
 
 ## 11. Unity 导入验证清单
 
@@ -475,10 +479,10 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 - [x] Imp Model Importer 开启 Bake Axis Conversion（Unity 查询确认）。
 - [x] Imp Rig = Humanoid，Avatar 有效；仅 Idle 视觉由用户报告通过，其他动作仍待预览。
 - [ ] Puglin Rig = Humanoid，Avatar Configure 有效。
-- [ ] UAL1/UAL2 Rig = Humanoid，并使用可复用 Avatar/正确映射。
-- [ ] Unity 中实际 Clip 名称与本文映射一致。
+- [x] UAL1/UAL2 Rig = Humanoid；UAL2 使用 Create From This Model。
+- [x] Unity 中实际 Clip 名称与本文 A/B/C、A_Rec/B_Rec 映射一致。
 - [x] 已采用的 Idle/Walk/Jog/Sprint 开启 Loop Time，`A_TPose` 未误开循环（磁盘配置确认；视觉回归另行执行）。
-- [ ] `Animator.applyRootMotion = false`，代码与动画没有重复位移。
+- [x] `Animator.applyRootMotion = false`，用户回归未观察到动画重复位移。
 - [ ] Imp/Puglin 面向 Unity +Z，手脚和脊柱无明显变形。
 - [ ] Mace/Stick 在各攻击、受击、死亡动作中没有异常拉伸。
 - [ ] BaseColor/Emissive/Normal 显示正确；ORM 或替代参数已验证。

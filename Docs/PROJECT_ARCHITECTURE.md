@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-10（Day 8 通过；HealthBarPresenter 与 WorldSpaceBillboard 已核对）
+> 最后复核：2026-09-12（Day 9 复验通过；攻击配置与动画引用已核对）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -24,14 +24,15 @@
 
 ## 3. Current Architecture（实际状态）
 
-本节结合当前源码、场景 YAML、Unity 编辑态组件、Console 与用户 Day 4 全量手工测试结果。
+本节结合当前源码、资源序列化数据、Unity 编辑态组件、Console 与用户手工测试结果。
 
 ```text
 PlayerInput (InputSystem_Actions / Player map)
 └─ PlayerInputReader [Player，同对象 GetComponent]
    ├─ LookInput → CameraController [Player] → CameraTarget.rotation → Cinemachine
    ├─ MoveInput ──┐
-   └─ SprintHeld ─┴→ PlayerMotor [Player] → CharacterController.Move
+   ├─ SprintHeld ─┴→ PlayerMotor [Player] → CharacterController.Move
+   └─ AttackPressed → PlayerCombat（Day 9 骨架，尚未挂载/消费）
                           镜头空间限幅移动 + 重力 + 转向 + 速度切换
 
 PlayerMotor.CurrentMoveSpeed
@@ -59,6 +60,10 @@ Health
 ├─ MaxHealth / CurrentHealth
 ├─ HealthChanged(float)
 └─ Died()
+
+AttackDefinition（Current，ScriptableObject 静态配置）
+PlayerCombat（Current Skeleton，仅缓存 InputReader 与 Animator 引用）
+PlayerAnimator Attack_01/02/03（Current；分别绑定 Sword_Regular_A/B/C）
 ```
 
 - PlayerMotor 当前负责镜头空间移动、斜向限幅、重力、角色转向和 Sprint 速度切换；`cameraTransform` 指向 Prefab 内的 CameraTarget，普通速度 5、冲刺速度 10、转向速度 720°/s、反向转向速度 1440°/s。
@@ -72,7 +77,9 @@ Health
 - `DamageInfo`、`IDamageable` 与 `Health` 已实现；Health EditMode 测试 10/10 PASS。
 - `HealthBarPresenter` 已实现并复用于 Player 屏幕空间血条和 Enemy 世界空间血条；它通过显式 Health/Slider 引用监听 `HealthChanged`，启用时主动同步当前状态，不轮询 Player 或 Enemy。
 - `WorldSpaceBillboard` 在 LateUpdate 中同步显式 Main Camera 的旋转，使 Enemy 血条保持屏幕对齐；四个镜头方向回归通过。
-- 无 PlayerCombat、Enemy AI、Skill、GameFlow 或 NavMesh。
+- UAL2 已按 Humanoid / Create From This Model 导入；A/B/C 三段动画视觉预检通过。
+- `AttackDefinition` 与三个配置资产已建立，状态名分别对应 Attack_01/02/03；三个 Damage 当前均为可调整的占位值 10。`PlayerCombat` 当前只保留 Day 9 骨架，尚未挂载或实现 Combo。
+- 无 MeleeHitbox、Enemy AI、Skill、GameFlow 或 NavMesh。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -150,7 +157,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 
 ## 7. 核心类型职责（Current / Planned）
 
-`DamageInfo`、`IDamageable`、`Health` 为 Current；其余尚未实现的类型为 Planned。
+`DamageInfo`、`IDamageable`、`Health`、`AttackDefinition` 为 Current；`PlayerCombat` 为 Current Skeleton；其余尚未实现的类型为 Planned。
 
 | 类型 | 唯一职责 | 允许依赖 | 禁止事项 |
 |---|---|---|---|
@@ -160,7 +167,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `DamageInfo` | 当前携带只读伤害值；来源、命中点和方向在 Combat 确实需要时扩展 | 值类型/Unity 基础类型 | 持有目标行为或产生副作用 |
 | `IDamageable` | 为命中系统提供统一伤害入口 | `DamageInfo` | 暴露具体 Player/Enemy 实现 |
 | `Health` | HP 钳制、初始化、`HealthChanged`、只触发一次的 `Died` | 生命配置 | 引用 UI、Animator、Player 或 Enemy |
-| `PlayerCombat` | Combo 状态、输入缓存、攻击切换与中断 | InputReader、Animator、AttackDefinition、MeleeHitbox | 在动画事件中查找目标或直接依赖 Enemy |
+| `PlayerCombat`（Skeleton） | 当前只缓存 InputReader 与显式 Animator；通过 Day 9 后再承担 Combo 状态、输入缓存、攻击切换与中断 | InputReader、Animator、AttackDefinition、MeleeHitbox | 在动画事件中查找目标或直接依赖 Enemy |
 | `MeleeHitbox` | 攻击窗口、目标收集、每次攻击命中去重 | `IDamageable`、`DamageInfo` | 保存跨攻击的陈旧命中集合 |
 | `AttackDefinition` | 保存伤害、窗口、移动限制等静态攻击配置 | ScriptableObject | 保存当前 Combo、缓存输入或命中目标 |
 | `SkillDefinition` | 保存伤害、冷却、距离、持续时间和表现资源 | ScriptableObject | 保存剩余冷却或当前释放状态 |
@@ -178,7 +185,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 - Gameplay 代码不使用 `Keyboard.current` 或 `Mouse.current` 读取具体按键。
 - `PlayerInputReader` 是唯一 Input System 边界；下游只消费意图和值。
 - `CameraController` 属于 Camera 模块，当前位于 `Runtime/Camera`；Input 模块只保留输入读取职责。
-- 默认 Input Asset 已有 Move、Look、Attack、Sprint；PlayerInputReader 当前输出 Move、Look、Sprint。Skill(Q) 与 Restart(R) 尚待添加。
+- 默认 Input Asset 已有 Move、Look、Attack、Sprint；PlayerInputReader 当前输出 Move、Look、Sprint 与单帧 `AttackPressed`。Skill(Q) 与 Restart(R) 尚待添加。
 
 ### 位移与动画
 
@@ -264,7 +271,7 @@ Docs/
 
 ### ADR-003：ScriptableObject 只保存静态配置
 
-- **状态**：Accepted / 尚未实现。
+- **状态**：Accepted / `AttackDefinition` 与三个静态配置已实现并通过 Day 9 复验。
 - **决定**：AttackDefinition、SkillDefinition 等资产不保存运行时可变状态。
 - **原因**：避免多个实例共享状态、停止 Play 后污染资产及重开状态泄漏。
 - **收益**：配置可复用，运行时状态归属明确。

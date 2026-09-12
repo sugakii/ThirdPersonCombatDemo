@@ -2,7 +2,7 @@
 
 > 项目：Third-Person Combat Demo  
 > 维护规则：只记录实际复现的缺陷；修复后必须回归，不能仅凭代码修改关闭。
-> 最近回归：2026-09-10 / Day 8 最终验收；Health 回归 10/10 PASS，BUG-005/006 修复后回归通过。
+> 最近回归：2026-09-12 / Day 9 复验；18/18 PASS，BUG-007/008/009 已关闭。
 
 ## 状态定义
 
@@ -205,7 +205,7 @@ Imp 能正常播放重定向后的 Idle 动画，腿、脚和武器没有明显�
 - 首次发现版本：Day 6 工作树，尚未提交
 - Unity：`6000.5.6f1`
 - 场景：`Assets/_Game/Scenes/SampleScene.unity`
-- 状态：Open
+- 状态：Closed
 - 严重程度：Minor
 - 优先级：Medium
 - 复现率：用户 Day 6 测试中可观察
@@ -322,6 +322,84 @@ Enemy 世界空间血条在镜头移动和旋转后仍正对当前 Gameplay Came
 - 新增 `WorldSpaceBillboard`，在 `LateUpdate()` 将 Canvas 旋转同步到显式绑定的 Main Camera。
 - 0°、90°、180°、270° 四个方向下，Canvas 与 Main Camera 的旋转差均为 0°。
 - Console 为 0 Gameplay Error，BUG-006 Closed。
+
+---
+
+## BUG-007：Attack_02 与 Attack_03 配置仍引用 Attack_01
+
+### 基本信息
+
+- 发现日期：2026-09-12
+- 阶段：Day 9 首轮验收
+- 资源：`Assets/_Game/Data/Combat/Attack_02.asset`、`Attack_03.asset`
+- 状态：Open
+- 严重程度：Major
+- 优先级：High
+
+### 实际结果
+
+首轮验收时三个配置均为 `Damage=10`、`AnimatorStateName=Attack_01`。第二、第三段无法表达各自对应的 Animator State。
+
+### 预期结果
+
+| 配置 | Damage | AnimatorStateName |
+|---|---:|---|
+| Attack_01 | 10 | Attack_01 |
+| Attack_02 | 可配置 | Attack_02 |
+| Attack_03 | 可配置 | Attack_03 |
+
+### 修复与回归条件
+
+复验读取结果：Attack_01/02/03 的状态名分别正确；三个 Damage 当前均为 10，是合法且可读取的占位平衡值。结构缺陷已关闭，伤害递增不作为 Day 9 硬性要求。
+
+---
+
+## BUG-008：Attack_03 Animator State 没有绑定 Motion
+
+### 基本信息
+
+- 发现日期：2026-09-12
+- 阶段：Day 9 首轮验收
+- 资源：`Assets/_Game/Animations/Player/PlayerAnimator.controller`
+- 状态：Closed
+- 严重程度：Major
+- 优先级：High
+
+### 实际结果
+
+`Attack_03` State 已存在，但持久化的 Motion 为 `None`。用户临时预览 `Sword_Regular_C` 时视觉验证通过，但该结果尚未保存到正式 State。
+
+### 预期结果
+
+`Attack_03` 的 Motion 为 `Armature|Sword_Regular_C`，并保持 Foot IK 关闭。
+
+### 修复与回归条件
+
+复验确认 Attack_03 已绑定 `Armature|Sword_Regular_C`，Foot IK=false；三段用户视觉回归均通过，Bug Closed。
+
+---
+
+## BUG-009：Player Art 目录被移动到 Animations/Source
+
+### 基本信息
+
+- 发现日期：2026-09-12
+- 阶段：Day 9 首轮验收
+- 状态：Closed
+- 严重程度：Minor
+- 优先级：High
+
+### 实际结果
+
+原 `Assets/_Game/Art` 工作树目录被移动为 `Assets/_Game/Animations/Source/Art`。Imp 与纹理的 `.meta` GUID 保持不变，但目录职责与 `ASSET_AUDIT.md` 约定不符，也容易把角色美术误当作动画源文件提交或维护。
+
+### 预期结果
+
+角色模型和纹理位于 `Assets/_Game/Art/Charactors/Player/`；`Animations/Source` 只保存动画源文件。
+
+### 修复与回归条件
+
+复验确认 `_Game/Art` 已恢复，错误目录不存在；Player Prefab 中 Imp、Animator、有效 Avatar 和 Controller 均存在，Missing Script=0，Bug Closed。
 
 ---
 
