@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-12（Learning Day 9 复验通过；18/18 PASS）
+> 最后复核：2026-09-13（Learning Day 10 验收通过；Combo Runtime 16/16 PASS）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
 > 每日投入：3–4 小时  
@@ -197,10 +197,10 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 - **Learning Day 7｜9/9 验收通过**：完成只读 DamageInfo、IDamageable、Health 初始化/伤害/事件/恢复规则与 10 条 EditMode 测试；10/10 PASS。
 - **Learning Day 8｜9/10 验收通过**：完成 `ResetHealth()`、Player/Enemy 血条、事件驱动 Presenter 与世界空间 Billboard；BUG-005/006 修复关闭，Health 回归 10/10、Day 8 集成 12/12 PASS。
 - **Learning Day 9｜9/12 验收通过**：UAL2 与三段动作预检、AttackDefinition、Attack 输入意图和 PlayerCombat 骨架完成；三个复现问题已修复关闭，18/18 PASS。
-- **Learning Day 10｜Day 9 通过后开始**：输入缓存、伤害窗口与命中去重。
-- **Learning Day 11｜9/12**：必要庭院地面/墙/楼梯美术替换（保持白盒碰撞）；Puglin Prefab、NavMesh 与 Enemy 状态机。时间不足保留白盒，不阻塞 AI。
-- **Learning Day 12｜9/13**：3 Enemy 集成、AI/Combat 边界测试。
-- **Learning Day 13｜9/14**：停止扩功能；回归、修复、架构复核、Docs 与 Week 2 标签。
+- **Learning Day 10｜9/13 验收通过**：三段 Combo、输入缓存、Recovery Cancel 与逐段镜头朝向完成；16/16 PASS。伤害窗口和命中去重明确顺延，不属于本日范围。
+- **Learning Day 11**：伤害窗口、MeleeHitbox、单次攻击命中去重及一条 PlayMode 测试。
+- **Learning Day 12**：必要环境白盒/美术整理；Puglin Prefab、NavMesh 与 Enemy 状态机。
+- **Learning Day 13**：3 Enemy 集成、AI/Combat 边界测试、回归与 Week 2 验收。
 
 ## 6. Week 3：火焰突进与完整游戏循环（9/15–9/21）
 

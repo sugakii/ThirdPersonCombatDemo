@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 076b381d23f29234d8b774f424152d42, type: 3}
   m_Name: Attack_02
   m_EditorClassIdentifier: Game.Runtime::AttackDefinition
-  damage: 10
-  animatorStateName: Attack_02
+  damage: 15
+  attackStateName: Attack_02
+  recoveryStateName: Attack_02_Recovery

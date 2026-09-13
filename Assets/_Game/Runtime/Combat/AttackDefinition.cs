@@ -15,8 +15,13 @@ public class AttackDefinition : ScriptableObject
 
     // 必须与 Animator Controller 中对应 State 的名称完全一致。
     [SerializeField]
-    private string animatorStateName;
+    private string attackStateName;
+
+    // 未继续 Combo 时播放的收招 State；最后一段攻击可留空。
+    [SerializeField]
+    private string recoveryStateName;
 
     public float Damage => damage;
-    public string AnimatorStateName => animatorStateName;
+    public string AttackStateName => attackStateName;
+    public string RecoveryStateName => recoveryStateName;
 }

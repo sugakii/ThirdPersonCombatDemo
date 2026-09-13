@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-12（Day 9 复验通过；攻击配置与动画引用已核对）
+> 最后复核：2026-09-13（Day 10 验收通过；Combo Runtime 已实现，Hitbox 顺延为 Planned）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -62,8 +62,18 @@ Health
 └─ Died()
 
 AttackDefinition（Current，ScriptableObject 静态配置）
-PlayerCombat（Current Skeleton，仅缓存 InputReader 与 Animator 引用）
-PlayerAnimator Attack_01/02/03（Current；分别绑定 Sword_Regular_A/B/C）
+        ↓
+PlayerCombat（Current：Combo 状态、输入缓存、状态切换）
+        ├─ PlayerMotor.FaceCameraForward()
+        └─ Animator.CrossFade()
+
+UAL2 Animation Events
+        ↓
+PlayerCombatAnimationEvents（Imp）
+        ↓
+PlayerCombat.OpenComboInput / OpenComboAdvance / EnterRecovery / EndAttack
+
+PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
 ```
 
 - PlayerMotor 当前负责镜头空间移动、斜向限幅、重力、角色转向和 Sprint 速度切换；`cameraTransform` 指向 Prefab 内的 CameraTarget，普通速度 5、冲刺速度 10、转向速度 720°/s、反向转向速度 1440°/s。
@@ -78,7 +88,11 @@ PlayerAnimator Attack_01/02/03（Current；分别绑定 Sword_Regular_A/B/C）
 - `HealthBarPresenter` 已实现并复用于 Player 屏幕空间血条和 Enemy 世界空间血条；它通过显式 Health/Slider 引用监听 `HealthChanged`，启用时主动同步当前状态，不轮询 Player 或 Enemy。
 - `WorldSpaceBillboard` 在 LateUpdate 中同步显式 Main Camera 的旋转，使 Enemy 血条保持屏幕对齐；四个镜头方向回归通过。
 - UAL2 已按 Humanoid / Create From This Model 导入；A/B/C 三段动画视觉预检通过。
-- `AttackDefinition` 与三个配置资产已建立，状态名分别对应 Attack_01/02/03；三个 Damage 当前均为可调整的占位值 10。`PlayerCombat` 当前只保留 Day 9 骨架，尚未挂载或实现 Combo。
+- `AttackDefinition` 当前保存 Damage、Attack State Name 与可选 Recovery State Name；三个资产已配置为 10/15/20。
+- `PlayerCombat` 已挂载到 Player，显式绑定 Animator 和三个 AttackDefinition；负责 Combo 索引、输入缓存、窗口状态与 CrossFade，不负责命中和生命结算。
+- `PlayerCombatAnimationEvents` 挂在 Imp，只把 UAL2 的 Animation Event 转发给父级 PlayerCombat，不保存 Combo 状态。
+- `PlayerMotor.FaceCameraForward()` 为攻击开始和连段切换提供水平面瞬时朝向；PlayerMotor 仍是位移唯一执行者。
+- 场景中 Hitbox 组件数量为 0，尚无攻击伤害窗口或单次攻击命中去重。
 - 无 MeleeHitbox、Enemy AI、Skill、GameFlow 或 NavMesh。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
@@ -157,7 +171,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 
 ## 7. 核心类型职责（Current / Planned）
 
-`DamageInfo`、`IDamageable`、`Health`、`AttackDefinition` 为 Current；`PlayerCombat` 为 Current Skeleton；其余尚未实现的类型为 Planned。
+`DamageInfo`、`IDamageable`、`Health`、`AttackDefinition`、`PlayerCombat` 与 `PlayerCombatAnimationEvents` 为 Current；其余尚未实现的类型为 Planned。
 
 | 类型 | 唯一职责 | 允许依赖 | 禁止事项 |
 |---|---|---|---|
@@ -167,9 +181,10 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `DamageInfo` | 当前携带只读伤害值；来源、命中点和方向在 Combat 确实需要时扩展 | 值类型/Unity 基础类型 | 持有目标行为或产生副作用 |
 | `IDamageable` | 为命中系统提供统一伤害入口 | `DamageInfo` | 暴露具体 Player/Enemy 实现 |
 | `Health` | HP 钳制、初始化、`HealthChanged`、只触发一次的 `Died` | 生命配置 | 引用 UI、Animator、Player 或 Enemy |
-| `PlayerCombat`（Skeleton） | 当前只缓存 InputReader 与显式 Animator；通过 Day 9 后再承担 Combo 状态、输入缓存、攻击切换与中断 | InputReader、Animator、AttackDefinition、MeleeHitbox | 在动画事件中查找目标或直接依赖 Enemy |
+| `PlayerCombat`（Current） | Combo 状态、输入缓存、攻击/收招切换与攻击朝向 | InputReader、PlayerMotor、Animator、AttackDefinition | 在动画事件中查找目标或直接依赖 Enemy |
+| `PlayerCombatAnimationEvents`（Current） | 将 Imp Animation Event 转发到 PlayerCombat | 父级 PlayerCombat | 保存 Combo 状态、查找目标或结算伤害 |
 | `MeleeHitbox` | 攻击窗口、目标收集、每次攻击命中去重 | `IDamageable`、`DamageInfo` | 保存跨攻击的陈旧命中集合 |
-| `AttackDefinition` | 保存伤害、窗口、移动限制等静态攻击配置 | ScriptableObject | 保存当前 Combo、缓存输入或命中目标 |
+| `AttackDefinition` | 当前保存伤害、攻击 State 与可选收招 State 等静态配置 | ScriptableObject | 保存当前 Combo、缓存输入或命中目标 |
 | `SkillDefinition` | 保存伤害、冷却、距离、持续时间和表现资源 | ScriptableObject | 保存剩余冷却或当前释放状态 |
 | `SkillController` | 技能准入、冷却、释放流程和命中去重 | SkillDefinition、PlayerMotor、ObjectPool | 直接写 Transform；修改配置资产 |
 | `EnemyStateMachine` | 统一管理 Idle/Chase/Attack/Hit/Dead 迁移 | NavMeshAgent、Animator、EnemyCombat、Health | 用互相冲突的布尔变量替代状态 |

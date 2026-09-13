@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(
-    typeof(CharacterController),
-    typeof(PlayerInputReader)
-    )]
 /// <summary>
 /// Player 的唯一 Gameplay 位移执行者。
 /// 负责镜头空间移动、重力、角色朝向、反向转身和 Sprint。
 /// </summary>
+[RequireComponent(
+    typeof(CharacterController),
+    typeof(PlayerInputReader)
+    )]
 public class PlayerMotor : MonoBehaviour
 {
     /// <summary>
@@ -48,7 +48,31 @@ public class PlayerMotor : MonoBehaviour
     private bool isReverseTurning = false;
     private Vector3 reverseTurnDirection;
 
-    void Awake()
+    /// <summary>
+    /// 将角色立即转向镜头在水平面上的朝向，供攻击开始和连段切换时调用。
+    /// </summary>
+    public void FaceCameraForward()
+    {
+        Vector3 forward = cameraTransform.forward;
+
+        forward.y = 0f;
+
+        // 防止镜头接近垂直方向时得到无法用于 LookRotation 的零向量。
+        if(forward.sqrMagnitude <= 0.001f)
+        {
+            return;
+        }
+
+        forward.Normalize();
+
+        // 攻击朝向只是用镜头在地面的投影，避免镜头俯仰使角色产生 X/Z 倾斜。
+        transform.rotation = Quaternion.LookRotation(forward);
+
+        // 瞬间攻击转向后终止旧的反向转身状态，避免下一帧又被旧目标方向拉回去。
+        isReverseTurning = false;
+    }
+
+    private void Awake()
     {
         // cameraTransform 是 Inspector 引用；缺失时尽早停止，避免每帧刷空引用异常。
         if(cameraTransform == null)
@@ -62,7 +86,7 @@ public class PlayerMotor : MonoBehaviour
         inputReader = GetComponent<PlayerInputReader>();
     }
 
-    void Update()
+    private void Update()
     {
         // Sprint 只切换速度，不改变输入向量，也不会在静止时主动产生位移。
         float currentSpeed = moveSpeed;

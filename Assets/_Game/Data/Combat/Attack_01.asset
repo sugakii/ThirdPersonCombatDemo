@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Attack_01
   m_EditorClassIdentifier: Game.Runtime::AttackDefinition
   damage: 10
-  animatorStateName: Attack_01
+  attackStateName: Attack_01
+  recoveryStateName: Attack_01_Recovery
