@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-13（Day 10 验收通过；Combo Runtime 已实现，Hitbox 顺延为 Planned）
+> 最后复核：2026-09-15（Day 11 验收通过；MeleeHitbox 反射测试延期）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -32,7 +32,7 @@ PlayerInput (InputSystem_Actions / Player map)
    ├─ LookInput → CameraController [Player] → CameraTarget.rotation → Cinemachine
    ├─ MoveInput ──┐
    ├─ SprintHeld ─┴→ PlayerMotor [Player] → CharacterController.Move
-   └─ AttackPressed → PlayerCombat（Day 9 骨架，尚未挂载/消费）
+   └─ AttackPressed → PlayerCombat（Current：Combo 与伤害窗口）
                           镜头空间限幅移动 + 重力 + 转向 + 速度切换
 
 PlayerMotor.CurrentMoveSpeed
@@ -72,6 +72,12 @@ UAL2 Animation Events
 PlayerCombatAnimationEvents（Imp）
         ↓
 PlayerCombat.OpenComboInput / OpenComboAdvance / EnterRecovery / EndAttack
+        └─ OpenDamageWindow / CloseDamageWindow
+                    ↓
+              MeleeHitbox（Player）
+              ├─ OverlapSphere + LayerMask + 前半球过滤
+              ├─ HashSet<IDamageable> 单窗口去重
+              └─ IDamageable.TakeDamage(DamageInfo)
 
 PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
 ```
@@ -90,10 +96,12 @@ PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
 - UAL2 已按 Humanoid / Create From This Model 导入；A/B/C 三段动画视觉预检通过。
 - `AttackDefinition` 当前保存 Damage、Attack State Name 与可选 Recovery State Name；三个资产已配置为 10/15/20。
 - `PlayerCombat` 已挂载到 Player，显式绑定 Animator 和三个 AttackDefinition；负责 Combo 索引、输入缓存、窗口状态与 CrossFade，不负责命中和生命结算。
-- `PlayerCombatAnimationEvents` 挂在 Imp，只把 UAL2 的 Animation Event 转发给父级 PlayerCombat，不保存 Combo 状态。
+- `PlayerCombatAnimationEvents` 挂在 Imp，只把 UAL2 的 Combo 与伤害窗口 Animation Event 转发给父级 PlayerCombat，不保存 Combo 状态、不查询目标。
 - `PlayerMotor.FaceCameraForward()` 为攻击开始和连段切换提供水平面瞬时朝向；PlayerMotor 仍是位移唯一执行者。
-- 场景中 Hitbox 组件数量为 0，尚无攻击伤害窗口或单次攻击命中去重。
-- 无 MeleeHitbox、Enemy AI、Skill、GameFlow 或 NavMesh。
+- 场景中的 `MeleeHitbox` 使用独立中心、0.75 半径和 Enemy LayerMask；候选 Collider 经过前半球过滤，再按父级 `IDamageable` 去重结算。
+- A/B/C Clip 已持久化伤害窗口事件，三段分别读取 AttackDefinition 的 10/15/20 伤害。
+- MeleeHitbox 命中规则已完成手工功能与边界回归；需要反射配置私有序列化字段的 PlayMode 测试已延期，不计入自动化证据。
+- 无 Enemy AI、Skill、GameFlow 或 NavMesh。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -171,7 +179,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 
 ## 7. 核心类型职责（Current / Planned）
 
-`DamageInfo`、`IDamageable`、`Health`、`AttackDefinition`、`PlayerCombat` 与 `PlayerCombatAnimationEvents` 为 Current；其余尚未实现的类型为 Planned。
+`DamageInfo`、`IDamageable`、`Health`、`AttackDefinition`、`PlayerCombat`、`PlayerCombatAnimationEvents` 与 `MeleeHitbox` 为 Current；其余尚未实现的类型为 Planned。
 
 | 类型 | 唯一职责 | 允许依赖 | 禁止事项 |
 |---|---|---|---|
@@ -183,7 +191,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `Health` | HP 钳制、初始化、`HealthChanged`、只触发一次的 `Died` | 生命配置 | 引用 UI、Animator、Player 或 Enemy |
 | `PlayerCombat`（Current） | Combo 状态、输入缓存、攻击/收招切换与攻击朝向 | InputReader、PlayerMotor、Animator、AttackDefinition | 在动画事件中查找目标或直接依赖 Enemy |
 | `PlayerCombatAnimationEvents`（Current） | 将 Imp Animation Event 转发到 PlayerCombat | 父级 PlayerCombat | 保存 Combo 状态、查找目标或结算伤害 |
-| `MeleeHitbox` | 攻击窗口、目标收集、每次攻击命中去重 | `IDamageable`、`DamageInfo` | 保存跨攻击的陈旧命中集合 |
+| `MeleeHitbox`（Current） | 攻击窗口、目标收集、前半球过滤与每次攻击命中去重 | `IDamageable`、`DamageInfo`、Unity Physics | 保存跨攻击的陈旧命中集合；依赖具体 Enemy 类型 |
 | `AttackDefinition` | 当前保存伤害、攻击 State 与可选收招 State 等静态配置 | ScriptableObject | 保存当前 Combo、缓存输入或命中目标 |
 | `SkillDefinition` | 保存伤害、冷却、距离、持续时间和表现资源 | ScriptableObject | 保存剩余冷却或当前释放状态 |
 | `SkillController` | 技能准入、冷却、释放流程和命中去重 | SkillDefinition、PlayerMotor、ObjectPool | 直接写 Transform；修改配置资产 |

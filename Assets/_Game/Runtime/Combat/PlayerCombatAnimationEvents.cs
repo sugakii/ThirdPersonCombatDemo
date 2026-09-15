@@ -24,6 +24,17 @@ public class PlayerCombatAnimationEvents : MonoBehaviour
         playerCombat.EnterRecovery();
     }
 
+    // 伤害窗口仍由动画决定时机，但命中查询和扣血不在动画桥接组件中执行。
+    public void OpenDamageWindow()
+    {
+        playerCombat.OpenDamageWindow();
+    }
+
+    public void CloseDamageWindow()
+    {
+        playerCombat.CloseDamageWindow();
+    }
+
     public void EndAttack()
     {
         playerCombat.EndAttack();

@@ -5,7 +5,9 @@ using UnityEngine;
 /// 不负责命中检测和生命结算。
 /// </summary>
 [RequireComponent(
-    typeof(PlayerInputReader), typeof(PlayerMotor)
+    typeof(PlayerInputReader),
+    typeof(PlayerMotor),
+    typeof(MeleeHitbox)
     )]
 public class PlayerCombat : MonoBehaviour
 {
@@ -38,11 +40,15 @@ public class PlayerCombat : MonoBehaviour
     // 当前是否已经到达允许真正切换下一段攻击的时机。
     private bool comboAdvanceOpen;
 
+    // 命中检测由同对象的 Hitbox 执行，PlayerCombat 只提供当前段的伤害数据和窗口时机。
+    private MeleeHitbox meleeHitbox;
+
     private void Awake()
     {
         // 缓存同对象依赖，后续战斗逻辑不直接读取具体输入设备。
         inputReader = GetComponent<PlayerInputReader>();
         playerMotor = GetComponent<PlayerMotor>();
+        meleeHitbox = GetComponent<MeleeHitbox>();
     }
 
     private void StartAttack()
@@ -78,6 +84,21 @@ public class PlayerCombat : MonoBehaviour
     public void OpenComboInput()
     {
         comboInputOpen = true;
+    }
+
+    // 伤害值由当前 Combo 配置决定，Hitbox 只负责检测和结算。
+    public void OpenDamageWindow()
+    {
+        float damageAmount = attacks[currentComboIndex].Damage;
+
+        DamageInfo damageInfo = new DamageInfo(damageAmount);
+
+        meleeHitbox.OpenDamageWindow(damageInfo);
+    }
+
+    public void CloseDamageWindow()
+    {
+        meleeHitbox.CloseDamageWindow();
     }
 
     // 消费一次有效的衔接请求，并将 Combo 推进到下一段攻击。

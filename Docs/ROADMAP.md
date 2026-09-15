@@ -1,8 +1,8 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-13（Learning Day 10 验收通过；Combo Runtime 16/16 PASS）
+> 最后复核：2026-09-14（补回两个独立场景制作日：Day 12 主体、Day 23 润色）
 > 项目周期：2026-09-02 至 2026-09-30  
-> 学习日编号：2026-09-02 = Learning Day 1；之后按自然日连续递增，至 2026-09-30 = Learning Day 29
+> 学习日编号：Day 10 于 9/13 完成；剩余日程重排为 9/14 Day 11 至 9/30 Day 27，原 Day 28/29 的交付任务并入 Day 26/27
 > 每日投入：3–4 小时  
 > 固定节奏：约 70% 开发学习，30% 测试、复盘、文档和 Git  
 > 项目目标：在 2026-09-30 前完成可玩、可测试、可解释的第三人称战斗 Vertical Slice
@@ -35,8 +35,8 @@ Day 7 已通过：`DamageInfo`、`IDamageable` 与通用 `Health` 已实现，He
 
 固定规则：
 
-- 9/7、9/14、9/21、9/28 是周验收日，不增加功能。
-- 第四周全周停止扩功能，只做修复、重构、测试、性能和作品集交付。
+- Day 16、Day 22 是阶段验收日，不增加功能；Day 23 起停止扩玩法功能。
+- 9/26–9/30 只做修复、测试、性能、Build 和作品集交付。
 - 每个功能执行“需求 → 验收标准 → 失败测试/用例 → 实现 → 边界与异常测试 → Bug → 修复 → 回归”。
 - 未通过本周验收门槛，不进入下一周系统。
 - 每次收到“验收”请求时，先扫描本次涉及的自有代码并补齐必要注释，再执行验证、更新 Docs 和给出包含全部自有代码的 Git 指令。
@@ -129,7 +129,7 @@ Day 7 已通过：`DamageInfo`、`IDamageable` 与通用 `Health` 已实现，He
 Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重构已验收的 PlayerMotor。Week 2–4 日期均视为目标窗口，后续按实际进度顺延。
 若 Package Manager 受网络影响，最多排查 30 分钟；可先用静态 Camera 推进 Input/Motor，Cinemachine 最迟在 Week 1 验收前补齐。`com.unity.ai.assistant` 当前承担 Unity MCP Bridge，使用 MCP 期间保留；只有 `com.unity.pipeline` 再次确认阻断解析时才移除。
 
-## 5. Week 2：生命、近战与 Enemy AI（9/8–9/14）
+## 5. Phase A：庭院主体、生命、近战与 Enemy AI（完成至 9/19）
 
 ### 开发
 
@@ -139,6 +139,7 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 - 创建三个 `AttackDefinition` 静态配置。
 - 实现 `PlayerCombat`、三段普攻、输入缓存、攻击中断和动画伤害窗口。
 - 实现 `MeleeHitbox` 每次攻击对同一目标的命中去重。
+- 使用已审计的地面、墙、墙角、门、楼梯、平台、木箱、马车和栅栏，完成约 20×20m 的庭院主体及必要碰撞。
 - 导入并配置 `Puglin.fbx`、纹理及 Idle/Run/Attack/Hit/Death 动画。
 - 烘焙 NavMesh；实现 Idle、Chase、Attack、Hit、Dead 明确状态机。
 - 先用单个 Enemy 验收，再放置 3 个共用 Prefab 的 Puglin 实例。
@@ -171,7 +172,7 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 - EditMode：Health 正确钳制。
 - EditMode：`Died` 只触发一次。
 - EditMode：Health Reset 恢复完整状态。
-- PlayMode：一个攻击窗口对同一目标只结算一次。
+- `MeleeHitbox` PlayMode 去重测试延期；不为测试修改生产字段可见性，也不要求学习者在当前阶段掌握反射。
 
 ### 交付
 
@@ -179,7 +180,7 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 - 三段普攻、Player/Enemy 血条、Enemy 状态机。
 - 至少 28 条累计测试用例。
 - 至少 2 份由真实问题产生的规范 Bug Report。
-- Health/Hitbox 自动化测试及执行结果。
+- Health EditMode 与既有 PlayerMotor PlayMode 自动化测试及执行结果；Hitbox 以正式手工边界用例验收。
 
 ### 验收门槛
 
@@ -198,11 +199,14 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 - **Learning Day 8｜9/10 验收通过**：完成 `ResetHealth()`、Player/Enemy 血条、事件驱动 Presenter 与世界空间 Billboard；BUG-005/006 修复关闭，Health 回归 10/10、Day 8 集成 12/12 PASS。
 - **Learning Day 9｜9/12 验收通过**：UAL2 与三段动作预检、AttackDefinition、Attack 输入意图和 PlayerCombat 骨架完成；三个复现问题已修复关闭，18/18 PASS。
 - **Learning Day 10｜9/13 验收通过**：三段 Combo、输入缓存、Recovery Cancel 与逐段镜头朝向完成；16/16 PASS。伤害窗口和命中去重明确顺延，不属于本日范围。
-- **Learning Day 11**：伤害窗口、MeleeHitbox、单次攻击命中去重及一条 PlayMode 测试。
-- **Learning Day 12**：必要环境白盒/美术整理；Puglin Prefab、NavMesh 与 Enemy 状态机。
-- **Learning Day 13**：3 Enemy 集成、AI/Combat 边界测试、回归与 Week 2 验收。
+- **Learning Day 11｜9/14（9/15 验收通过）**：伤害窗口、MeleeHitbox、前半球过滤及窗口/去重/多目标/范围/Layer/方向手工回归完成；反射 PlayMode 测试延期，不作为本日门槛。
+- **Learning Day 12｜9/15**：使用正式环境素材完成约 20×20m 庭院主体、必要碰撞、楼梯与第三人称动线回归。
+- **Learning Day 13｜9/16**：Puglin 导入、Humanoid 动画验证、材质、Health/血条与 Enemy Prefab。
+- **Learning Day 14｜9/17**：最小 NavMesh；Enemy Idle ↔ Chase 状态与距离/路径测试。
+- **Learning Day 15｜9/18**：Enemy Attack/Hit/Dead、Player/Enemy 互相伤害与死亡终态。
+- **Learning Day 16｜9/19**：3 Enemy 集成、AI/Combat 边界回归、Bug 修复与 Phase A 验收。
 
-## 6. Week 3：火焰突进与完整游戏循环（9/15–9/21）
+## 6. Phase B：火焰突进与完整游戏循环（9/20–9/25）
 
 ### 开发
 
@@ -268,20 +272,20 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 
 ### 每日检查点
 
-- **Learning Day 14｜9/15**：SkillDefinition、冷却状态与失败测试。
-- **Learning Day 15｜9/16**：由 PlayerMotor 执行 Dash 位移与障碍处理。
-- **Learning Day 16｜9/17**：技能伤害、多目标与单次释放去重。
-- **Learning Day 17｜9/18**：ParticleSystem、TrailRenderer、对象池、冷却 UI。
-- **Learning Day 18｜9/19**：GameFlow、胜负、重开、同帧死亡规则。
-- **Learning Day 19｜9/20**：3 Enemy 压力测试与完整闭环。
-- **Learning Day 20｜9/21**：停止扩功能；回归、修复、Docs 与 Week 3 标签。
+- **Learning Day 17｜9/20**：SkillDefinition、Q 输入、运行时冷却与 EditMode 测试。
+- **Learning Day 18｜9/21**：由 PlayerMotor 执行 Sword_Dash 位移与障碍处理。
+- **Learning Day 19｜9/22**：技能伤害、多目标与单次释放去重。
+- **Learning Day 20｜9/23**：ParticleSystem、TrailRenderer、Unity ObjectPool、冷却 UI 与完整技能回归。
+- **Learning Day 21｜9/24**：GameFlow、Victory/GameOver、R 重开和同帧死亡规则。
+- **Learning Day 22｜9/25**：停止扩功能；5 次完整流程压力回归、修复与 Phase B 验收。
 
-## 7. Week 4：质量、作品集与发布（9/22–9/28）
+## 7. Phase C：质量、作品集与发布（9/26–9/30）
 
 ### 开发
 
 本周不增加玩法，只修复已登记问题：
 
+- 在庭院主体上完成构图、必要 Props、基础灯光与可读性润色，并回归碰撞和 NavMesh。
 - 审查依赖方向、空引用、事件订阅和对象生命周期。
 - 清理无用脚本、重复配置、未使用输入和临时调试对象。
 - 检查 Animator 状态退出、死亡状态和场景重载。
@@ -329,31 +333,17 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 
 ### 每日检查点
 
-- **Learning Day 21｜9/22**：架构、依赖、空引用、生命周期审查。
-- **Learning Day 22｜9/23**：完整测试会与 Bug 分级。
-- **Learning Day 23｜9/24**：P0/P1 修复、Profiler、资源优化。
-- **Learning Day 24｜9/25**：Windows Build 与 Build 内专项测试。
-- **Learning Day 25｜9/26**：README、架构图、测试报告、许可说明。
-- **Learning Day 26｜9/27**：演示视频、简历描述、源码讲解。
-- **Learning Day 27｜9/28**：停止所有新增内容；最终回归、Docs 同步、RC 标签。
+- **Learning Day 23｜9/26**：庭院第二遍制作；完成构图、必要 Props、基础灯光，并回归镜头、碰撞与 NavMesh。
+- **Learning Day 24｜9/27**：架构/引用/生命周期审查、Profiler、P0/P1 修复、Windows x64 Build 与 Build 专项测试。
+- **Learning Day 25｜9/28**：README、架构图、测试报告、素材许可和复现说明。
+- **Learning Day 26｜9/29**：90–120 秒视频、简历描述、源码讲解与模拟面试。
+- **Learning Day 27｜9/30**：停止所有新增内容；Build 连续 3 次完整回归、Docs 同步、`v1.0.0` 标签与投递。
 
-## 8. 最终交付（9/29–9/30）
+## 8. 最终交付（已并入 Day 26–27）
 
-### Learning Day 28｜9/29
-
-- 在 Windows Build 中连续完成 3 次完整游戏循环。
-- 复核全部测试用例和已修复 Bug 的 Regression。
-- 检查公开 Git 不包含 QAL 原始资产或完整素材包。
-- 只允许修复阻断投递的 P0/P1，不再调整表现或范围。
-- 生成最终 Release Candidate。
-
-### Learning Day 29｜9/30
-
-- 完成简历项目描述、作品链接、视频链接和代码仓库说明。
-- 进行一次 U3D 架构讲解与游戏测试模拟面试。
-- 最终同步 `PROJECT_STATUS.md`、README 和测试结果。
-- 创建最终 `v1.0.0` 标签并冻结项目。
-- 提交实习简历。
+- Day 26 完成视频、简历描述、源码讲解和模拟面试。
+- Day 27 在 Windows Build 中连续完成 3 次完整循环，复核 Bug Regression 和仓库许可，创建 `v1.0.0` 并投递。
+- 不再保留额外 Day 28/29，避免计划日期越过 9/30。
 
 最终门槛：
 

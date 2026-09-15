@@ -403,6 +403,43 @@ Enemy 世界空间血条在镜头移动和旋转后仍正对当前 Gameplay Came
 
 ---
 
+## BUG-010：Enemy 血条在 0 HP 时仍残留短条
+
+### 基本信息
+
+- 发现日期：2026-09-14
+- 阶段：Day 11 手工伤害回归
+- 场景：`Assets/_Game/Scenes/SampleScene.unity`
+- 状态：Closed
+- 严重程度：Minor
+- 优先级：Medium
+
+### 复现步骤
+
+1. 将 Enemy 生命值降至 5。
+2. 使用 10 点伤害将生命值降至 0。
+3. 观察 Enemy 世界空间血条的 Fill。
+
+### 实际结果
+
+`CurrentHealth` 和 Slider Value 已经为 0，但 Fill 仍显示一小段，看起来像目标还有残余生命。
+
+### 预期结果
+
+生命值为 0 时，Fill 完全不可见。
+
+### 根因
+
+Fill 的 RectTransform 左右偏移均为 `-5`。Slider 将锚点收缩到 0 时，额外偏移仍留下可见宽度；Health 和伤害结算本身正确。
+
+### 修复与回归
+
+- 将 Fill 的 Left/Right 改为 `0`，未修改 Health 或 MeleeHitbox。
+- 5 HP 承受 10 点伤害后，`CurrentHealth=0` 且血条完全归零。
+- 三段 10/15/20 伤害与超额伤害钳制回归通过。
+
+---
+
 ## 不登记为 Bug 的观察项
 
 ### OBS-001：角色停止时镜头轻微追随
