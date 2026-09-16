@@ -2,7 +2,7 @@
 
 > 扫描日期：2026-09-02  
 > 扫描源：`MaterialPackage/` 实际本地文件、FBX/GLB 结构、随包 README/导入图和许可证  
-> 工程复核：2026-09-12（Day 9 复验通过）；UAL2 为 Humanoid，43 个 Clip 及 A/B/C 攻击主体已确认，攻击 Motion/配置与 Player Art 目录均已回归。源素材目录树仍为 9/2 扫描快照。
+> 工程复核：2026-09-16（Day 12 验收通过）；8 个庭院结构 FBX 已选择性导入并完成主体/碰撞回归。UAL2、攻击 Motion/配置与 Player Art 结论保持有效；源素材目录树仍为 9/2 扫描快照。
 
 ## 1. 审计原则
 
@@ -35,7 +35,8 @@
 - UAL1：`Assets/_Game/Animations/Source/UAL1_Standard.fbx`，43 条 Clip；实际名称保留 `Armature|` 前缀。Idle、Walk、Jog、Sprint 的 Loop Time 均为 true；Walk 的 Loop Pose 为 true，Idle/Jog/Sprint 为 false。`A_TPose` 的 Loop Time/Loop Pose 均为 false。用户完成四个 locomotion Clip 的视觉回归，`BUG-001`、`BUG-002` 均 Closed。Bake Axis Conversion=false。
 - PlayerAnimator.controller 已使用 Speed 1D Blend Tree：Idle=0、Walk=2.5、Jog=5、Sprint=10。Imp Animator 启用并绑定 ImpAvatar/Controller，Root Motion=false；用户完成静止、普通移动、冲刺、松键和撞墙动画回归。
 - UAL2：`Assets/_Game/Animations/Source/UAL2_Standard.fbx`，Human / CreateFromThisModel，43 个 Clip；`Sword_Regular_A/B/C` 均存在且非 Loop。用户手工预览三段动作均无明显变形或异常位移。
-- Player Prefab 已创建并保存内部 CameraTarget/Imp Animator 引用。楼梯、30°/50°斜坡、墙角和平台白盒已保存并通过手工碰撞回归。Puglin、正式环境尚未导入；现有基础体不能标成完整美术庭院。
+- Player Prefab 已创建并保存内部 CameraTarget/Imp Animator 引用。楼梯、30°/50°斜坡、墙角和平台白盒已保存并通过手工碰撞回归。
+- Day 12 已选择性导入 8 个庭院结构 FBX：`Floor_Brick`、`Wall_Plaster_Straight`、`Wall_Plaster_Door_Round`、`Corner_Exterior_Wood`、`DoorFrame_Round_WoodDark`、`Door_1_Round`、`Stairs_Exterior_Straight`、`Stairs_Exterior_Platform`。场景已完成约 22×22m 主体与简化碰撞回归；Crate/Wagon/Fence 和统一材质留到 Day 23。Puglin 尚未导入。
 
 ## 3. 正式使用清单
 
@@ -486,9 +487,10 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 - [ ] Imp/Puglin 面向 Unity +Z，手脚和脊柱无明显变形。
 - [ ] Mace/Stick 在各攻击、受击、死亡动作中没有异常拉伸。
 - [ ] BaseColor/Emissive/Normal 显示正确；ORM 或替代参数已验证。
-- [ ] 环境尺寸、Pivot、2m 拼接接缝正确。
-- [ ] Floor/Wall/Crate/Fence/Wagon 简化碰撞体可用。
-- [ ] 楼梯斜坡碰撞可让 CharacterController 稳定上下。
+- [x] Day 12 庭院主体尺寸约 22×22m，2m 地面模块、墙体、门洞与墙角拼接已完成实机回归。
+- [x] Floor/Wall/门洞/平台简化碰撞体可用；门洞双向、Sprint 通行及墙角阻挡已通过。
+- [x] 楼梯使用隐藏斜坡 Box Collider，CharacterController 普通移动与 Sprint 上下楼稳定。
+- [ ] Crate/Fence/Wagon 尚未导入；计划在 Day 23 场景润色时按实际构图选择并验证碰撞。
 - [x] 已导入的 Imp 原始 FBX/PNG 被 .gitignore 排除（check-ignore 已验证）；未来导入 Puglin 时需扩展覆盖。
 
 ## 12. 审计结论

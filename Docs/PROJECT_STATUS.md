@@ -1,44 +1,41 @@
 # Current Project Status
 
-> Last Updated：2026-09-15
-> Current Learning Day：Day 11 已完成
-> Current Phase：Phase A / MeleeHitbox 完成
-> Next Checkpoint：Learning Day 12 — 20×20m 中世纪庭院主体
+> Last Updated：2026-09-16
+> Current Learning Day：Day 12 已完成
+> Current Phase：Phase A / 中世纪庭院主体完成
+> Next Checkpoint：Learning Day 13 — Puglin 导入与 Enemy Prefab
 > Source of Truth：当前 Unity 工程 + Git + Docs
 > Remaining Plan：`Docs/plans/2026-09-13-remaining-learning-days.md`
 
 ## 验收结论
 
-**Day 11：PASS。** 伤害窗口、`MeleeHitbox`、单窗口命中去重、前半球过滤和伤害结算均已实现，手工功能/边界回归通过。`MeleeHitbox` PlayMode 测试经范围评估后延期：当前实现需要学习者尚未掌握的反射来模拟 Inspector 私有字段，不再作为 Day 11 阻断项；未完成的空测试骨架已删除，避免产生假通过。
+**Day 12：PASS。** 约 22×22m 中世纪庭院主体已保存；地面、四面墙、门洞/门框/门、四个墙角、楼梯、平台和必要简化碰撞完成。门洞、墙角、楼梯、平台、边缘、镜头及全场基础碰撞手工回归通过，Console 无新增红错。Props、统一材质与灯光留到 Day 23，不阻断本日交付。
 
 ## Implemented
 
-- `PlayerCombat` 从当前 Combo 的 `AttackDefinition` 读取伤害，并把 `DamageInfo` 交给 `MeleeHitbox`。
-- `PlayerCombatAnimationEvents` 只转发伤害窗口时机，不查询目标、不直接扣血。
-- `MeleeHitbox` 只在窗口打开时执行 `Physics.OverlapSphere`，并使用 Enemy LayerMask 过滤候选目标。
-- 候选目标再通过 `Vector3.Dot` 排除角色后方目标。
-- `HashSet<IDamageable>` 在每次新窗口打开时清空，使同一目标一刀只结算一次、下一刀仍可再次命中。
-- 命中只调用 `IDamageable.TakeDamage(DamageInfo)`，没有依赖 Enemy 具体类。
-- A/B/C Clip 已保存 Open/Close Damage Window 事件；三段伤害分别为 10/15/20。
-- `MeleeHitboxCenter`、0.75 半径和 Enemy LayerMask 已保存到 `SampleScene`。
-- Day 11 涉及代码已补齐职责、边界和原因型注释。
+- 从 Medieval Village 包选择性导入 8 个结构 FBX，没有导入 OBJ/glTF 重复格式。
+- `Environment_Courtyard` 使用 2m `Floor_Brick` 模块形成约 22×22m 地面，并完成四面外围墙。
+- 场景保存门洞墙、圆门框、圆门和四个外墙转角。
+- 楼梯使用视觉模型 + 隐藏斜坡 Box Collider，平台使用简化 Box Collider。
+- 地面、墙体、门口与平台碰撞已按第三人称 CharacterController 动线校准。
+- 今日没有新增玩法脚本；代码注释检查无新增项。
 
 ## Test Evidence
 
 | 范围 | 结果 |
 |---|---|
-| 当前脚本编译 | PASS：`Game.Runtime.dll` 晚于 Day 11 脚本，Editor.log 未检出编译错误 |
-| 场景引用 | PASS：Center、Radius=0.75、Enemy Mask 已保存 |
-| Animation Events | PASS：A/B/C 均保存伤害窗口事件 |
-| 窗口内/外伤害 | PASS（用户实机） |
-| 多帧与多 Collider 去重 | PASS（用户实机） |
-| 下一次攻击重新命中 | PASS（用户实机） |
-| 多目标、范围、Layer、后方过滤 | PASS（用户实机） |
-| 三段 10/15/20 与超额伤害归零 | PASS（用户实机） |
-| MeleeHitbox PlayMode 去重测试 | DEFERRED：当前不以反射测试作为学习门槛，且不计为自动化证据 |
-| Day 11 结论 | PASS：11 项手工/静态验收通过；1 项异常测试未运行；自动化延期 |
+| 场景结构持久化 | PASS：庭院根节点、四面墙、门口、RaisedArea、楼梯与平台均已保存 |
+| 正式环境引用 | PASS：121 地面模块、43 直墙、门洞墙/门框/门、4 转角及楼梯平台已保存 |
+| 简化碰撞 | PASS：15 个 Box Collider；未给全部视觉 Mesh 使用复杂 Mesh Collider |
+| 墙体、墙角和门洞 | PASS（用户实机） |
+| 楼梯、平台和边缘 | PASS（用户实机） |
+| 镜头靠墙/墙角/平台 | PASS（用户实机） |
+| 全场移动与碰撞回归 | PASS（用户实机） |
+| Console | PASS：用户确认无新增红色错误；当前 Editor.log 未检出近期异常 |
+| MeleeHitbox PlayMode 去重测试 | DEFERRED：空骨架已再次删除，不计为自动化证据 |
+| Day 12 结论 | PASS：13 项手工/静态验收通过 |
 
-详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY11.md`。
+详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY12.md`。
 
 ## Current Architecture
 
@@ -64,41 +61,35 @@ Health
 
 ## Files
 
-- `Assets/_Game/Runtime/Combat/AttackDefinition.cs`
-- `Assets/_Game/Runtime/Combat/PlayerCombat.cs`
-- `Assets/_Game/Runtime/Combat/PlayerCombatAnimationEvents.cs`
-- `Assets/_Game/Runtime/Combat/MeleeHitbox.cs`
-- `Assets/_Game/Runtime/Player/PlayerMotor.cs`
-- `Assets/_Game/Animations/Player/PlayerAnimator.controller`
-- `Assets/_Game/Animations/Source/UAL2_Standard.fbx.meta`
-- `Assets/_Game/Data/Combat/Attack_01.asset`
-- `Assets/_Game/Data/Combat/Attack_02.asset`
-- `Assets/_Game/Data/Combat/Attack_03.asset`
+- `Assets/_Game/Art/Environment/MedievalVillage/Models/`（8 个结构 FBX 及 `.meta`）
 - `Assets/_Game/Scenes/SampleScene.unity`
-- `Docs/TEST_REPORT/TEST_CASE_DAY11.md`
+- `Docs/ASSET_AUDIT.md`
+- `Docs/ROADMAP.md`
+- `Docs/PROJECT_STATUS.md`
+- `Docs/TEST_REPORT/TEST_CASE_DAY12.md`
 
 ## Known Bugs / Risks
 
 1. `BUG-004` Open：角色离地后仍保留完整水平控制速度；进入技能位移前处理。
-2. `MeleeHitbox` PlayMode 测试延期且不计为自动化证据；已有 Health EditMode 与 PlayerMotor PlayMode 测试继续提供自动化能力证明。
-3. Day 11 新组件当前保存为 `SampleScene` 的 Player Prefab 实例覆盖；在 Phase A 集成前决定是否 Apply 到 Player Prefab。
-4. `Physics.OverlapSphere` 在伤害窗口每帧分配数组；Day 24 通过 Profiler 决定是否需要改为 NonAlloc。
+2. `MeleeHitbox` PlayMode 测试延期且不计为自动化证据；空骨架不得保留以免假通过。
+3. Day 12 环境 FBX 当前未导入统一纹理/材质；视觉统一、灯光和 Props 留到 Day 23。
+4. Day 12 场景直接复用模型 Prefab，尚未建立额外 Environment Prefab；只有出现稳定复用配置时再提取，避免为目录而建空壳。
 5. `Assets/_Recovery/` 是恢复文件，不纳入正式项目提交。
 
 ## Git
 
-- 当前分支：`main`；当前已提交 HEAD：`fc77a55`。
-- Day 11 已通过，可以创建正式完成提交。
+- 当前分支：`main`；提交前以 `git rev-parse --short HEAD` 复核实际 HEAD。
+- Day 12 已通过，可以创建正式完成提交。
 - 默认提交全部自有代码、对应 `.meta`、配置资产、Scene、测试与 Docs。
 - 排除 Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug 目录及未经确认的 ProjectSettings 变化。
 - Bestiary 原始 FBX/PNG 不进入公开仓库。
 
 ## Next Task
 
-1. Learning Day 12 使用已审计的环境素材完成约 20×20m 中世纪庭院主体。
-2. 优先完成地面、外围墙、墙角、门、楼梯与平台；必要时保留隐藏白盒 Collider。
-3. 执行角色尺度、楼梯、墙角、平台边缘、镜头遮挡和基础碰撞回归。
-4. 不在场景日增加新的玩法脚本。
+1. Learning Day 13 选择性导入 `Puglin.fbx` 与必要纹理，验证 Humanoid Avatar 和动画重定向。
+2. 创建 `MI_Puglin.mat` 与 `Puglin.prefab`，保存 Collider、Health 和世界空间血条引用。
+3. 先只建立 1 个可复用 Enemy Prefab；3 个实例留到 AI/Combat 集成日。
+4. 执行材质、比例、Idle/Jog/Attack/Hit/Death、Root Motion 与 Prefab 持久化回归。
 
 ## Update Rules
 
