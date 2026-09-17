@@ -5,9 +5,23 @@ using UnityEngine;
 /// </summary>
 public class WorldSpaceBillboard : MonoBehaviour
 {
-    // 由场景或 Prefab 显式指定，避免每帧搜索 Main Camera。
-    [SerializeField]
     private Transform cameraTransform;
+
+    private void Awake()
+    {
+        // Prefab 不能保存场景对象引用，因此实例启用时只查找一次 Main Camera，避免在 LateUpdate 重复搜索。
+        Camera mainCamera = Camera.main;
+
+        if(mainCamera == null)
+        {
+            Debug.LogError("WorldSpaceBillboard: Main Camera was not found.", this);
+
+            enabled = false;
+            return;
+        }
+
+        cameraTransform = mainCamera.transform;
+    }
 
     private void LateUpdate()
     {

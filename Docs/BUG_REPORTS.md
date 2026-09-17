@@ -205,7 +205,7 @@ Imp 能正常播放重定向后的 Idle 动画，腿、脚和武器没有明显�
 - 首次发现版本：Day 6 工作树，尚未提交
 - Unity：`6000.5.6f1`
 - 场景：`Assets/_Game/Scenes/SampleScene.unity`
-- 状态：Closed
+- 状态：Open
 - 严重程度：Minor
 - 优先级：Medium
 - 复现率：用户 Day 6 测试中可观察
@@ -332,7 +332,7 @@ Enemy 世界空间血条在镜头移动和旋转后仍正对当前 Gameplay Came
 - 发现日期：2026-09-12
 - 阶段：Day 9 首轮验收
 - 资源：`Assets/_Game/Data/Combat/Attack_02.asset`、`Attack_03.asset`
-- 状态：Open
+- 状态：Closed
 - 严重程度：Major
 - 优先级：High
 
@@ -437,6 +437,78 @@ Fill 的 RectTransform 左右偏移均为 `-5`。Slider 将锚点收缩到 0 时
 - 将 Fill 的 Left/Right 改为 `0`，未修改 Health 或 MeleeHitbox。
 - 5 HP 承受 10 点伤害后，`CurrentHealth=0` 且血条完全归零。
 - 三段 10/15/20 伤害与超额伤害钳制回归通过。
+
+---
+
+## BUG-011：Puglin Animator 默认进入死亡状态
+
+### 基本信息
+
+- 发现日期：2026-09-17
+- 阶段：Day 13 首轮验收
+- 状态：Closed
+- 严重程度：Major
+- 优先级：High
+
+### 实际结果
+
+`PuglinTest.controller` 的默认 State 指向 `Armature|Death01`，新 Enemy 启动后默认播放死亡动画。
+
+### 预期结果
+
+尚未进入 AI 状态机时，新 Puglin 默认处于 `Idle_Loop`。
+
+### 修复与回归条件
+
+已将 Base Layer 默认 State 改为 Idle；磁盘复验确认默认 State fileID 指向 `Armature|Idle_Loop`，正式 Prefab 实例已保存到场景。Bug Closed。
+
+---
+
+## BUG-012：Puglin Prefab 的世界空间血条缺少相机引用
+
+### 基本信息
+
+- 发现日期：2026-09-17
+- 阶段：Day 13 首轮验收
+- 状态：Closed
+- 严重程度：Major
+- 优先级：High
+
+### 实际结果
+
+`Puglin.prefab` 中 `WorldSpaceBillboard.cameraTransform` 为 None。场景 Main Camera 不能作为跨场景引用保存在 Prefab 中；直接实例化 Prefab 后，Billboard 会在 `LateUpdate` 访问空引用。
+
+### 预期结果
+
+Puglin Prefab 实例无需逐只手工配置即可取得 Gameplay Camera；找不到相机时只报告一次明确错误并停止组件，不持续刷异常。
+
+### 修复与回归条件
+
+已在 `Awake` 中通过 `Camera.main` 一次性缓存 Gameplay Camera；找不到时记录明确 Error 并禁用组件，`LateUpdate` 不重复搜索。Unity MCP Play Mode 复验确认 Billboard 启用且旋转与 Main Camera 完全一致，Console 无游戏 Error。Bug Closed。
+
+---
+
+## BUG-013：Puglin Emissive 贴图被黑色乘数关闭
+
+### 基本信息
+
+- 发现日期：2026-09-17
+- 阶段：Day 13 首轮验收
+- 状态：Closed
+- 严重程度：Minor
+- 优先级：Medium
+
+### 实际结果
+
+`MI_Puglin.mat` 已绑定 EmissionMap 并启用 `_EMISSION`，但 `_EmissionColor` 为黑色，最终发光贡献为零。
+
+### 预期结果
+
+如果采用 Emissive 贴图，应使用非黑色乘数并显示预期发光；如果不采用，应移除无效配置并同步素材说明。
+
+### 修复与回归条件
+
+已将 Emission Color 保存为白色。Unity MCP 实时复验确认 `T_Puglin_Emissive` 已绑定、`_EMISSION` 已启用、`_EmissionColor=(1,1,1,1)`，材质非 Dirty。Bug Closed。
 
 ---
 

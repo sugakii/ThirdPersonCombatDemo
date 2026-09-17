@@ -2,7 +2,7 @@
 
 > 扫描日期：2026-09-02  
 > 扫描源：`MaterialPackage/` 实际本地文件、FBX/GLB 结构、随包 README/导入图和许可证  
-> 工程复核：2026-09-16（Day 12 验收通过）；8 个庭院结构 FBX 已选择性导入并完成主体/碰撞回归。UAL2、攻击 Motion/配置与 Player Art 结论保持有效；源素材目录树仍为 9/2 扫描快照。
+> 工程复核：2026-09-17（Day 13 复验通过）；Puglin 模型、纹理、材质、Avatar、Animator 与 Enemy Prefab 已完成实时检查。源素材目录树仍为 9/2 扫描快照。
 
 ## 1. 审计原则
 
@@ -285,8 +285,8 @@ Bestiary Standard 本地实际只有两个怪物 Unity FBX：
 ### 最终推荐
 
 - **Enemy**：`MaterialPackage/Bestiary - Dungeon Monsters Kit[Standard]/Exports/FBX (Unity)/Puglin.fbx`
-- 场景实例数：3；共用一个 Puglin Prefab 和同一份静态配置。
-- 默认外观：推荐 `T_Puglin_BaseColor_1.png`；当前工程尚未创建 Material。
+- 当前场景实例数：1；Day 16 集成时扩展为 3 个实例，共用同一个 Puglin Prefab 和静态配置。
+- 默认外观：`T_Puglin_BaseColor_1.png`；已创建外部 URP/Lit 材质 `Assets/_Game/Materials/MI_Puglin.mat` 并完成 FBX Material Remap。
 - 模型子项：`Puglin_Body`、`Puglin_Stick`、`Puglin_Tusks`。
 - FBX Binary 7400；无内置动画。
 
@@ -294,7 +294,7 @@ Bestiary Standard 本地实际只有两个怪物 Unity FBX：
 
 - 55 个 LimbNode，核心骨命名与 Imp 一致。
 - 与 65 骨 UAL 相比同样缺少左右 pinky 链与两个 ball_leaf 末端骨。
-- 需要按 Humanoid + Bake Axis Conversion 导入，并在 Unity Configure 中验证。
+- Unity ModelImporter 已保存 Humanoid（`animationType=3`）、Create From This Model（`avatarSetup=1`）和 Bake Axis Conversion=true；用户完成五个计划动作的视觉验证。
 
 ### Materials
 
@@ -304,7 +304,7 @@ Bestiary Standard 本地实际只有两个怪物 Unity FBX：
 - `T_Puglin_ORM.png`
 - `Textures/Unreal Normals/T_Puglin_Normal_Unreal.png`（不采用）
 
-纹理均为 2048×2048 RGB。GLB 中材质名为 `MI_Puglin`；Unity `.mat` 尚未创建。
+纹理均为 2048×2048 RGB。外部 `MI_Puglin.mat` 已绑定 BaseColor、Normal 和 Emissive 贴图，FBX Remap 指向该材质。Unity MCP 实时检查确认 `_EmissionColor=(1,1,1,1)`、`_EMISSION=true`，资产已保存且非 Dirty。
 
 ### 可重定向动画
 
@@ -314,7 +314,7 @@ Bestiary Standard 本地实际只有两个怪物 Unity FBX：
 - Hit：`Hit_Knockback`
 - Death：`Death01`
 
-这些是**计划映射**；Avatar 有效性、动作变形、脚底滑动和 Stick 对动作的视觉适配仍待 Unity 逐条验证。
+Idle/Jog/Attack/Hit/Death 均已完成用户手工预览，未报告明显骨骼变形、异常位移或 Stick 拉伸，Root Motion=false。复验确认 `PuglinTest.controller` 默认 State 已恢复为 `Idle_Loop`。
 
 ## 7. Weapons
 
@@ -479,14 +479,14 @@ Bestiary 的本地 `License_Standard.txt` 标明 QAL v1.0（last updated 2026-08
 
 - [x] Imp Model Importer 开启 Bake Axis Conversion（Unity 查询确认）。
 - [x] Imp Rig = Humanoid，Avatar 有效；仅 Idle 视觉由用户报告通过，其他动作仍待预览。
-- [ ] Puglin Rig = Humanoid，Avatar Configure 有效。
+- [x] Puglin Rig = Humanoid、Create From This Model、Bake Axis Conversion=true；五个计划动作已完成手工重定向验证。
 - [x] UAL1/UAL2 Rig = Humanoid；UAL2 使用 Create From This Model。
 - [x] Unity 中实际 Clip 名称与本文 A/B/C、A_Rec/B_Rec 映射一致。
 - [x] 已采用的 Idle/Walk/Jog/Sprint 开启 Loop Time，`A_TPose` 未误开循环（磁盘配置确认；视觉回归另行执行）。
 - [x] `Animator.applyRootMotion = false`，用户回归未观察到动画重复位移。
-- [ ] Imp/Puglin 面向 Unity +Z，手脚和脊柱无明显变形。
-- [ ] Mace/Stick 在各攻击、受击、死亡动作中没有异常拉伸。
-- [ ] BaseColor/Emissive/Normal 显示正确；ORM 或替代参数已验证。
+- [x] Imp/Puglin 的五个当前计划动作手脚和脊柱未见明显变形；Puglin 默认运行状态为 Idle。
+- [x] Mace/Stick 在已验证攻击、受击、死亡动作中未报告异常拉伸。
+- [x] Puglin BaseColor/Normal/Emissive 已绑定并通过检查；Emission Color 为白色且 `_EMISSION` 已启用。ORM 尚未接入当前材质流程，不阻断 Day 13。
 - [x] Day 12 庭院主体尺寸约 22×22m，2m 地面模块、墙体、门洞与墙角拼接已完成实机回归。
 - [x] Floor/Wall/门洞/平台简化碰撞体可用；门洞双向、Sprint 通行及墙角阻挡已通过。
 - [x] 楼梯使用隐藏斜坡 Box Collider，CharacterController 普通移动与 Sprint 上下楼稳定。

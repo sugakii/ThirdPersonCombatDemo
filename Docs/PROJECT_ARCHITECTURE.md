@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-15（Day 11 验收通过；MeleeHitbox 反射测试延期）
+> 最后复核：2026-09-17（Day 13 复验通过；Puglin Billboard 已完成 Play Mode 回归）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -92,7 +92,7 @@ PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
 - `PlayerMotorPlayModeTests` 使用虚拟 Keyboard 和真实 `SampleScene`；场景通过 `LoadSceneAsync` 完成初始化。斜向限速与 Sprint 按下/释放/速度恢复断言均有效，连续 5 轮 2/2 PASS。
 - `DamageInfo`、`IDamageable` 与 `Health` 已实现；Health EditMode 测试 10/10 PASS。
 - `HealthBarPresenter` 已实现并复用于 Player 屏幕空间血条和 Enemy 世界空间血条；它通过显式 Health/Slider 引用监听 `HealthChanged`，启用时主动同步当前状态，不轮询 Player 或 Enemy。
-- `WorldSpaceBillboard` 在 LateUpdate 中同步显式 Main Camera 的旋转，使 Enemy 血条保持屏幕对齐；四个镜头方向回归通过。
+- `WorldSpaceBillboard` 在 Awake 中通过 `Camera.main` 一次性缓存 Gameplay Camera，解决 Prefab 不能保存场景引用的问题；LateUpdate 只同步旋转，不重复搜索。Play Mode 中 Billboard 与 Main Camera 旋转一致，Console 无游戏 Error。
 - UAL2 已按 Humanoid / Create From This Model 导入；A/B/C 三段动画视觉预检通过。
 - `AttackDefinition` 当前保存 Damage、Attack State Name 与可选 Recovery State Name；三个资产已配置为 10/15/20。
 - `PlayerCombat` 已挂载到 Player，显式绑定 Animator 和三个 AttackDefinition；负责 Combo 索引、输入缓存、窗口状态与 CrossFade，不负责命中和生命结算。
@@ -197,7 +197,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `SkillController` | 技能准入、冷却、释放流程和命中去重 | SkillDefinition、PlayerMotor、ObjectPool | 直接写 Transform；修改配置资产 |
 | `EnemyStateMachine` | 统一管理 Idle/Chase/Attack/Hit/Dead 迁移 | NavMeshAgent、Animator、EnemyCombat、Health | 用互相冲突的布尔变量替代状态 |
 | `HealthBarPresenter`（Current） | 订阅 Health 事件并更新 Player/Enemy 血条 | Health、Unity UI Slider | 轮询具体 Player/Enemy 类；持有生命规则 |
-| `WorldSpaceBillboard`（Current） | 让世界空间 UI 与 Gameplay Camera 保持同旋转 | Main Camera Transform | 查找 Player/Enemy；修改 Health 或 Slider |
+| `WorldSpaceBillboard`（Current） | 实例启动时一次性缓存 Main Camera，并让世界空间 UI 保持同旋转 | `Camera.main`、Main Camera Transform | 每帧查找相机；查找 Player/Enemy；修改 Health 或 Slider |
 | `CooldownPresenter` | 订阅技能冷却状态并更新 UI | SkillController、UI | 驱动技能逻辑 |
 | `GameFlowController` | 维护 Playing/Victory/GameOver、冻结战斗并重开 | Player/Enemy 死亡事件、场景加载 | 持有攻击或 AI 的业务细节 |
 

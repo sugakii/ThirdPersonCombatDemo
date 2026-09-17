@@ -1,41 +1,41 @@
 # Current Project Status
 
-> Last Updated：2026-09-16
-> Current Learning Day：Day 12 已完成
-> Current Phase：Phase A / 中世纪庭院主体完成
-> Next Checkpoint：Learning Day 13 — Puglin 导入与 Enemy Prefab
+> Last Updated：2026-09-17
+> Current Learning Day：Day 13 验收通过
+> Current Phase：Phase A / Enemy AI
+> Next Checkpoint：Day 14 最小 NavMesh 与 Enemy Idle ↔ Chase
 > Source of Truth：当前 Unity 工程 + Git + Docs
 > Remaining Plan：`Docs/plans/2026-09-13-remaining-learning-days.md`
 
 ## 验收结论
 
-**Day 12：PASS。** 约 22×22m 中世纪庭院主体已保存；地面、四面墙、门洞/门框/门、四个墙角、楼梯、平台和必要简化碰撞完成。门洞、墙角、楼梯、平台、边缘、镜头及全场基础碰撞手工回归通过，Console 无新增红错。Props、统一材质与灯光留到 Day 23，不阻断本日交付。
+**Day 13 复验：PASS（15/15）。** Unity MCP 实时确认材质发光、Idle 默认状态、Enemy Prefab、正式场景实例和世界空间血条均已保存；Play Mode 中 Puglin 为 50/50 HP，Billboard 与 Main Camera 旋转一致，Console 无游戏 Error。可以进入 Day 14。
 
 ## Implemented
 
-- 从 Medieval Village 包选择性导入 8 个结构 FBX，没有导入 OBJ/glTF 重复格式。
-- `Environment_Courtyard` 使用 2m `Floor_Brick` 模块形成约 22×22m 地面，并完成四面外围墙。
-- 场景保存门洞墙、圆门框、圆门和四个外墙转角。
-- 楼梯使用视觉模型 + 隐藏斜坡 Box Collider，平台使用简化 Box Collider。
-- 地面、墙体、门口与平台碰撞已按第三人称 CharacterController 动线校准。
-- 今日没有新增玩法脚本；代码注释检查无新增项。
+- 选择性导入 `Puglin.fbx` 与 BaseColor 1、Normal、Emissive、ORM，FBX/PNG 已加入公开仓库忽略规则。
+- Puglin 保存 Humanoid、Create From This Model、Bake Axis Conversion=true，Idle/Jog/Attack/Hit/Death 手工预览通过。
+- 创建外部 `MI_Puglin.mat` 并完成 FBX Material Remap。
+- 创建 `Puglin.prefab`，根节点保存 Enemy Layer、Capsule Collider 与 Health=50。
+- Prefab 内 HealthBarPresenter 的 Health/Slider 内部引用已保存；Animator Root Motion=false。
+- 今日没有新增玩法代码；无需补充代码注释。
 
 ## Test Evidence
 
 | 范围 | 结果 |
 |---|---|
-| 场景结构持久化 | PASS：庭院根节点、四面墙、门口、RaisedArea、楼梯与平台均已保存 |
-| 正式环境引用 | PASS：121 地面模块、43 直墙、门洞墙/门框/门、4 转角及楼梯平台已保存 |
-| 简化碰撞 | PASS：15 个 Box Collider；未给全部视觉 Mesh 使用复杂 Mesh Collider |
-| 墙体、墙角和门洞 | PASS（用户实机） |
-| 楼梯、平台和边缘 | PASS（用户实机） |
-| 镜头靠墙/墙角/平台 | PASS（用户实机） |
-| 全场移动与碰撞回归 | PASS（用户实机） |
-| Console | PASS：用户确认无新增红色错误；当前 Editor.log 未检出近期异常 |
-| MeleeHitbox PlayMode 去重测试 | DEFERRED：空骨架已再次删除，不计为自动化证据 |
-| Day 12 结论 | PASS：13 项手工/静态验收通过 |
+| 模型、Avatar 与五个动作 | PASS（配置静态检查 + 用户手工回归） |
+| Root Motion | PASS：Prefab 保存 false |
+| Layer / Collider / Health / 血条伤害 | PASS（配置静态检查 + 用户手工回归） |
+| 材质 Remap、BaseColor、Normal | PASS |
+| Emissive | PASS：白色乘数、Emissive 贴图与 `_EMISSION` 均已保存 |
+| Animator 默认状态 | PASS：默认 State 为 Idle_Loop |
+| Prefab 世界空间血条相机 | PASS：Play Mode 中 Billboard 启用且旋转与 Main Camera 一致 |
+| 场景 Prefab 实例 | PASS：正式 Puglin Prefab GUID 已保存 |
+| Console / Missing Script | PASS：未检出近期异常，Missing Script=0 |
+| Day 13 结论 | PASS：15/15 |
 
-详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY12.md`。
+详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY13.md`。
 
 ## Current Architecture
 
@@ -61,35 +61,32 @@ Health
 
 ## Files
 
-- `Assets/_Game/Art/Environment/MedievalVillage/Models/`（8 个结构 FBX 及 `.meta`）
+- `Assets/_Game/Art/Charactors/Enemy/Puglin/`
+- `Assets/_Game/Materials/MI_Puglin.mat`
+- `Assets/_Game/Animations/Enemy/PuglinTest.controller`
+- `Assets/_Game/Prefabs/Enemy/Puglin.prefab`
+- `Assets/_Game/Prefabs/Player/Player.prefab`（原 GUID 保持不变的目录移动）
 - `Assets/_Game/Scenes/SampleScene.unity`
-- `Docs/ASSET_AUDIT.md`
-- `Docs/ROADMAP.md`
-- `Docs/PROJECT_STATUS.md`
-- `Docs/TEST_REPORT/TEST_CASE_DAY12.md`
+- `Docs/TEST_REPORT/TEST_CASE_DAY13.md`
 
 ## Known Bugs / Risks
 
 1. `BUG-004` Open：角色离地后仍保留完整水平控制速度；进入技能位移前处理。
 2. `MeleeHitbox` PlayMode 测试延期且不计为自动化证据；空骨架不得保留以免假通过。
-3. Day 12 环境 FBX 当前未导入统一纹理/材质；视觉统一、灯光和 Props 留到 Day 23。
-4. Day 12 场景直接复用模型 Prefab，尚未建立额外 Environment Prefab；只有出现稳定复用配置时再提取，避免为目录而建空壳。
-5. `Assets/_Recovery/` 是恢复文件，不纳入正式项目提交。
+3. `Assets/_Recovery/` 是恢复文件，不纳入正式项目提交。
 
 ## Git
 
 - 当前分支：`main`；提交前以 `git rev-parse --short HEAD` 复核实际 HEAD。
-- Day 12 已通过，可以创建正式完成提交。
+- Day 13 已通过，可创建正式完成提交。
 - 默认提交全部自有代码、对应 `.meta`、配置资产、Scene、测试与 Docs。
 - 排除 Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug 目录及未经确认的 ProjectSettings 变化。
 - Bestiary 原始 FBX/PNG 不进入公开仓库。
 
 ## Next Task
 
-1. Learning Day 13 选择性导入 `Puglin.fbx` 与必要纹理，验证 Humanoid Avatar 和动画重定向。
-2. 创建 `MI_Puglin.mat` 与 `Puglin.prefab`，保存 Collider、Health 和世界空间血条引用。
-3. 先只建立 1 个可复用 Enemy Prefab；3 个实例留到 AI/Combat 集成日。
-4. 执行材质、比例、Idle/Jog/Attack/Hit/Death、Root Motion 与 Prefab 持久化回归。
+1. 开始 Day 14：烘焙最小 NavMesh。
+2. 实现 Enemy Idle ↔ Chase，并执行距离、路径与 NavMesh 边界测试。
 
 ## Update Rules
 

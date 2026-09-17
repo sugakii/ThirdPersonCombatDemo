@@ -201,7 +201,7 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 - **Learning Day 10｜9/13 验收通过**：三段 Combo、输入缓存、Recovery Cancel 与逐段镜头朝向完成；16/16 PASS。伤害窗口和命中去重明确顺延，不属于本日范围。
 - **Learning Day 11｜9/14（9/15 验收通过）**：伤害窗口、MeleeHitbox、前半球过滤及窗口/去重/多目标/范围/Layer/方向手工回归完成；反射 PlayMode 测试延期，不作为本日门槛。
 - **Learning Day 12｜9/15（9/16 验收通过）**：使用 8 个正式环境 FBX 完成约 22×22m 庭院主体；地面、四面墙、门洞/门框/门、墙角、楼梯/平台及简化碰撞已保存，门洞、楼梯、平台、墙角、镜头与全场回归通过。Props 与材质润色留到 Day 23。
-- **Learning Day 13｜9/16**：Puglin 导入、Humanoid 动画验证、材质、Health/血条与 Enemy Prefab。
+- **Learning Day 13｜9/16（9/17 复验通过）**：Puglin、Humanoid 动画、材质、Health/血条与 Enemy Prefab 已建立；Unity MCP 实时确认 Emission 配置已保存，Play Mode 确认 Billboard 与 Main Camera 同旋转、Puglin 50/50 HP、Console 无游戏 Error；15/15 PASS。
 - **Learning Day 14｜9/17**：最小 NavMesh；Enemy Idle ↔ Chase 状态与距离/路径测试。
 - **Learning Day 15｜9/18**：Enemy Attack/Hit/Dead、Player/Enemy 互相伤害与死亡终态。
 - **Learning Day 16｜9/19**：3 Enemy 集成、AI/Combat 边界回归、Bug 修复与 Phase A 验收。
