@@ -101,7 +101,8 @@ PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
 - 场景中的 `MeleeHitbox` 使用独立中心、0.75 半径和 Enemy LayerMask；候选 Collider 经过前半球过滤，再按父级 `IDamageable` 去重结算。
 - A/B/C Clip 已持久化伤害窗口事件，三段分别读取 AttackDefinition 的 10/15/20 伤害。
 - MeleeHitbox 命中规则已完成手工功能与边界回归；需要反射配置私有序列化字段的 PlayMode 测试已延期，不计入自动化证据。
-- 无 Enemy AI、Skill、GameFlow 或 NavMesh。
+- Enemy AI 当前实现最小 enum 状态机：Idle 停止 Agent 并清除旧路径，Chase 向 Target 设置目的地；NavMeshAgent 是 Enemy 位移唯一执行者，Animator 通过 `IsChasing` 表现状态。Target 为 null、被销毁或 inactive 时安全回到 Idle。
+- 无 Enemy Attack/Hit/Dead、Skill 或 GameFlow。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求

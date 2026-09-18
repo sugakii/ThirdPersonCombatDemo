@@ -202,6 +202,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (82)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -264,6 +268,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (76)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -325,6 +333,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (84)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -395,6 +407,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -457,6 +473,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (112)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -492,7 +512,7 @@ GameObject:
   m_Component:
   - component: {fileID: 81275616}
   - component: {fileID: 81275617}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EastWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -618,6 +638,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (115)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -679,6 +703,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (98)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -764,6 +792,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -833,6 +865,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -901,6 +937,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
       propertyPath: m_Name
       value: Wall_Plaster_Straight (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -981,6 +1021,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1038,6 +1082,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (52)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1094,6 +1142,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (85)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1164,6 +1216,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1220,6 +1276,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (54)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1282,6 +1342,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1367,6 +1431,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1423,6 +1491,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (110)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1491,6 +1563,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (77)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1553,6 +1629,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (28)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1609,6 +1689,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (75)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1667,6 +1751,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (48)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1724,6 +1812,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (90)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1780,6 +1872,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1860,6 +1956,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1926,6 +2026,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (23)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2171,6 +2275,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2238,6 +2346,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (64)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2279,7 +2391,7 @@ GameObject:
   m_Component:
   - component: {fileID: 363457234}
   - component: {fileID: 363457235}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2495,6 +2607,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (113)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2572,6 +2688,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2628,6 +2748,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (30)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2698,6 +2822,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2764,6 +2892,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (44)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2986,6 +3118,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3055,6 +3191,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3074,7 +3214,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 445078597}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RaisedArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3150,6 +3290,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Corner_NE
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f8790dcfc1f2dbe468114dbd508e497a, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3217,6 +3361,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (78)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3279,6 +3427,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (107)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3340,6 +3492,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stairs_Exterior_Straight
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 13b836552a77f6845bb1a5be992b952f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3355,7 +3511,7 @@ GameObject:
   m_Component:
   - component: {fileID: 482950264}
   - component: {fileID: 482950265}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NorthWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3478,6 +3634,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Corner_SE
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f8790dcfc1f2dbe468114dbd508e497a, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3539,6 +3699,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (41)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3706,7 +3870,7 @@ GameObject:
   - component: {fileID: 602218596}
   - component: {fileID: 602218595}
   - component: {fileID: 602218594}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_ColliderRamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3722,7 +3886,7 @@ Transform:
   m_GameObject: {fileID: 602218592}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5299194, y: -0, z: -0, w: -0.84804803}
-  m_LocalPosition: {x: -0.25, y: -0.503, z: -0.325}
+  m_LocalPosition: {x: -0.25, y: -0.38991982, z: -0.3249998}
   m_LocalScale: {x: 1.9, y: 2.2, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3820,7 +3984,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 615589722}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3897,6 +4061,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (102)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3993,6 +4161,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4055,6 +4227,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (68)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4111,6 +4287,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4194,6 +4374,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4251,6 +4435,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (94)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4307,6 +4495,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4370,6 +4562,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4426,6 +4622,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (57)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4616,6 +4816,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (56)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4683,6 +4887,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (105)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4698,7 +4906,7 @@ GameObject:
   m_Component:
   - component: {fileID: 715461651}
   - component: {fileID: 715461652}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WestWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4809,6 +5017,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (111)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4871,6 +5083,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (104)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4927,6 +5143,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (71)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5060,6 +5280,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (65)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5121,6 +5345,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (103)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5184,6 +5412,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (61)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5245,6 +5477,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (96)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5425,6 +5661,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Door_Round
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2a6d3003d1b766c488f47c3ff9e0acbd, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5553,6 +5793,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (69)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5746,6 +5990,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (100)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5802,6 +6050,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f8790dcfc1f2dbe468114dbd508e497a, type: 3}
       propertyPath: m_Name
       value: Corner_SW
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f8790dcfc1f2dbe468114dbd508e497a, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5875,6 +6127,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5944,6 +6200,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6011,6 +6271,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6073,6 +6337,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (72)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6134,6 +6402,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (45)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6209,6 +6481,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6276,6 +6552,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6333,6 +6613,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (97)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6389,6 +6673,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (36)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6451,6 +6739,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (37)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6519,6 +6811,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (108)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6580,6 +6876,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (120)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6663,6 +6963,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (74)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6682,7 +6986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 13b836552a77f6845bb1a5be992b952f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.857
+      value: -0.869
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 13b836552a77f6845bb1a5be992b952f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6723,6 +7027,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 13b836552a77f6845bb1a5be992b952f, type: 3}
       propertyPath: m_Name
       value: Stairs_Exterior_Straight
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 13b836552a77f6845bb1a5be992b952f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6838,6 +7146,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6894,6 +7206,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (40)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6952,6 +7268,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (33)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7008,6 +7328,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (62)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7066,6 +7390,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (42)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7080,7 +7408,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1149653818}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7166,6 +7494,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (31)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7242,6 +7574,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f8790dcfc1f2dbe468114dbd508e497a, type: 3}
       propertyPath: m_Name
       value: Corner_NW
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f8790dcfc1f2dbe468114dbd508e497a, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7340,6 +7676,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7397,6 +7737,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (88)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7407,6 +7751,70 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
   m_PrefabInstance: {fileID: 1363292304}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1240488432
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1240488434}
+  - component: {fileID: 1240488433}
+  m_Layer: 0
+  m_Name: Navigation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1240488433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240488432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 385a9927701c58b4d81bf5c8676131e3, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!4 &1240488434
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240488432}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1240677313
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7458,6 +7866,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (63)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7538,6 +7950,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (32)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7594,6 +8010,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (73)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7702,6 +8122,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7771,6 +8195,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7828,6 +8256,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7884,6 +8316,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7947,6 +8383,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8009,6 +8449,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8066,6 +8510,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (47)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8122,6 +8570,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (43)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8192,6 +8644,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8261,6 +8717,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8328,6 +8788,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8384,6 +8848,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (118)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8452,6 +8920,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (66)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8513,6 +8985,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8646,6 +9122,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (116)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8703,6 +9183,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (109)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8717,7 +9201,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1373356125}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8750,7 +9234,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1389940365}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8846,6 +9330,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8914,6 +9402,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
       propertyPath: m_Name
       value: Wall_Plaster_Straight (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8984,6 +9476,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9052,6 +9548,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
       propertyPath: m_Name
       value: Wall_Plaster_Straight
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9126,6 +9626,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
       propertyPath: m_Name
       value: Wall_Plaster_Straight (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9206,6 +9710,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9263,6 +9771,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorFrame_Round_WoodDark
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e294f75670463b343ac9f34404702bb2, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9319,6 +9831,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (114)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9394,6 +9910,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9456,6 +9976,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (81)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9512,6 +10036,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (49)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9570,6 +10098,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (93)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9627,6 +10159,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (25)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9644,7 +10180,7 @@ GameObject:
   - component: {fileID: 1538727278}
   - component: {fileID: 1538727277}
   - component: {fileID: 1538727276}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stairs_ColliderRamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9796,6 +10332,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9857,6 +10397,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (79)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9925,6 +10469,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (106)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9981,6 +10529,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (46)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10056,6 +10608,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10118,6 +10674,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door_1_Round
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 65a877879aae9d1428e874baa8a4b955, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10179,6 +10739,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10254,6 +10818,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10315,6 +10883,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (50)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10499,6 +11071,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10568,6 +11144,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10624,6 +11204,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (39)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10687,6 +11271,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (91)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10743,6 +11331,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (92)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10813,6 +11405,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10873,6 +11469,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10930,6 +11530,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (60)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10986,6 +11590,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (117)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11071,6 +11679,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11133,6 +11745,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (80)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11189,6 +11805,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11262,6 +11882,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (29)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11331,6 +11955,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11397,6 +12025,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (87)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11567,6 +12199,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (86)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11623,6 +12259,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (35)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11681,6 +12321,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (95)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11737,6 +12381,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (53)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11807,6 +12455,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11875,6 +12527,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
       propertyPath: m_Name
       value: Wall_Plaster_Straight (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11955,6 +12611,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12011,6 +12671,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (26)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12069,6 +12733,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (83)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12100,6 +12768,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4105649962871395879, guid: c30f91ebe3047e944ac8054923f4e555, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1111413458}
     - target: {fileID: 4199976164983295095, guid: c30f91ebe3047e944ac8054923f4e555, type: 3}
       propertyPath: m_Name
       value: Puglin
@@ -12173,7 +12845,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f2aefff2e885e4a478b1ace5d494a8a8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.03
+      value: 0.014
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f2aefff2e885e4a478b1ace5d494a8a8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12210,6 +12882,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f2aefff2e885e4a478b1ace5d494a8a8, type: 3}
       propertyPath: m_Name
       value: Stairs_Exterior_Platform
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f2aefff2e885e4a478b1ace5d494a8a8, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12288,6 +12964,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12344,6 +13024,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (70)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12415,6 +13099,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (59)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12472,6 +13160,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (58)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12497,7 +13189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1992180573}
   - component: {fileID: 1992180574}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SouthWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12613,6 +13305,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12682,6 +13378,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12739,6 +13439,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (89)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12795,6 +13499,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (99)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12895,6 +13603,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12914,7 +13626,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2027330583}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Environment_Courtyard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13003,6 +13715,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13059,6 +13775,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (55)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13122,6 +13842,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13184,6 +13908,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (67)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13240,6 +13968,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (101)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13325,6 +14057,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13381,6 +14117,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (38)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13450,6 +14190,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
       propertyPath: m_Name
       value: Wall_Plaster_Straight (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13525,6 +14269,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_Plaster_Straight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7f8dac46fac1b3941b51c327212a5ab0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13586,6 +14334,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (34)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13654,6 +14406,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (119)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13710,6 +14466,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
       propertyPath: m_Name
       value: Floor_Brick (51)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13768,6 +14528,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor_Brick (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54cc6b472b94fdf4280e59256ba10a59, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13792,6 +14556,10 @@ PrefabInstance:
     - target: {fileID: 5881735228136231820, guid: 281f511d7a849304d855ea8a8ab235c2, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5881735228136231820, guid: 281f511d7a849304d855ea8a8ab235c2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5881735228136231820, guid: 281f511d7a849304d855ea8a8ab235c2, type: 3}
       propertyPath: m_TagString
@@ -13880,3 +14648,4 @@ SceneRoots:
   - {fileID: 2027330583}
   - {fileID: 1957487081}
   - {fileID: 1920527089}
+  - {fileID: 1240488434}

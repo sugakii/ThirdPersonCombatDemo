@@ -1,41 +1,39 @@
 # Current Project Status
 
-> Last Updated：2026-09-17
-> Current Learning Day：Day 13 验收通过
+> Last Updated：2026-09-18
+> Current Learning Day：Day 14 验收通过
 > Current Phase：Phase A / Enemy AI
-> Next Checkpoint：Day 14 最小 NavMesh 与 Enemy Idle ↔ Chase
+> Next Checkpoint：Day 15 Enemy Attack / Hit / Dead
 > Source of Truth：当前 Unity 工程 + Git + Docs
 > Remaining Plan：`Docs/plans/2026-09-13-remaining-learning-days.md`
 
 ## 验收结论
 
-**Day 13 复验：PASS（15/15）。** Unity MCP 实时确认材质发光、Idle 默认状态、Enemy Prefab、正式场景实例和世界空间血条均已保存；Play Mode 中 Puglin 为 50/50 HP，Billboard 与 Main Camera 旋转一致，Console 无游戏 Error。可以进入 Day 14。
+**Day 14 复验：PASS（10/10）。** 最小 NavMesh、Environment Layer、Puglin Agent、6m 仇恨距离及 Idle ↔ Chase 已完成。Unity MCP 运行态确认正常追逐、范围外停止、目标禁用/销毁保护、8 拐点障碍路径、NavMesh 边缘和 Console 全部通过。可以进入 Day 15。
 
 ## Implemented
 
-- 选择性导入 `Puglin.fbx` 与 BaseColor 1、Normal、Emissive、ORM，FBX/PNG 已加入公开仓库忽略规则。
-- Puglin 保存 Humanoid、Create From This Model、Bake Axis Conversion=true，Idle/Jog/Attack/Hit/Death 手工预览通过。
-- 创建外部 `MI_Puglin.mat` 并完成 FBX Material Remap。
-- 创建 `Puglin.prefab`，根节点保存 Enemy Layer、Capsule Collider 与 Health=50。
-- Prefab 内 HealthBarPresenter 的 Health/Slider 内部引用已保存；Animator Root Motion=false。
-- 今日没有新增玩法代码；无需补充代码注释。
+- 新增 Environment Layer，并让 NavMeshSurface 只收集该层的 Physics Colliders。
+- 烘焙 `NavMesh-Navigation`，当前数据为 76 个顶点、30 个三角形。
+- Puglin Prefab 新增 `NavMeshAgent` 与 `EnemyStateMachine`。
+- 实现 Idle/Chase 两个互斥状态、6m 仇恨距离、路径设置和离开追逐后的路径清理。
+- Puglin Animator 新增 `IsChasing` Bool 与 Idle/Jog 双向切换。
+- 已为 `EnemyStateMachine` 补充职责和原因型注释。
 
 ## Test Evidence
 
 | 范围 | 结果 |
 |---|---|
-| 模型、Avatar 与五个动作 | PASS（配置静态检查 + 用户手工回归） |
-| Root Motion | PASS：Prefab 保存 false |
-| Layer / Collider / Health / 血条伤害 | PASS（配置静态检查 + 用户手工回归） |
-| 材质 Remap、BaseColor、Normal | PASS |
-| Emissive | PASS：白色乘数、Emissive 贴图与 `_EMISSION` 均已保存 |
-| Animator 默认状态 | PASS：默认 State 为 Idle_Loop |
-| Prefab 世界空间血条相机 | PASS：Play Mode 中 Billboard 启用且旋转与 Main Camera 一致 |
-| 场景 Prefab 实例 | PASS：正式 Puglin Prefab GUID 已保存 |
-| Console / Missing Script | PASS：未检出近期异常，Missing Script=0 |
-| Day 13 结论 | PASS：15/15 |
+| NavMesh 数据与 Surface | PASS |
+| Puglin Agent 在 NavMesh 上 | PASS |
+| 6m 内 Chase | PASS：完整路径、Velocity=3.5 |
+| 6m 外 Idle | PASS：路径清除、Velocity=0 |
+| Player 禁用 | PASS：Error=0 |
+| Player 运行中丢失 | PASS：Agent 停止、路径清除、Error=0 |
+| 障碍绕行 / 完整边缘路线 | PASS：8 拐点 PathComplete；边缘 PathComplete |
+| Day 14 结论 | PASS：10/10 |
 
-详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY13.md`。
+详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY14.md`。
 
 ## Current Architecture
 
@@ -58,6 +56,7 @@ Health
 - Animator 只提供伤害窗口时机；命中检测、伤害配置和生命规则仍彼此分离。
 - PlayerCombat 不依赖具体 Enemy；MeleeHitbox 只面向 `IDamageable`。
 - 当前物理查询使用 `OverlapSphere`，短窗口内会分配数组；是否改 NonAlloc 留到 Profiler 日依据数据决定。
+- EnemyStateMachine 当前以 enum + switch 管理 Idle/Chase；Agent 负责寻路和位移，Animator 只表现状态。
 
 ## Files
 
@@ -67,7 +66,9 @@ Health
 - `Assets/_Game/Prefabs/Enemy/Puglin.prefab`
 - `Assets/_Game/Prefabs/Player/Player.prefab`（原 GUID 保持不变的目录移动）
 - `Assets/_Game/Scenes/SampleScene.unity`
-- `Docs/TEST_REPORT/TEST_CASE_DAY13.md`
+- `Assets/_Game/Scenes/SampleScene/NavMesh-Navigation.asset`
+- `Assets/_Game/Runtime/Enemy/EnemyStateMachine.cs`
+- `Docs/TEST_REPORT/TEST_CASE_DAY14.md`
 
 ## Known Bugs / Risks
 
@@ -78,15 +79,15 @@ Health
 ## Git
 
 - 当前分支：`main`；提交前以 `git rev-parse --short HEAD` 复核实际 HEAD。
-- Day 13 已通过，可创建正式完成提交。
+- Day 14 已通过，可创建正式完成提交。
 - 默认提交全部自有代码、对应 `.meta`、配置资产、Scene、测试与 Docs。
 - 排除 Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug 目录及未经确认的 ProjectSettings 变化。
 - Bestiary 原始 FBX/PNG 不进入公开仓库。
 
 ## Next Task
 
-1. 开始 Day 14：烘焙最小 NavMesh。
-2. 实现 Enemy Idle ↔ Chase，并执行距离、路径与 NavMesh 边界测试。
+1. 开始 Day 15：补齐 Enemy Attack / Hit / Dead 状态。
+2. 让 Enemy 通过 `IDamageable` 伤害 Player，并验证死亡终态与事件生命周期。
 
 ## Update Rules
 

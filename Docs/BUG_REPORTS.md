@@ -348,7 +348,7 @@ Enemy 世界空间血条在镜头移动和旋转后仍正对当前 Gameplay Came
 | Attack_02 | 可配置 | Attack_02 |
 | Attack_03 | 可配置 | Attack_03 |
 
-### 修复与回归条件
+### 修复与回归
 
 复验读取结果：Attack_01/02/03 的状态名分别正确；三个 Damage 当前均为 10，是合法且可读取的占位平衡值。结构缺陷已关闭，伤害递增不作为 Day 9 硬性要求。
 
@@ -509,6 +509,38 @@ Puglin Prefab 实例无需逐只手工配置即可取得 Gameplay Camera；找�
 ### 修复与回归条件
 
 已将 Emission Color 保存为白色。Unity MCP 实时复验确认 `T_Puglin_Emissive` 已绑定、`_EMISSION` 已启用、`_EmissionColor=(1,1,1,1)`，材质非 Dirty。Bug Closed。
+
+---
+
+## BUG-014：Player 运行中丢失后 EnemyStateMachine 持续访问目标
+
+### 基本信息
+
+- 发现日期：2026-09-18
+- 阶段：Day 14 首轮验收
+- 状态：Closed
+- 严重程度：Major
+- 优先级：High
+
+### 复现步骤
+
+1. 打开 `SampleScene` 并进入 Play Mode。
+2. 确认 Puglin 已绑定 Player 且状态机正常运行。
+3. 在运行中销毁 Player。
+
+### 实际结果
+
+`EnemyStateMachine.Update()` 继续读取已销毁 Transform 的 `position`，Console 报 `MissingReferenceException`。
+
+### 预期结果
+
+Target 为 null、被销毁或未激活时，Enemy 清除旧路径并保持 Idle；不持续产生异常。
+
+### 修复与回归
+
+- 在读取 `target.position` 前验证 Unity Object 是否仍有效且处于 Active Hierarchy。
+- Target 无效时切回 Idle、设置 `agent.isStopped=true`、清除路径并提前返回。
+- Unity MCP 重跑目标禁用、目标销毁、Idle 路径清理与正常 Chase，Console Error=0。Bug Closed。
 
 ---
 
