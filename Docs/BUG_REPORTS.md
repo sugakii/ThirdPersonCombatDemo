@@ -2,7 +2,7 @@
 
 > 项目：Third-Person Combat Demo  
 > 维护规则：只记录实际复现的缺陷；修复后必须回归，不能仅凭代码修改关闭。
-> 最近回归：2026-09-12 / Day 9 复验；18/18 PASS，BUG-007/008/009 已关闭。
+> 最近回归：2026-09-19 / Day 15 复验；10/10 PASS，BUG-015 已关闭。
 
 ## 状态定义
 
@@ -205,7 +205,7 @@ Imp 能正常播放重定向后的 Idle 动画，腿、脚和武器没有明显�
 - 首次发现版本：Day 6 工作树，尚未提交
 - Unity：`6000.5.6f1`
 - 场景：`Assets/_Game/Scenes/SampleScene.unity`
-- 状态：Open
+- 状态：Closed
 - 严重程度：Minor
 - 优先级：Medium
 - 复现率：用户 Day 6 测试中可观察
@@ -541,6 +541,65 @@ Target 为 null、被销毁或未激活时，Enemy 清除旧路径并保持 Idle
 - 在读取 `target.position` 前验证 Unity Object 是否仍有效且处于 Active Hierarchy。
 - Target 无效时切回 Idle、设置 `agent.isStopped=true`、清除路径并提前返回。
 - Unity MCP 重跑目标禁用、目标销毁、Idle 路径清理与正常 Chase，Console Error=0。Bug Closed。
+
+---
+
+## BUG-015：Player 死亡后 Puglin 仍重复发起攻击
+
+### 基本信息
+
+- 发现日期：2026-09-19
+- 阶段：Day 15 首轮验收
+- 状态：Open
+- 严重程度：Major
+- 优先级：High
+- 复现率：1/1
+
+### 前置条件
+
+- Puglin 已进入 Player 的 1m 攻击距离。
+- Player 与 Puglin 的 Health、EnemyStateMachine、EnemyCombat 和攻击 Animation Event 已启用。
+
+### 复现步骤
+
+1. 进入 `SampleScene` Play Mode。
+2. 让 Player 进入 Puglin 攻击范围并保持不动。
+3. 等待 Player HP 降至 0。
+4. 继续观察 Puglin 的动画与攻击运行状态。
+
+### 实际结果
+
+- Player HP 正确钳制在 0。
+- Puglin 仍反复进入 Sword_Attack，并在每个动画周期结束后开始下一次攻击。
+- `Health.TakeDamage` 会忽略死亡后的伤害，因此 HP 不会继续降低，但 AI 表现仍错误。
+
+### 预期结果
+
+Player 死亡后，Puglin 应立即结束当前攻击并停止开始新的攻击；等待后续 GameFlow 接管。
+
+### 根因范围
+
+`EnemyStateMachine.Update()` 只检查 Target 是否存在和 Active，没有检查目标 Health 是否已经死亡。目标仍处于 Active Hierarchy，因此距离判断会继续进入 Attack。
+
+### 修复
+
+- 在 Awake 中一次性缓存 Target Health。
+- 在 OnEnable/OnDisable 中成对订阅与退订 Target Health 的 Died 事件。
+- Player 死亡回调立即调用 `EnemyCombat.EndAttack()` 并清空 Target；下一帧进入已有的无目标 Idle 分支。
+
+### 修复与回归条件
+
+- 缓存目标的 Health 或订阅其 Died 事件，不在热路径重复查找组件。
+- Player 死亡时结束正在进行的 EnemyCombat，并回到不会继续攻击的状态。
+- 回归攻击范围、正常攻击周期、目标禁用/销毁、Enemy 受击中断和 Enemy 死亡终态。
+- Player HP=0 后至少观察两个原攻击周期，Puglin 不再进入 Sword_Attack。
+
+### 回归结果
+
+- Player HP=0 后：Target=null、`IsAttacking=false`、`Agent.isStopped=true`、SwordAttack=false。
+- 持续观察超过两个原攻击周期，没有重新发起攻击。
+- 状态机禁用/重新启用后，受击与死亡回调仍各执行一次；Enemy Death01 终态正常。
+- Unity Console 0 Error / 0 Warning。Bug Closed。
 
 ---
 

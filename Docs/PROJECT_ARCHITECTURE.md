@@ -59,6 +59,7 @@ IDamageable.TakeDamage(DamageInfo)
 Health
 ├─ MaxHealth / CurrentHealth
 ├─ HealthChanged(float)
+├─ Damaged()
 └─ Died()
 
 AttackDefinition（Current，ScriptableObject 静态配置）
@@ -94,15 +95,15 @@ PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
 - `HealthBarPresenter` 已实现并复用于 Player 屏幕空间血条和 Enemy 世界空间血条；它通过显式 Health/Slider 引用监听 `HealthChanged`，启用时主动同步当前状态，不轮询 Player 或 Enemy。
 - `WorldSpaceBillboard` 在 Awake 中通过 `Camera.main` 一次性缓存 Gameplay Camera，解决 Prefab 不能保存场景引用的问题；LateUpdate 只同步旋转，不重复搜索。Play Mode 中 Billboard 与 Main Camera 旋转一致，Console 无游戏 Error。
 - UAL2 已按 Humanoid / Create From This Model 导入；A/B/C 三段动画视觉预检通过。
-- `AttackDefinition` 当前保存 Damage、Attack State Name 与可选 Recovery State Name；三个资产已配置为 10/15/20。
+- `AttackDefinition` 当前保存 Damage、Attack State Name、可选 Recovery State Name 与 Attack Range；Player 三个资产为 10/15/20，Enemy 资产为 Damage=10、Range=1。
 - `PlayerCombat` 已挂载到 Player，显式绑定 Animator 和三个 AttackDefinition；负责 Combo 索引、输入缓存、窗口状态与 CrossFade，不负责命中和生命结算。
 - `PlayerCombatAnimationEvents` 挂在 Imp，只把 UAL2 的 Combo 与伤害窗口 Animation Event 转发给父级 PlayerCombat，不保存 Combo 状态、不查询目标。
 - `PlayerMotor.FaceCameraForward()` 为攻击开始和连段切换提供水平面瞬时朝向；PlayerMotor 仍是位移唯一执行者。
 - 场景中的 `MeleeHitbox` 使用独立中心、0.75 半径和 Enemy LayerMask；候选 Collider 经过前半球过滤，再按父级 `IDamageable` 去重结算。
 - A/B/C Clip 已持久化伤害窗口事件，三段分别读取 AttackDefinition 的 10/15/20 伤害。
 - MeleeHitbox 命中规则已完成手工功能与边界回归；需要反射配置私有序列化字段的 PlayMode 测试已延期，不计入自动化证据。
-- Enemy AI 当前实现最小 enum 状态机：Idle 停止 Agent 并清除旧路径，Chase 向 Target 设置目的地；NavMeshAgent 是 Enemy 位移唯一执行者，Animator 通过 `IsChasing` 表现状态。Target 为 null、被销毁或 inactive 时安全回到 Idle。
-- 无 Enemy Attack/Hit/Dead、Skill 或 GameFlow。
+- Enemy AI 当前以单一 enum 管理 Idle、Chase、Attack、Hit、Dead；NavMeshAgent 是 Enemy 位移唯一执行者，EnemyCombat 负责攻击动画与命中结算，Health 的 Damaged/Died 事件驱动受击与死亡。Target 为 null、被销毁或 inactive 时安全回到 Idle。
+- Enemy 自身死亡终态已通过；EnemyStateMachine 缓存 Target Health，并通过成对的 Died 订阅在 Player 死亡时结束攻击和释放目标。Skill 与 GameFlow 尚未实现。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -180,7 +181,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 
 ## 7. 核心类型职责（Current / Planned）
 
-`DamageInfo`、`IDamageable`、`Health`、`AttackDefinition`、`PlayerCombat`、`PlayerCombatAnimationEvents` 与 `MeleeHitbox` 为 Current；其余尚未实现的类型为 Planned。
+`DamageInfo`、`IDamageable`、`Health`、`AttackDefinition`、`PlayerCombat`、`PlayerCombatAnimationEvents`、`MeleeHitbox`、`EnemyCombat` 与 `EnemyStateMachine` 为 Current；其余尚未实现的类型为 Planned。
 
 | 类型 | 唯一职责 | 允许依赖 | 禁止事项 |
 |---|---|---|---|
@@ -189,11 +190,12 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `PlayerMotor` | CharacterController 位移、重力、面向和所有受控突进位移的唯一入口 | CharacterController、相机朝向、移动配置 | 读取具体键盘按键；直接处理攻击 |
 | `DamageInfo` | 当前携带只读伤害值；来源、命中点和方向在 Combat 确实需要时扩展 | 值类型/Unity 基础类型 | 持有目标行为或产生副作用 |
 | `IDamageable` | 为命中系统提供统一伤害入口 | `DamageInfo` | 暴露具体 Player/Enemy 实现 |
-| `Health` | HP 钳制、初始化、`HealthChanged`、只触发一次的 `Died` | 生命配置 | 引用 UI、Animator、Player 或 Enemy |
+| `Health` | HP 钳制、初始化、`HealthChanged`、有效伤害 `Damaged`、只触发一次的 `Died` | 生命配置 | 引用 UI、Animator、Player 或 Enemy |
 | `PlayerCombat`（Current） | Combo 状态、输入缓存、攻击/收招切换与攻击朝向 | InputReader、PlayerMotor、Animator、AttackDefinition | 在动画事件中查找目标或直接依赖 Enemy |
 | `PlayerCombatAnimationEvents`（Current） | 将 Imp Animation Event 转发到 PlayerCombat | 父级 PlayerCombat | 保存 Combo 状态、查找目标或结算伤害 |
 | `MeleeHitbox`（Current） | 攻击窗口、目标收集、前半球过滤与每次攻击命中去重 | `IDamageable`、`DamageInfo`、Unity Physics | 保存跨攻击的陈旧命中集合；依赖具体 Enemy 类型 |
 | `AttackDefinition` | 当前保存伤害、攻击 State 与可选收招 State 等静态配置 | ScriptableObject | 保存当前 Combo、缓存输入或命中目标 |
+| `EnemyCombat`（Current） | 启动 Enemy 攻击、在动画命中帧复核范围并通过 `IDamageable` 结算 | Animator、AttackDefinition、IDamageable | 决定 AI 状态；依赖 Player 具体类型 |
 | `SkillDefinition` | 保存伤害、冷却、距离、持续时间和表现资源 | ScriptableObject | 保存剩余冷却或当前释放状态 |
 | `SkillController` | 技能准入、冷却、释放流程和命中去重 | SkillDefinition、PlayerMotor、ObjectPool | 直接写 Transform；修改配置资产 |
 | `EnemyStateMachine` | 统一管理 Idle/Chase/Attack/Hit/Dead 迁移 | NavMeshAgent、Animator、EnemyCombat、Health | 用互相冲突的布尔变量替代状态 |

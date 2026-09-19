@@ -21,7 +21,12 @@ public class AttackDefinition : ScriptableObject
     [SerializeField]
     private string recoveryStateName;
 
+    // Enemy 使用该距离切换 Attack，并在命中帧再次校验目标仍处于范围内。
+    [SerializeField, Min(0f)]
+    private float attackRange;
+
     public float Damage => damage;
     public string AttackStateName => attackStateName;
     public string RecoveryStateName => recoveryStateName;
+    public float AttackRange => attackRange;
 }

@@ -1,93 +1,96 @@
 # Current Project Status
 
-> Last Updated：2026-09-18
-> Current Learning Day：Day 14 验收通过
-> Current Phase：Phase A / Enemy AI
-> Next Checkpoint：Day 15 Enemy Attack / Hit / Dead
+> Last Updated：2026-09-19
+> Current Learning Day：Day 15 验收通过
+> Current Phase：Phase A / Enemy Combat
+> Next Checkpoint：Day 16 三个 Enemy 集成与 Phase A 验收
 > Source of Truth：当前 Unity 工程 + Git + Docs
 > Remaining Plan：`Docs/plans/2026-09-13-remaining-learning-days.md`
 
 ## 验收结论
 
-**Day 14 复验：PASS（10/10）。** 最小 NavMesh、Environment Layer、Puglin Agent、6m 仇恨距离及 Idle ↔ Chase 已完成。Unity MCP 运行态确认正常追逐、范围外停止、目标禁用/销毁保护、8 拐点障碍路径、NavMesh 边缘和 Console 全部通过。可以进入 Day 15。
+**Day 15 复验：PASS（10/10）。** Enemy Attack、通过 `IDamageable` 伤害 Player、受击中断、Enemy Dead 终态和 Player 死亡后的停止行为均通过。`BUG-015` 已修复关闭，可以进入 Day 16。
 
 ## Implemented
 
-- 新增 Environment Layer，并让 NavMeshSurface 只收集该层的 Physics Colliders。
-- 烘焙 `NavMesh-Navigation`，当前数据为 76 个顶点、30 个三角形。
-- Puglin Prefab 新增 `NavMeshAgent` 与 `EnemyStateMachine`。
-- 实现 Idle/Chase 两个互斥状态、6m 仇恨距离、路径设置和离开追逐后的路径清理。
-- Puglin Animator 新增 `IsChasing` Bool 与 Idle/Jog 双向切换。
-- 已为 `EnemyStateMachine` 补充职责和原因型注释。
+- `AttackDefinition` 新增静态 `AttackRange`；Enemy 配置为 Damage=10、Range=1、State=`Sword_Attack`。
+- `Health` 新增 `Damaged` 事件；无效伤害和死亡后的重复伤害不会触发。
+- `EnemyStateMachine` 已包含 Idle、Chase、Attack、Hit、Dead 互斥状态，并成对订阅/退订自身 Health 事件。
+- `EnemyCombat` 负责启动攻击、在动画命中帧复核距离，并仅通过 `IDamageable` 结算伤害。
+- `Sword_Attack` 已配置 Hit 与 EndAttack 事件；Hit 流程使用 `LayToIdle` 的 EndHit 事件恢复决策。
+- Puglin Dead 会停止 Agent、清除攻击状态并播放 Death01。
+- EnemyStateMachine 缓存 Target Health，并通过成对的 Died 订阅在 Player 死亡时立即结束攻击和释放目标。
+- Day 15 涉及脚本已补职责/原因型注释；重复诊断日志和重复条件已清理；动画事件桥接脚本名称已规范为 `EnemyCombatAnimationEvents`，原 `.meta` GUID 保持不变。
 
 ## Test Evidence
 
 | 范围 | 结果 |
 |---|---|
-| NavMesh 数据与 Surface | PASS |
-| Puglin Agent 在 NavMesh 上 | PASS |
-| 6m 内 Chase | PASS：完整路径、Velocity=3.5 |
-| 6m 外 Idle | PASS：路径清除、Velocity=0 |
-| Player 禁用 | PASS：Error=0 |
-| Player 运行中丢失 | PASS：Agent 停止、路径清除、Error=0 |
-| 障碍绕行 / 完整边缘路线 | PASS：8 拐点 PathComplete；边缘 PathComplete |
-| Day 14 结论 | PASS：10/10 |
+| 配置、引用、动画事件 | PASS |
+| Enemy 进入攻击范围并攻击 | PASS |
+| Enemy 每次命中造成 10 点伤害 | PASS |
+| 攻击动画周期与 EndAttack | PASS |
+| Enemy 攻击中受击清理攻击状态 | PASS |
+| Hit 恢复链配置 | PASS |
+| Enemy 致死后 Dead 终态 | PASS：HP=0、Death01、Agent 停止、IsAttacking=false |
+| Player 死亡后停止攻击 | PASS：Target=null、IsAttacking=false、Agent 停止，两个攻击周期内未重启 |
+| 编译与 Missing Script | PASS：Error=0，桥接组件引用保留 |
+| Day 15 结论 | **PASS：10/10** |
 
-详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY14.md`。
+详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY15.md`。
 
 ## Current Architecture
 
 ```text
-UAL2 Animation Events
-        ↓
-PlayerCombatAnimationEvents（只转发）
-        ↓
-PlayerCombat（读取当前 AttackDefinition.Damage）
-        ↓ DamageInfo
-MeleeHitbox
-├─ OverlapSphere + Enemy LayerMask
-├─ Vector3.Dot 前半球过滤
-├─ HashSet<IDamageable> 单窗口去重
-└─ IDamageable.TakeDamage
-        ↓
-Health
+EnemyStateMachine
+├─ Idle / Chase ───────► NavMeshAgent
+├─ Attack ─────────────► EnemyCombat
+├─ Hit / Dead ◄──────── Health.Damaged / Health.Died
+└─ 表现 ───────────────► Animator
+
+EnemyCombat
+├─ AttackDefinition（Damage / Range / State）
+├─ Animation Event（Hit / EndAttack）
+└─ IDamageable.TakeDamage(DamageInfo)
 ```
 
-- Animator 只提供伤害窗口时机；命中检测、伤害配置和生命规则仍彼此分离。
-- PlayerCombat 不依赖具体 Enemy；MeleeHitbox 只面向 `IDamageable`。
-- 当前物理查询使用 `OverlapSphere`，短窗口内会分配数组；是否改 NonAlloc 留到 Profiler 日依据数据决定。
-- EnemyStateMachine 当前以 enum + switch 管理 Idle/Chase；Agent 负责寻路和位移，Animator 只表现状态。
+- Health 仍不引用 UI、Animator、Player 或 Enemy。
+- Animation Event 只报告命中/结束时机，不决定 AI 状态。
+- EnemyStateMachine 通过 Target Health 的 Died 事件停止攻击；不在 Update 热路径重复查找组件。
 
 ## Files
 
-- `Assets/_Game/Art/Charactors/Enemy/Puglin/`
-- `Assets/_Game/Materials/MI_Puglin.mat`
-- `Assets/_Game/Animations/Enemy/PuglinTest.controller`
-- `Assets/_Game/Prefabs/Enemy/Puglin.prefab`
-- `Assets/_Game/Prefabs/Player/Player.prefab`（原 GUID 保持不变的目录移动）
-- `Assets/_Game/Scenes/SampleScene.unity`
-- `Assets/_Game/Scenes/SampleScene/NavMesh-Navigation.asset`
+- `Assets/_Game/Runtime/Common/Health.cs`
+- `Assets/_Game/Runtime/Combat/AttackDefinition.cs`
 - `Assets/_Game/Runtime/Enemy/EnemyStateMachine.cs`
-- `Docs/TEST_REPORT/TEST_CASE_DAY14.md`
+- `Assets/_Game/Runtime/Enemy/EnemyStateMachineAnimationEvents.cs`
+- `Assets/_Game/Runtime/Enemy/Combat/EnemyCombat.cs`
+- `Assets/_Game/Runtime/Enemy/Combat/EnemyCombatAnimationEvents.cs`
+- `Assets/_Game/Data/Combat/Enemy/AttackDefinition.asset`
+- `Assets/_Game/Animations/Enemy/PuglinTest.controller`
+- `Assets/_Game/Animations/Source/UAL1_Standard.fbx.meta`
+- `Assets/_Game/Scenes/SampleScene.unity`
+- `Docs/TEST_REPORT/TEST_CASE_DAY15.md`
 
 ## Known Bugs / Risks
 
 1. `BUG-004` Open：角色离地后仍保留完整水平控制速度；进入技能位移前处理。
-2. `MeleeHitbox` PlayMode 测试延期且不计为自动化证据；空骨架不得保留以免假通过。
+2. `MeleeHitbox` PlayMode 测试延期且不计为自动化证据。
 3. `Assets/_Recovery/` 是恢复文件，不纳入正式项目提交。
 
 ## Git
 
 - 当前分支：`main`；提交前以 `git rev-parse --short HEAD` 复核实际 HEAD。
-- Day 14 已通过，可创建正式完成提交。
+- Day 15 已通过，可以创建正式完成提交。
 - 默认提交全部自有代码、对应 `.meta`、配置资产、Scene、测试与 Docs。
 - 排除 Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug 目录及未经确认的 ProjectSettings 变化。
 - Bestiary 原始 FBX/PNG 不进入公开仓库。
 
 ## Next Task
 
-1. 开始 Day 15：补齐 Enemy Attack / Hit / Dead 状态。
-2. 让 Enemy 通过 `IDamageable` 伤害 Player，并验证死亡终态与事件生命周期。
+1. 开始 Day 16：放置三个共享 Puglin Prefab 的 Enemy 实例。
+2. 验证拥挤、同时受击、逐个死亡与 Player 死亡后全部停止。
+3. 完成 Phase A 的 Health、血条、Combo、命中去重与 AI/Combat 回归。
 
 ## Update Rules
 

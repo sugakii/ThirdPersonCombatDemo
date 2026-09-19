@@ -19,6 +19,9 @@ public class Health : MonoBehaviour, IDamageable
     // 只在生命值首次从正数降到 0 时触发。
     public event Action Died;
 
+    // 每次有效正伤害触发一次，供受击表现或状态机响应；无效伤害和死亡后的伤害不触发。
+    public event Action Damaged;
+
     // 场景和 Prefab 的默认生命上限；运行时测试仍可通过 Initialize 覆盖。
     [SerializeField]
     [Min(0f)]
@@ -57,6 +60,8 @@ public class Health : MonoBehaviour, IDamageable
         {
             CurrentHealth = 0f;
         }
+
+        Damaged?.Invoke();
 
         // 先广播最终 HP，再广播死亡，保证 UI 能先显示 0。
         HealthChanged?.Invoke(CurrentHealth);
