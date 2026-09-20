@@ -204,7 +204,7 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 - **Learning Day 13｜9/16（9/17 复验通过）**：Puglin、Humanoid 动画、材质、Health/血条与 Enemy Prefab 已建立；Unity MCP 实时确认 Emission 配置已保存，Play Mode 确认 Billboard 与 Main Camera 同旋转、Puglin 50/50 HP、Console 无游戏 Error；15/15 PASS。
 - **Learning Day 14｜9/17（9/18 复验通过）**：最小 NavMesh、Environment Layer、Agent 与 Idle/Chase 已完成；范围内追逐、范围外停止、目标禁用/销毁、8 拐点障碍路径、NavMesh 边缘与 Console 回归全部通过；10/10 PASS。
 - **Learning Day 15｜9/18（9/19 复验通过）**：Enemy Attack/Hit/Dead、Enemy 对 Player 伤害、受击中断和双方死亡终态完成；`BUG-015` 已修复关闭，10/10 PASS，可以进入 Day 16。
-- **Learning Day 16｜9/19**：3 Enemy 集成、AI/Combat 边界回归、Bug 修复与 Phase A 验收。
+- **Learning Day 16｜9/19（9/20 验收通过）**：3 个 Puglin Prefab 实例完成共同追击、拥挤、同时受击、逐个死亡、独立血条与 Player 死亡后全部停止回归；12/12 PASS，严重/阻断 Bug 为 0，Phase A 完成。
 
 ## 6. Phase B：火焰突进与完整游戏循环（9/20–9/25）
 
