@@ -12,7 +12,7 @@
 - Player：红色 `Imp`。
 - Enemy：3 个 `Puglin` 实例。
 - 场景：约 20×20m 中世纪庭院。
-- 操作：WASD、鼠标镜头、Shift 冲刺、左键普攻、Q 火焰突进、R 重开。
+- 操作：WASD、鼠标镜头、Shift 冲刺、左键普攻、E 火焰突进、R 重开。
 - 系统：第三人称移动、三段普攻、Enemy AI、伤害与生命、血条、技能冷却/VFX、胜负与重开。
 - 求职材料：Windows Build、README、架构说明、40–60 条测试用例、至少 5 份真实 Bug Report、6–10 个自动化测试、90–120 秒视频和简历描述。
 
@@ -211,7 +211,7 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 ### 开发
 
 - 实现 `SkillDefinition`、`SkillController` 和独立 Runtime 冷却状态。
-- Q 触发 `Sword_Dash` 火焰突进。
+- E 触发 `Sword_Dash` 火焰突进。
 - Skill 向 PlayerMotor 请求受控位移，不直接修改 Transform。
 - 实现突进障碍阻挡、目标收集和单次释放命中去重。
 - 使用 ParticleSystem、TrailRenderer、Unity `ObjectPool<T>` 完成火焰表现。
@@ -234,7 +234,7 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 
 新增约 15 条正式用例，使累计达到约 43 条：
 
-- 冷却期间反复按 Q。
+- 冷却期间反复按 E。
 - 突进起点、终点、距离边界。
 - 正面撞墙、斜向撞墙、贴墙释放。
 - 同时命中多个 Enemy。
@@ -255,7 +255,7 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 
 ### 交付
 
-- Q 火焰突进具有动画、代码位移、伤害、VFX、冷却和 UI。
+- E 火焰突进具有动画、代码位移、伤害、VFX、冷却和 UI。
 - 3 个 Puglin 可共同参与战斗。
 - 完整开始 → 战斗 → Victory/GameOver → Restart 流程。
 - 累计约 43 条测试用例、目标 10 个自动化测试。
@@ -272,7 +272,7 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 
 ### 每日检查点
 
-- **Learning Day 17｜9/20**：SkillDefinition、Q 输入、运行时冷却与 EditMode 测试。
+- **Learning Day 17｜9/20（复验通过）**：SkillDefinition、用户确认的 E 输入、运行时冷却与 Reset 完成；SkillCooldownTests 4/4、EditMode 总计 14/14 PASS，正式场景引用已保存。
 - **Learning Day 18｜9/21**：由 PlayerMotor 执行 Sword_Dash 位移与障碍处理。
 - **Learning Day 19｜9/22**：技能伤害、多目标与单次释放去重。
 - **Learning Day 20｜9/23**：ParticleSystem、TrailRenderer、Unity ObjectPool、冷却 UI 与完整技能回归。

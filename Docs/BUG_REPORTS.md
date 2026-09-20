@@ -2,7 +2,7 @@
 
 > 项目：Third-Person Combat Demo  
 > 维护规则：只记录实际复现的缺陷；修复后必须回归，不能仅凭代码修改关闭。
-> 最近回归：2026-09-19 / Day 15 复验；10/10 PASS，BUG-015 已关闭。
+> 最近回归：2026-09-20 / Day 17 首轮验收；技能使用 E 已确认为设计决定。
 
 ## 状态定义
 
@@ -617,3 +617,9 @@ Player 死亡后，Puglin 应立即结束当前攻击并停止开始新的攻击
 - 当前结论：已在 Day 8 改名为 `ResetHealth()`；Health 回归 10/10 PASS，观察项关闭。
 - 风险：添加组件或执行 Inspector 的 Reset 操作时，Unity 可能自动调用该方法；同时容易让调用者误判它的生命周期语义。
 - 处理：已完成改名、测试名同步和回归。
+
+### OBS-003：Skill 与预留 Interact Action 当前都绑定 E
+
+- 现象：用户明确选择 E 作为技能键；Input Actions 模板中的 Interact 也预留了 E。
+- 当前结论：现阶段没有 Gameplay 代码读取 Interact，因此不会产生实际冲突，不登记为 Bug。
+- 处理：保留 E 技能键；以后真正实现交互系统时，必须为 Skill 或 Interact 重新分配按键。

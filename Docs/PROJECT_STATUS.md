@@ -1,15 +1,15 @@
 # Current Project Status
 
 > Last Updated：2026-09-20
-> Current Learning Day：Day 16 验收通过
-> Current Phase：Phase B / Skill Cooldown
-> Next Checkpoint：Day 17 SkillDefinition 与冷却规则
+> Current Learning Day：Day 17 复验通过
+> Current Phase：Phase B / Sword Dash Movement
+> Next Checkpoint：Day 18 Sword_Dash 受控位移与障碍处理
 > Source of Truth：当前 Unity 工程 + Git + Docs
 > Remaining Plan：`Docs/plans/2026-09-13-remaining-learning-days.md`
 
 ## 验收结论
 
-**Day 16：PASS（12/12）。** 场景中的 3 个 Puglin Prefab 实例完成共同追击、拥挤、同时受击、逐个死亡、独立血条与 Player 死亡后全部停止回归。严重/阻断 Bug 为 0，Phase A 验收通过，可以进入 Day 17。
+**Day 17 复验：PASS（10/10）。** SkillDefinition、E 输入意图、运行时冷却、ResetCooldown、FireDash 配置和正式场景引用均已通过；EditMode 总计 14/14 PASS，其中技能测试 4/4 PASS。可以进入 Day 18。
 
 ## Implemented
 
@@ -24,6 +24,9 @@
 - `SampleScene` 已放置 `Puglin_01/02/03` 三个 Prefab 实例；三者共享静态 AttackDefinition，但 Health、AI 和 Combat 运行时状态彼此独立。
 - 三敌近身时保持在 NavMesh，实测最小中心距离约 0.56m；当前 Agent Radius=0.28，无需额外避让代码。
 - Day 16 没有新增 C# 文件；现有运行时代码注释已满足职责/原因型标准，无需为验收制造无意义改动。
+- `SkillDefinition` 保存技能静态配置，`SkillController` 独立保存 RemainingCoolDown；运行时状态不会写回 ScriptableObject。
+- PlayerInputReader 已接入 E 的一次性 Skill 意图；Player 的 SkillController 与 FireDash 引用已保存到 SampleScene。
+- Day 17 涉及代码已补职责、边界和原因型注释；未提前实现 Day 18 的 Dash 位移或 VFX。
 
 ## Test Evidence
 
@@ -46,8 +49,15 @@
 | Player 死亡后三敌停止 | PASS：Target=null、IsAttacking=false、Agent 停止 |
 | Console / Runtime 编译 | PASS：0 Error / 0 Warning |
 | Day 16 结论 | **PASS：12/12；Phase A 完成** |
+| SkillDefinition / FireDash | PASS：Cooldown=3，静态配置与运行时状态分离 |
+| E 输入边沿 | PASS：WasPressedThisFrame=true，松开后 IsPressed=false |
+| SkillCooldownTests | PASS：4/4；EditMode 总计 14/14 |
+| 运行时冷却边界 | PASS：首次成功、冷却拒绝、3.0 秒恢复、Reset=0 |
+| Scene 持久化 | PASS：SkillController→FireDash，Scene dirty=false |
+| Day 17 Console / 编译 | PASS：0 Error / 0 Warning |
+| Day 17 结论 | **PASS：10/10** |
 
-详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY16.md`。
+Day 16 详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY16.md`；Day 17 见 `Docs/TEST_REPORT/TEST_CASE_DAY17.md`。
 
 ## Current Architecture
 
@@ -62,6 +72,10 @@ EnemyCombat
 ├─ AttackDefinition（Damage / Range / State）
 ├─ Animation Event（Hit / EndAttack）
 └─ IDamageable.TakeDamage(DamageInfo)
+
+PlayerInputReader ── SkillPressed ──► SkillController
+                                        ├─ SkillDefinition（静态配置）
+                                        └─ RemainingCoolDown（运行时状态）
 ```
 
 - Health 仍不引用 UI、Animator、Player 或 Enemy。
@@ -80,7 +94,12 @@ EnemyCombat
 - `Assets/_Game/Animations/Enemy/PuglinTest.controller`
 - `Assets/_Game/Animations/Source/UAL1_Standard.fbx.meta`
 - `Assets/_Game/Scenes/SampleScene.unity`
-- `Docs/TEST_REPORT/TEST_CASE_DAY16.md`
+- `Assets/_Game/Runtime/Skills/SkillDefinition.cs`
+- `Assets/_Game/Runtime/Skills/SkillController.cs`
+- `Assets/_Game/Runtime/Input/PlayerInputReader.cs`
+- `Assets/_Game/Data/Skills/FireDash.asset`
+- `Assets/_Game/Tests/EditMode/SkillCooldownTests.cs`
+- `Docs/TEST_REPORT/TEST_CASE_DAY17.md`
 
 ## Known Bugs / Risks
 
@@ -91,16 +110,16 @@ EnemyCombat
 ## Git
 
 - 当前分支：`main`；提交前以 `git rev-parse --short HEAD` 复核实际 HEAD。
-- Day 16 已通过，可以创建 Phase A 验收提交。
+- Day 17 已通过，可以创建技能冷却提交。
 - 默认提交全部自有代码、对应 `.meta`、配置资产、Scene、测试与 Docs。
 - 排除 Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug 目录及未经确认的 ProjectSettings 变化。
 - Bestiary 原始 FBX/PNG 不进入公开仓库。
 
 ## Next Task
 
-1. 开始 Day 17：创建 `SkillDefinition` 与 `SkillController`。
-2. 接入 Q 技能意图，只实现释放准入、冷却推进和重置，不提前加入位移/VFX。
-3. 为首次可释放、冷却中拒绝、结束后恢复和重开清零补至少 2 条 EditMode 测试。
+1. 开始 Day 18：接入 `Sword_Dash` 动画。
+2. 由 PlayerMotor 执行可调距离、持续时间的受控 Dash，不直接修改 Transform。
+3. 验证正面/斜向/贴墙、斜坡、平台边缘和 Dash 中重复输入。
 
 ## Update Rules
 

@@ -115,7 +115,7 @@ PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
 | FR-03 | 通用伤害 | Player 与 Enemy 使用相同 `DamageInfo`、`IDamageable`、`Health` 契约 |
 | FR-04 | Enemy AI | Puglin 明确实现 Idle、Chase、Attack、Hit、Dead 状态 |
 | FR-05 | UI | Player/Enemy 血条和技能冷却显示由领域事件驱动 |
-| FR-06 | 火焰突进 | Q 触发代码位移、障碍阻挡、多目标去重、伤害、VFX 和冷却 |
+| FR-06 | 火焰突进 | E 触发代码位移、障碍阻挡、多目标去重、伤害、VFX 和冷却 |
 | FR-07 | 游戏流程 | Playing、Victory、GameOver；R 可可靠重开并清理运行时状态 |
 
 ## 5. 非功能需求
@@ -211,7 +211,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 - Gameplay 代码不使用 `Keyboard.current` 或 `Mouse.current` 读取具体按键。
 - `PlayerInputReader` 是唯一 Input System 边界；下游只消费意图和值。
 - `CameraController` 属于 Camera 模块，当前位于 `Runtime/Camera`；Input 模块只保留输入读取职责。
-- 默认 Input Asset 已有 Move、Look、Attack、Sprint；PlayerInputReader 当前输出 Move、Look、Sprint 与单帧 `AttackPressed`。Skill(Q) 与 Restart(R) 尚待添加。
+- Input Asset 已有 Move、Look、Attack、Sprint 与 Skill；PlayerInputReader 当前输出 Move、Look、Sprint、单帧 `AttackPressed` 与单帧 `SkillPressed`。Skill 使用 E，Restart(R) 尚待添加。
 
 ### 位移与动画
 

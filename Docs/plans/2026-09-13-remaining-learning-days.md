@@ -130,7 +130,7 @@
 - Create: `Assets/_Game/Tests/EditMode/SkillCooldownTests.cs`
 - Modify: `Assets/_Game/Runtime/Input/PlayerInputReader.cs`
 
-**开发：** 接入 Q 意图；实现准入、开始冷却、剩余时间和重置，不实现位移/VFX。
+**开发：** 接入 E 意图；实现准入、开始冷却、剩余时间和重置，不实现位移/VFX。
 
 **测试：** 首次可释放、冷却中拒绝、结束后恢复、重开清零；至少 2 条 EditMode 测试。
 
@@ -145,7 +145,7 @@
 - Modify: `Assets/_Game/Runtime/Skills/SkillController.cs`
 - Modify: `Assets/_Game/Animations/Player/PlayerAnimator.controller`
 
-**开发：** Q 播放 Sword_Dash；SkillController 请求 PlayerMotor 执行 Dash，禁止直接修改 Transform。
+**开发：** E 播放 Sword_Dash；SkillController 请求 PlayerMotor 执行 Dash，禁止直接修改 Transform。
 
 **测试：** 距离、持续时间、正面/斜向/贴墙、斜坡、平台边缘、Dash 中重复输入。
 
@@ -177,11 +177,11 @@
 - Modify: `Assets/_Game/Runtime/Skills/SkillController.cs`
 - Modify: `Assets/_Game/Scenes/SampleScene.unity`
 
-**开发：** 自制一个粒子效果和一个 Trail；预热少量实例；Get/Release 时重置粒子、Trail、Transform 和计时；在现有 Canvas 增加最小 Q 冷却显示，UI 只呈现状态，不决定技能能否释放。
+**开发：** 自制一个粒子效果和一个 Trail；预热少量实例；Get/Release 时重置粒子、Trail、Transform 和计时；在现有 Canvas 增加最小 E 冷却显示，UI 只呈现状态，不决定技能能否释放。
 
-**测试：** 连续释放、重开、池容量边界、Trail 残影、永久对象、冷却开始/结束、重复 Q、Console 和 Hierarchy 数量。
+**测试：** 连续释放、重开、池容量边界、Trail 残影、永久对象、冷却开始/结束、重复 E、Console 和 Hierarchy 数量。
 
-**交付：** Q 动画、位移、伤害、VFX、CD 与 UI 全部闭环。
+**交付：** E 动画、位移、伤害、VFX、CD 与 UI 全部闭环。
 
 ### Day 21｜9/24：Victory/GameOver/Restart
 

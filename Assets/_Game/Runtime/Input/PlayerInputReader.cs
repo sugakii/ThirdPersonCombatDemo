@@ -14,12 +14,15 @@ public class PlayerInputReader : MonoBehaviour
     public bool SprintHeld { get; private set; }
     // 只在 Attack Action 本帧首次触发时为 true，供战斗系统消费一次性意图。
     public bool AttackPressed { get; private set; }
+    // 技能同样使用按下边沿，按住按键不会在冷却结束瞬间自动再次释放。
+    public bool SkillPressed { get; private set; }
 
     private PlayerInput playerInput;
     private InputAction lookAction;
     private InputAction moveAction;
     private InputAction sprintAction;
     private InputAction attackAction;
+    private InputAction skillAction;
 
     private void Awake()
     {
@@ -30,6 +33,7 @@ public class PlayerInputReader : MonoBehaviour
         moveAction = playerInput.actions["Move"];
         sprintAction = playerInput.actions["Sprint"];
         attackAction = playerInput.actions["Attack"];
+        skillAction = playerInput.actions["Skill"];
     }
 
     private void Update()
@@ -43,5 +47,7 @@ public class PlayerInputReader : MonoBehaviour
 
         // WasPressedThisFrame 只报告按下边沿，避免按住按键时每帧重复发起攻击。
         AttackPressed = attackAction.WasPressedThisFrame();
+
+        SkillPressed = skillAction.WasPressedThisFrame();
     }
 }
