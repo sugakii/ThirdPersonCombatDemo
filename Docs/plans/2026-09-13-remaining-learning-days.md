@@ -1,5 +1,7 @@
 # Remaining Learning Days Implementation Plan
 
+> **执行状态：** Day 17 后已由 `Docs/plans/2026-09-21-five-day-sprint.md` 接管；本文保留作为原始需求与 Day 18–27 映射依据。
+
 > **For Claude:** REQUIRED SUB-SKILL: Use executing-plans to implement this plan task-by-task.
 
 **Goal:** 在 2026-09-30 前完成可玩、可测试、可解释的第三人称战斗 Vertical Slice 及投递材料。

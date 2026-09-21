@@ -1,11 +1,11 @@
 # Current Project Status
 
-> Last Updated：2026-09-20
+> Last Updated：2026-09-21
 > Current Learning Day：Day 17 复验通过
 > Current Phase：Phase B / Sword Dash Movement
-> Next Checkpoint：Day 18 Sword_Dash 受控位移与障碍处理
+> Next Checkpoint：五日冲刺 Day 1——Dash 位移、伤害与去重
 > Source of Truth：当前 Unity 工程 + Git + Docs
-> Remaining Plan：`Docs/plans/2026-09-13-remaining-learning-days.md`
+> Remaining Plan：`Docs/plans/2026-09-21-five-day-sprint.md`
 
 ## 验收结论
 
@@ -117,9 +117,9 @@ PlayerInputReader ── SkillPressed ──► SkillController
 
 ## Next Task
 
-1. 开始 Day 18：接入 `Sword_Dash` 动画。
-2. 由 PlayerMotor 执行可调距离、持续时间的受控 Dash，不直接修改 Transform。
-3. 验证正面/斜向/贴墙、斜坡、平台边缘和 Dash 中重复输入。
+1. 五日冲刺 Day 1 上午：完成 `Sword_Dash` 动画与 PlayerMotor 受控位移。
+2. 五日冲刺 Day 1 下午：完成 Dash 伤害、多 Collider 去重和至少 1 条自动化测试。
+3. 当天完成距离、持续时间、墙角/斜坡/平台和重复输入回归，不把未验证功能带入 Day 2。
 
 ## Update Rules
 
