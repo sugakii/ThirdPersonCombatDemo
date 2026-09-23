@@ -161,4 +161,48 @@ public class PlayerMotorPlayModeTests
             Is.EqualTo(normalSpeed).Within(0.1f)
         );
     }
+
+    [UnityTest]
+    public IEnumerator Skill_WhenCooldownAndDashFinish_CanBeUsedAgain()
+    {
+        // 使用真实场景验证 Dash 与冷却都结束后，技能才重新具备完整释放条件。
+        AsyncOperation loadOperation =
+            SceneManager.LoadSceneAsync("SampleScene");
+
+        yield return loadOperation;
+        yield return null;
+
+        SkillController skillController =
+            Object.FindAnyObjectByType<SkillController>();
+
+        Assert.IsNotNull(skillController);
+
+        PlayerMotor playerMotor =
+            skillController.GetComponent<PlayerMotor>();
+
+        Assert.IsNotNull(playerMotor);
+
+        skillController.ResetCooldown();
+
+        bool firstResult = skillController.TryUseSkill();
+
+        Assert.IsTrue(firstResult);
+
+        float timeoutAt = Time.realtimeSinceStartup + 5f;
+
+        while(
+            (!skillController.CanUse || playerMotor.IsDashing) &&
+            Time.realtimeSinceStartup < timeoutAt
+        )
+        {
+            yield return null;
+        }
+
+        Assert.IsTrue(skillController.CanUse);
+        Assert.IsFalse(playerMotor.IsDashing);
+
+        bool secondResult = skillController.TryUseSkill();
+
+        Assert.IsTrue(secondResult);
+    }
 }

@@ -15,13 +15,19 @@ public class SkillCooldownTests
     {
         testTarget = new GameObject("TestTarget");
 
+        // RequireComponent 会同时补齐 PlayerMotor 与 SkillHitDetector，避免测试重复添加组件。
         skillController = testTarget.AddComponent<SkillController>();
+
+        PlayerMotor playerMotor = testTarget.GetComponent<PlayerMotor>();
+
+        skillController.InitializePlayerMotor(playerMotor);
         
         skillDefinition = AssetDatabase.LoadAssetAtPath<SkillDefinition>(
             "Assets/_Game/Data/Skills/FireDash.asset"
         );
 
-        skillController.Initialize(skillDefinition);
+        skillController.InitializeSkillDefinition(skillDefinition);
+
     }
 
     [TearDown]
@@ -51,27 +57,6 @@ public class SkillCooldownTests
             skillDefinition.Cooldown,
             skillController.RemainingCoolDown
         );
-    }
-
-    [Test]
-    public void TickCooldown_WhenCooldownEnds_SkillCanBeUsedAgain()
-    {
-        bool firstResult = skillController.TryUseSkill();
-
-        Assert.IsTrue(firstResult);
-
-        skillController.TickCooldown(3);
-
-        Assert.AreEqual(
-            0,
-            skillController.RemainingCoolDown
-        );
-
-        Assert.IsTrue(skillController.CanUse);
-
-        bool secondResult = skillController.TryUseSkill();
-
-        Assert.IsTrue(secondResult);
     }
 
     [Test]

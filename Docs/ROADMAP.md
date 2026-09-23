@@ -1,13 +1,13 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-21（Day 17 后将原 Day 18–27 压缩为五日冲刺）
+> 最后复核：2026-09-22（Day 18 已完成五日冲刺第 1 天；后续继续使用原学习日序号）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：Day 10 于 9/13 完成；剩余日程重排为 9/14 Day 11 至 9/30 Day 27，原 Day 28/29 的交付任务并入 Day 26/27
 > 每日投入：9/21–9/25 调整为约 6–8 小时
 > 固定节奏：约 70% 开发学习，30% 测试、复盘、文档和 Git  
 > 项目目标：在 2026-09-30 前完成可玩、可测试、可解释的第三人称战斗 Vertical Slice
 
-> **当前执行计划：** `Docs/plans/2026-09-21-five-day-sprint.md`。原 Day 18–27 保留为需求来源，但实际执行以五日冲刺为准。
+> **当前执行计划：** `Docs/plans/2026-09-21-five-day-sprint.md`。五个冲刺日依次使用 Day 18–22 编号，不另起“冲刺 Day”编号。
 
 ## 1. 最终交付范围
 
@@ -275,11 +275,11 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 ### 每日检查点
 
 - **Learning Day 17｜9/20（复验通过）**：SkillDefinition、用户确认的 E 输入、运行时冷却与 Reset 完成；SkillCooldownTests 4/4、EditMode 总计 14/14 PASS，正式场景引用已保存。
-- **Learning Day 18｜9/21**：由 PlayerMotor 执行 Sword_Dash 位移与障碍处理。
-- **Learning Day 19｜9/22**：技能伤害、多目标与单次释放去重。
-- **Learning Day 20｜9/23**：ParticleSystem、TrailRenderer、Unity ObjectPool、冷却 UI 与完整技能回归。
-- **Learning Day 21｜9/24**：GameFlow、Victory/GameOver、R 重开和同帧死亡规则。
-- **Learning Day 22｜9/25**：停止扩功能；5 次完整流程压力回归、修复与 Phase B 验收。
+- **Learning Day 18｜完成（五日冲刺第 1 天）**：PlayerMotor 受控 Dash、碰撞、受限空中控制、技能伤害、多目标与单次释放去重；EditMode 13/13、PlayMode 4/4 PASS。
+- **Learning Day 19（五日冲刺第 2 天）**：ParticleSystem、TrailRenderer、Unity ObjectPool、冷却 UI、GameFlow、Victory/GameOver 与 R 重开。
+- **Learning Day 20（五日冲刺第 3 天）**：开始/暂停菜单、庭院润色、完整回归并冻结功能。
+- **Learning Day 21（五日冲刺第 4 天）**：代码审查、测试扩充、Profiler、GC 与严重缺陷清零。
+- **Learning Day 22（五日冲刺第 5 天）**：Windows Build、README、架构图、演示视频与 Release。
 
 ## 7. Phase C：质量、作品集与发布（9/26–9/30）
 

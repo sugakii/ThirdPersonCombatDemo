@@ -1,125 +1,102 @@
 # Current Project Status
 
-> Last Updated：2026-09-21
-> Current Learning Day：Day 17 复验通过
-> Current Phase：Phase B / Sword Dash Movement
-> Next Checkpoint：五日冲刺 Day 1——Dash 位移、伤害与去重
-> Source of Truth：当前 Unity 工程 + Git + Docs
+> Last Updated：2026-09-22  
+> Current Learning Day：Day 18 验收通过（五日冲刺第 1 天）  
+> Current Phase：Phase B / Skill VFX、Cooldown UI 与 GameFlow  
+> Next Checkpoint：Day 19——火焰表现、冷却 UI、胜负与重开  
+> Source of Truth：当前 Unity 工程 + Git + Docs  
 > Remaining Plan：`Docs/plans/2026-09-21-five-day-sprint.md`
 
 ## 验收结论
 
-**Day 17 复验：PASS（10/10）。** SkillDefinition、E 输入意图、运行时冷却、ResetCooldown、FireDash 配置和正式场景引用均已通过；EditMode 总计 14/14 PASS，其中技能测试 4/4 PASS。可以进入 Day 18。
+**Day 18：PASS。** `Sword_Dash` 已完成代码受控位移、碰撞阻挡、伤害窗口、多目标伤害和同目标多 Collider 去重；`BUG-004` 已通过受限空中控制关闭。EditMode `13/13 PASS`，PlayMode `4/4 PASS`，Console 0 Error。
 
 ## Implemented
 
-- `AttackDefinition` 新增静态 `AttackRange`；Enemy 配置为 Damage=10、Range=1、State=`Sword_Attack`。
-- `Health` 新增 `Damaged` 事件；无效伤害和死亡后的重复伤害不会触发。
-- `EnemyStateMachine` 已包含 Idle、Chase、Attack、Hit、Dead 互斥状态，并成对订阅/退订自身 Health 事件。
-- `EnemyCombat` 负责启动攻击、在动画命中帧复核距离，并仅通过 `IDamageable` 结算伤害。
-- `Sword_Attack` 已配置 Hit 与 EndAttack 事件；Hit 流程使用 `LayToIdle` 的 EndHit 事件恢复决策。
-- Puglin Dead 会停止 Agent、清除攻击状态并播放 Death01。
-- EnemyStateMachine 缓存 Target Health，并通过成对的 Died 订阅在 Player 死亡时立即结束攻击和释放目标。
-- Day 15 涉及脚本已补职责/原因型注释；重复诊断日志和重复条件已清理；动画事件桥接脚本名称已规范为 `EnemyCombatAnimationEvents`，原 `.meta` GUID 保持不变。
-- `SampleScene` 已放置 `Puglin_01/02/03` 三个 Prefab 实例；三者共享静态 AttackDefinition，但 Health、AI 和 Combat 运行时状态彼此独立。
-- 三敌近身时保持在 NavMesh，实测最小中心距离约 0.56m；当前 Agent Radius=0.28，无需额外避让代码。
-- Day 16 没有新增 C# 文件；现有运行时代码注释已满足职责/原因型标准，无需为验收制造无意义改动。
-- `SkillDefinition` 保存技能静态配置，`SkillController` 独立保存 RemainingCoolDown；运行时状态不会写回 ScriptableObject。
-- PlayerInputReader 已接入 E 的一次性 Skill 意图；Player 的 SkillController 与 FireDash 引用已保存到 SampleScene。
-- Day 17 涉及代码已补职责、边界和原因型注释；未提前实现 Day 18 的 Dash 位移或 VFX。
+- E 成功释放后播放 `Sword_Dash`；技能静态参数来自 `FireDash.asset`：Damage=50、Cooldown=3s、DashDistance=1.5m、DashDuration=0.5s。
+- `SkillController` 负责释放准入、冷却、动画和伤害窗口启动，不直接修改 Player Transform。
+- `PlayerMotor.TryStartDash()` 接收位移请求，并由 `CharacterController.Move()` 执行 Dash、重力和碰撞处理。
+- Dash 最后一帧按剩余时间截断，避免不同帧率下累计位移超过配置距离。
+- `PlayerMotor.DashEnded` 通知 `SkillHitDetector` 关闭伤害检测。
+- `SkillHitDetector` 使用独立的 `SkillHitboxCenter`、Radius=1.2、Enemy LayerMask；按 `IDamageable` 去重，同一目标的多个 Collider 每次 Dash 只结算一次。
+- 空中普通移动乘以 `airControlMultiplier=0.25`，不再保留完整地面水平控制，`BUG-004` Closed。
+- Day 18 新增和修改代码已补充职责、边界与原因型注释；测试中由 `RequireComponent` 自动添加的依赖不再重复创建。
 
 ## Test Evidence
 
 | 范围 | 结果 |
 |---|---|
-| 配置、引用、动画事件 | PASS |
-| Enemy 进入攻击范围并攻击 | PASS |
-| Enemy 每次命中造成 10 点伤害 | PASS |
-| 攻击动画周期与 EndAttack | PASS |
-| Enemy 攻击中受击清理攻击状态 | PASS |
-| Hit 恢复链配置 | PASS |
-| Enemy 致死后 Dead 终态 | PASS：HP=0、Death01、Agent 停止、IsAttacking=false |
-| Player 死亡后停止攻击 | PASS：Target=null、IsAttacking=false、Agent 停止，两个攻击周期内未重启 |
-| 编译与 Missing Script | PASS：Error=0，桥接组件引用保留 |
-| 三敌 Prefab/引用与共同追击 | PASS |
-| 近身拥挤与 NavMesh | PASS：最小中心距离约 0.56m，均保持在 NavMesh |
-| 三敌同时受击 | PASS：各自 50→40，攻击均被中断 |
-| 三敌依次死亡 | PASS：各自 HP=0、Death01、Agent 停止 |
-| 三条 Enemy 血条 | PASS：分别绑定对应 Health，死亡后 0/50 |
-| Player 死亡后三敌停止 | PASS：Target=null、IsAttacking=false、Agent 停止 |
-| Console / Runtime 编译 | PASS：0 Error / 0 Warning |
-| Day 16 结论 | **PASS：12/12；Phase A 完成** |
-| SkillDefinition / FireDash | PASS：Cooldown=3，静态配置与运行时状态分离 |
-| E 输入边沿 | PASS：WasPressedThisFrame=true，松开后 IsPressed=false |
-| SkillCooldownTests | PASS：4/4；EditMode 总计 14/14 |
-| 运行时冷却边界 | PASS：首次成功、冷却拒绝、3.0 秒恢复、Reset=0 |
-| Scene 持久化 | PASS：SkillController→FireDash，Scene dirty=false |
-| Day 17 Console / 编译 | PASS：0 Error / 0 Warning |
-| Day 17 结论 | **PASS：10/10** |
+| Sword_Dash 动画与配置 | PASS：Motion 正确、Speed=1.2、Foot IK=false |
+| 受控位移 | PASS：PlayerMotor + CharacterController，未直接修改 Transform |
+| 贴墙 / 墙角 | PASS：受到碰撞阻挡，不穿墙 |
+| 30° / 50°斜坡 | PASS |
+| 平台边缘与空中控制 | PASS：空中水平控制降为地面的 25% |
+| Dash 中重复 E / 冷却输入 | PASS：不会覆盖当前 Dash 或冷却 |
+| 单目标与多目标伤害 | PASS |
+| 同目标多 Collider 去重 | PASS：一次检测只调用一次 TakeDamage |
+| EditMode | **13/13 PASS** |
+| PlayMode | **4/4 PASS**：PlayerMotor 3 条、SkillHitDetector 1 条 |
+| 编译 | Runtime、EditMode、PlayMode 程序集 0 Error / 0 Warning |
+| 场景持久化 | PASS：独立 SkillHitboxCenter、Radius=1.2、Enemy Mask；临时 Cube 已删除，Scene dirty=false |
+| Console | **0 Error** |
 
-Day 16 详细用例见 `Docs/TEST_REPORT/TEST_CASE_DAY16.md`；Day 17 见 `Docs/TEST_REPORT/TEST_CASE_DAY17.md`。
+详细步骤与结果见 `Docs/TEST_REPORT/TEST_CASE_DAY18.md`。
 
 ## Current Architecture
 
 ```text
-EnemyStateMachine
-├─ Idle / Chase ───────► NavMeshAgent
-├─ Attack ─────────────► EnemyCombat
-├─ Hit / Dead ◄──────── Health.Damaged / Health.Died
-└─ 表现 ───────────────► Animator
-
-EnemyCombat
-├─ AttackDefinition（Damage / Range / State）
-├─ Animation Event（Hit / EndAttack）
-└─ IDamageable.TakeDamage(DamageInfo)
-
-PlayerInputReader ── SkillPressed ──► SkillController
-                                        ├─ SkillDefinition（静态配置）
-                                        └─ RemainingCoolDown（运行时状态）
+PlayerInputReader.SkillPressed
+        ↓
+SkillController
+├─ SkillDefinition（静态伤害、冷却、距离、时长、动画名）
+├─ RemainingCoolDown（运行时状态）
+├─ PlayerMotor.TryStartDash(...)
+└─ SkillHitDetector.BeginDetection(DamageInfo)
+        ↓
+PlayerMotor
+├─ CharacterController.Move
+├─ Dash 生命周期 / 碰撞 / 重力
+└─ DashEnded ──► SkillHitDetector.EndDetection
+                         ↓
+               IDamageable.TakeDamage
 ```
 
-- Health 仍不引用 UI、Animator、Player 或 Enemy。
-- Animation Event 只报告命中/结束时机，不决定 AI 状态。
-- EnemyStateMachine 通过 Target Health 的 Died 事件停止攻击；不在 Update 热路径重复查找组件。
+- `PlayerMotor` 仍是 Player 唯一位移执行者。
+- `SkillHitDetector` 依赖 `IDamageable`，不依赖 Enemy 或 Health 的具体实现。
+- 普攻和技能分别使用 `MeleeHitboxCenter` 与 `SkillHitboxCenter`，可独立调整范围。
+- 运行时 Dash、冷却和命中集合不写回 ScriptableObject。
 
 ## Files
 
-- `Assets/_Game/Runtime/Common/Health.cs`
-- `Assets/_Game/Runtime/Combat/AttackDefinition.cs`
-- `Assets/_Game/Runtime/Enemy/EnemyStateMachine.cs`
-- `Assets/_Game/Runtime/Enemy/EnemyStateMachineAnimationEvents.cs`
-- `Assets/_Game/Runtime/Enemy/Combat/EnemyCombat.cs`
-- `Assets/_Game/Runtime/Enemy/Combat/EnemyCombatAnimationEvents.cs`
-- `Assets/_Game/Data/Combat/Enemy/AttackDefinition.asset`
-- `Assets/_Game/Animations/Enemy/PuglinTest.controller`
-- `Assets/_Game/Animations/Source/UAL1_Standard.fbx.meta`
-- `Assets/_Game/Scenes/SampleScene.unity`
-- `Assets/_Game/Runtime/Skills/SkillDefinition.cs`
+- `Assets/_Game/Runtime/Player/PlayerMotor.cs`
 - `Assets/_Game/Runtime/Skills/SkillController.cs`
-- `Assets/_Game/Runtime/Input/PlayerInputReader.cs`
+- `Assets/_Game/Runtime/Skills/SkillHitDetector.cs`
 - `Assets/_Game/Data/Skills/FireDash.asset`
+- `Assets/_Game/Animations/Player/PlayerAnimator.controller`
+- `Assets/_Game/Scenes/SampleScene.unity`
 - `Assets/_Game/Tests/EditMode/SkillCooldownTests.cs`
-- `Docs/TEST_REPORT/TEST_CASE_DAY17.md`
+- `Assets/_Game/Tests/PlayMode/PlayerMotorPlayModeTests.cs`
+- `Assets/_Game/Tests/PlayMode/SkillHitDetectorPlayModeTests.cs`
+- `Docs/TEST_REPORT/TEST_CASE_DAY18.md`
 
 ## Known Bugs / Risks
 
-1. `BUG-004` Open：角色离地后仍保留完整水平控制速度；进入技能位移前处理。
-2. `MeleeHitbox` PlayMode 测试延期且不计为自动化证据。
+1. `Physics.OverlapSphere()` 在技能检测期间会分配数组；留到质量阶段用 Profiler 确认后再决定是否改为 NonAlloc，不提前优化。
+2. `MeleeHitbox` PlayMode 测试仍延期，不能算作已有自动化证据。
 3. `Assets/_Recovery/` 是恢复文件，不纳入正式项目提交。
 
 ## Git
 
-- 当前分支：`main`；提交前以 `git rev-parse --short HEAD` 复核实际 HEAD。
-- Day 17 已通过，可以创建技能冷却提交。
-- 默认提交全部自有代码、对应 `.meta`、配置资产、Scene、测试与 Docs。
-- 排除 Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug 目录及未经确认的 ProjectSettings 变化。
+- 当前分支：`main`；Day 18 已通过，可以创建 Dash 位移与伤害提交。
+- 默认提交全部自有代码、对应 `.meta`、配置资产、Animator、Scene、测试与 Docs。
+- 排除 Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug/Combat 目录元文件及未经确认的 ProjectSettings 变化。
 - Bestiary 原始 FBX/PNG 不进入公开仓库。
 
 ## Next Task
 
-1. 五日冲刺 Day 1 上午：完成 `Sword_Dash` 动画与 PlayerMotor 受控位移。
-2. 五日冲刺 Day 1 下午：完成 Dash 伤害、多 Collider 去重和至少 1 条自动化测试。
-3. 当天完成距离、持续时间、墙角/斜坡/平台和重复输入回归，不把未验证功能带入 Day 2。
+1. Day 19 上午：用 ParticleSystem + TrailRenderer 制作火焰 Dash 表现，并通过 Unity `ObjectPool<T>` 复用。
+2. Day 19 上午：实现 `CooldownPresenter`，只读取技能冷却状态，不决定释放规则。
+3. Day 19 下午：实现 Playing、Victory、GameOver 和 R 重开，补至少 1 条 GameFlow 自动化测试。
 
 ## Update Rules
 

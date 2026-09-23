@@ -2,7 +2,7 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use executing-plans to implement this plan task-by-task.
 
-**Goal:** 在 2026-09-21 至 2026-09-25 五天内完成原 Day 18–27 的核心内容，交付可玩、可测试、可构建、可展示的第三人称战斗 Demo。
+**Goal:** 从 Learning Day 18 起连续五个学习日完成原 Day 18–27 的核心内容，交付可玩、可测试、可构建、可展示的第三人称战斗 Demo。对外始终使用 Learning Day 18–22 编号。
 
 **Architecture:** 保持现有 InputReader → Gameplay Controller → PlayerMotor/Combat/Health 的依赖方向。前三天完成技能、游戏流程、菜单和场景冻结；后两天只做质量、Build、文档、视频与 Release，不再扩展玩法。
 
@@ -18,7 +18,7 @@
 - 教学继续遵守 `Docs/PROJECT_STATUS.md` 的 Update Rules：先提供职责、API 和验收标准，由学习者尝试实现。
 - 不新增 Lock-On、Dodge、跳跃、任务、存档、Boss、复杂 Shader 或 Addressables。
 
-## Day 1｜9/21：Dash 位移 + 伤害（合并原 Day 18–19）
+## Learning Day 18｜完成：Dash 位移 + 伤害（冲刺第 1 天）
 
 ### 上午：Sword_Dash 受控位移
 
@@ -63,7 +63,7 @@
 - 不穿墙，不重复伤害，冷却期间不能释放。
 - 至少完成 8 条手工用例和 1 条去重自动化测试；Console 0 Error。
 
-## Day 2｜9/22：VFX/CD UI + GameFlow 核心（合并原 Day 20–21 核心）
+## Learning Day 19：VFX/CD UI + GameFlow 核心（冲刺第 2 天）
 
 ### 上午：火焰表现与冷却 UI
 
@@ -109,7 +109,7 @@
 - 战斗能进入 Victory/GameOver 并可靠重开。
 - 至少 1 条 GameFlow 自动化测试；Console 0 Error。
 
-## Day 3｜9/23：开始/暂停菜单 + 场景润色 + 完整回归（合并原 Day 22–23）
+## Learning Day 20：开始/暂停菜单 + 场景润色 + 完整回归（冲刺第 3 天）
 
 ### 上午：最小完整菜单
 
@@ -155,7 +155,7 @@
 - P0/P1=0，累计正式测试用例不少于 43 条。
 - 当天结束后禁止新增功能。
 
-## Day 4｜9/24：代码审查 + Profiler + Windows Build + 文档（合并原 Day 24–25）
+## Learning Day 21：代码审查 + Profiler + Windows Build + 文档（冲刺第 4 天）
 
 ### 上午：质量与 Build
 
@@ -194,7 +194,7 @@
 - Windows Build 可独立运行，P0/P1=0。
 - README 和 Docs 能让不了解聊天历史的人理解、运行和测试项目。
 
-## Day 5｜9/25：视频 + 简历 + 最终 Release（合并原 Day 26–27）
+## Learning Day 22：视频 + 简历 + 最终 Release（冲刺第 5 天）
 
 ### 上午：作品展示
 

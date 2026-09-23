@@ -2,7 +2,7 @@
 
 > 项目：Third-Person Combat Demo  
 > 维护规则：只记录实际复现的缺陷；修复后必须回归，不能仅凭代码修改关闭。
-> 最近回归：2026-09-20 / Day 17 首轮验收；技能使用 E 已确认为设计决定。
+> 最近回归：2026-09-22 / Day 18 验收；Dash、伤害去重与受限空中控制通过。
 
 ## 状态定义
 
@@ -231,6 +231,14 @@ Player 离地后仍保留与地面相同的完整水平控制能力和速度。
 ### 处理计划
 
 暂不在 Day 6 顺带修改 PlayerMotor。进入技能位移前确定最小空中控制规则，再实现并增加平台边缘回归用例。
+
+### 修复与回归
+
+- Day 18 在 `PlayerMotor` 中加入 `airControlMultiplier=0.25`；角色离地后普通水平控制降为地面的 25%。
+- Dash 仍由独立的受控位移分支执行，不与普通空中移动规则混用。
+- 平台边缘、Dash、普通移动、斜向速度与 Sprint 回归通过。
+- PlayerMotor PlayMode 测试 3/3 PASS；完整 PlayMode 4/4 PASS，Console 0 Error。
+- 结论：Closed。
 
 ---
 

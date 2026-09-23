@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0bce8eb2e7d05143a31967d7ad13ea1, type: 3}
   m_Name: FireDash
   m_EditorClassIdentifier: Game.Runtime::SkillDefinition
-  damage: 0
+  damage: 50
   cooldown: 3
-  dashDistance: 0
-  dashDuration: 0
-  skillStateName: 
+  dashDistance: 1.5
+  dashDuration: 0.5
+  skillStateName: Sword_Dash

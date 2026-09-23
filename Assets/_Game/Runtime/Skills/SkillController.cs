@@ -1,24 +1,42 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerInputReader))]
+[RequireComponent(
+    typeof(PlayerInputReader),
+    typeof(PlayerMotor),
+    typeof(SkillHitDetector)
+    )]
 /// <summary>
-/// 处理技能释放准入和运行时冷却，不负责 Day 18 才加入的位移与表现。
+/// 处理技能释放准入和运行时冷却。
 /// </summary>
 public class SkillController : MonoBehaviour
 {
     [SerializeField]
     private SkillDefinition skillDefinition;
 
+    [SerializeField]
+    private Animator animator;
+
+    private SkillHitDetector skillHitDetector;
+
     private PlayerInputReader inputReader;
+
+    private PlayerMotor playerMotor;
 
     // 用于记录当前还剩多少秒冷却，是运行时状态。
     public float RemainingCoolDown { get; private set; }
 
     public bool CanUse => RemainingCoolDown <= 0f;
 
-    public void Initialize(SkillDefinition definition)
+    private DamageInfo damageInfo;
+
+    public void InitializeSkillDefinition(SkillDefinition definition)
     {
         skillDefinition = definition;
+    }
+
+    public void InitializePlayerMotor(PlayerMotor playerMotor)
+    {
+        this.playerMotor = playerMotor;
     }
 
     public bool TryUseSkill()
@@ -27,6 +45,19 @@ public class SkillController : MonoBehaviour
         if(!CanUse)
         {
             Debug.Log("Skill use rejected: cooldown active.", this);
+            return false;
+        }
+
+        Vector3 forward = transform.forward;
+        forward.y = 0;
+
+        if(
+            !playerMotor.TryStartDash(
+                forward,
+                skillDefinition.DashDistance,
+                skillDefinition.DashDuration
+            ))
+        {
             return false;
         }
 
@@ -52,9 +83,22 @@ public class SkillController : MonoBehaviour
         RemainingCoolDown = 0;
     }
 
+    private void OnEnable()
+    {
+        // 伤害检测窗口与实际 Dash 生命周期绑定，不依赖动画长度猜测结束时机。
+        playerMotor.DashEnded += skillHitDetector.EndDetection;
+    }
+
+    private void OnDisable()
+    {
+        playerMotor.DashEnded -= skillHitDetector.EndDetection;
+    }
+
     private void Awake()
     {
         inputReader = GetComponent<PlayerInputReader>();
+        playerMotor = GetComponent<PlayerMotor>();
+        skillHitDetector = GetComponent<SkillHitDetector>();
     }
 
     private void Update()
@@ -63,7 +107,19 @@ public class SkillController : MonoBehaviour
         
         if(inputReader.SkillPressed)
         {
-            TryUseSkill();
+            if(!TryUseSkill())
+            {
+                return;
+            }
+
+            damageInfo = new DamageInfo(skillDefinition.Damage);
+
+            skillHitDetector.BeginDetection(damageInfo);
+
+            animator.CrossFade(
+                skillDefinition.SkillStateName,
+                0.05f
+            );
         }
     }
 }

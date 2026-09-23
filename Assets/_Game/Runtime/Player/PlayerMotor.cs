@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -38,11 +39,33 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField]
     private float sprintSpeed = 10f;
 
+    [SerializeField]
+    private float airControlMultiplier = 0.25f;
+
     // CharacterController 不自动应用重力，因此需要保留跨帧垂直速度。
     private float verticalVelocity;
+
     private CharacterController controller;
+
     private PlayerInputReader inputReader;
+
     private Vector2 moveInput;
+
+    private Vector3 dashDirection;
+
+    private float dashSpeed;
+
+    private float remainingDashTime;
+
+    /// <summary>
+    /// 当前是否仍由 Dash 接管水平位移。
+    /// </summary>
+    public bool IsDashing => remainingDashTime > 0f;
+
+    /// <summary>
+    /// Dash 位移结束时通知伤害检测等外部表现系统收尾。
+    /// </summary>
+    public event Action DashEnded;
 
     // 反向转身期间锁定初始目标方向，避免在临界角度反复切换转向策略。
     private bool isReverseTurning = false;
@@ -72,6 +95,57 @@ public class PlayerMotor : MonoBehaviour
         isReverseTurning = false;
     }
 
+    public bool TryStartDash(Vector3 direction, float distance, float duration)
+    {
+        // 运行中的 Dash 不允许被新请求覆盖，避免距离、时长和伤害窗口失配。
+        if(
+        IsDashing ||
+        direction.sqrMagnitude <= 0.001f ||
+        distance <= 0 ||
+        duration <= 0
+        )
+        {
+            return false;
+        }
+
+        dashDirection = direction.normalized;
+
+        dashSpeed = distance / duration;
+
+        remainingDashTime = duration;
+
+        return true;
+    }
+
+    private void TickDash(float deltaTime)
+    {
+        // 最后一帧只消费剩余时长，保证总位移不因帧率不同而超出配置距离。
+        float stepTime = Mathf.Min(deltaTime, remainingDashTime);
+
+        Vector3 verticalMovement = Vector3.up * verticalVelocity * deltaTime;
+
+        Vector3 horizontalDashMovement = dashDirection * dashSpeed * stepTime;
+
+        controller.Move(horizontalDashMovement + verticalMovement);
+
+        remainingDashTime -= stepTime;
+
+        if(remainingDashTime <= 0)
+        {
+            DashEnded?.Invoke();
+        }
+    }
+
+    // 使用碰撞处理后的实际速度驱动动画，撞墙时动画能够随之降速。
+    private void RefreshCurrentMoveSpeed()
+    {
+        Vector3 actualVelocity = controller.velocity;
+
+        actualVelocity.y = 0;
+
+        CurrentMoveSpeed = actualVelocity.magnitude;
+    }
+
     private void Awake()
     {
         // cameraTransform 是 Inspector 引用；缺失时尽早停止，避免每帧刷空引用异常。
@@ -88,6 +162,24 @@ public class PlayerMotor : MonoBehaviour
 
     private void Update()
     {
+
+        // 接地时施加轻微向下速度，使 CharacterController 稳定贴住地面。
+        if(controller.isGrounded && verticalVelocity < 0f)
+        {
+            verticalVelocity = -2f;
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime;
+        }
+
+        if(IsDashing)
+        {
+            TickDash(Time.deltaTime);
+            RefreshCurrentMoveSpeed();
+            return;
+        }
+
         // Sprint 只切换速度，不改变输入向量，也不会在静止时主动产生位移。
         float currentSpeed = moveSpeed;
 
@@ -108,16 +200,6 @@ public class PlayerMotor : MonoBehaviour
         right.Normalize();
 
         moveInput = inputReader.MoveInput;
-
-        // 接地时施加轻微向下速度，使 CharacterController 稳定贴住地面。
-        if(controller.isGrounded && verticalVelocity < 0f)
-        {
-            verticalVelocity = -2f;
-        }
-        else
-        {
-            verticalVelocity += gravity * Time.deltaTime;
-        }
 
         // 将二维输入转换成相对镜头的三维世界方向。
         Vector3 moveDirection = forward * moveInput.y + right * moveInput.x;
@@ -169,6 +251,21 @@ public class PlayerMotor : MonoBehaviour
             isReverseTurning = false;
         }
 
+        if(!controller.isGrounded)
+        {
+            currentSpeed *= airControlMultiplier;
+
+            Vector3 airMoveVelocity = moveDirection * currentSpeed;
+
+            airMoveVelocity.y = verticalVelocity;
+
+            controller.Move(airMoveVelocity * Time.deltaTime);
+
+            RefreshCurrentMoveSpeed();
+
+            return;
+        }
+
         Vector3 velocity = moveDirection * currentSpeed;
 
         velocity.y = verticalVelocity;
@@ -176,11 +273,6 @@ public class PlayerMotor : MonoBehaviour
         // 所有水平移动和重力最终只通过 CharacterController 执行一次。
         controller.Move(velocity * Time.deltaTime);
 
-        // 使用碰撞处理后的实际速度驱动动画，撞墙时动画能够随之降速。
-        Vector3 actualVelocity = controller.velocity;
-
-        actualVelocity.y = 0f;
-
-        CurrentMoveSpeed = actualVelocity.magnitude;
+        RefreshCurrentMoveSpeed();
     }
 }

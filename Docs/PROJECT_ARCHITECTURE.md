@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-17（Day 13 复验通过；Puglin Billboard 已完成 Play Mode 回归）
+> 最后复核：2026-09-22（Day 18 验收通过；Sword Dash 位移、伤害与去重已实现）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -32,8 +32,9 @@ PlayerInput (InputSystem_Actions / Player map)
    ├─ LookInput → CameraController [Player] → CameraTarget.rotation → Cinemachine
    ├─ MoveInput ──┐
    ├─ SprintHeld ─┴→ PlayerMotor [Player] → CharacterController.Move
-   └─ AttackPressed → PlayerCombat（Current：Combo 与伤害窗口）
-                          镜头空间限幅移动 + 重力 + 转向 + 速度切换
+   ├─ AttackPressed → PlayerCombat（Current：Combo 与伤害窗口）
+   └─ SkillPressed → SkillController（Current：释放准入与冷却）
+                          镜头空间限幅移动 + 重力 + 转向 + 速度切换 + Dash
 
 PlayerMotor.CurrentMoveSpeed
 └─ PlayerAnimatorDriver [Player / LateUpdate]
@@ -81,6 +82,16 @@ PlayerCombat.OpenComboInput / OpenComboAdvance / EnterRecovery / EndAttack
               └─ IDamageable.TakeDamage(DamageInfo)
 
 PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
+
+SkillDefinition / FireDash（Current，静态配置）
+        ↓
+SkillController（Current：准入、冷却、动画、伤害窗口）
+        ├─ PlayerMotor.TryStartDash()
+        │      └─ CharacterController.Move + DashEnded
+        └─ SkillHitDetector（独立 SkillHitboxCenter）
+               ├─ OverlapSphere + Enemy LayerMask
+               ├─ HashSet<IDamageable> 单次 Dash 去重
+               └─ IDamageable.TakeDamage(DamageInfo)
 ```
 
 - PlayerMotor 当前负责镜头空间移动、斜向限幅、重力、角色转向和 Sprint 速度切换；`cameraTransform` 指向 Prefab 内的 CameraTarget，普通速度 5、冲刺速度 10、转向速度 720°/s、反向转向速度 1440°/s。
@@ -90,7 +101,7 @@ PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
 - PlayerInputReader、PlayerMotor、CameraController、PlayerAnimatorDriver 已声明必要 RequireComponent；三个 Inspector 引用缺失时会记录一次明确错误并禁用自身，异常测试通过。
 - Imp 的编辑态与磁盘 local rotation=(0,0,0)，不是旧文档的 Y=180；根 Player 由 PlayerMotor 转向，视觉朝向的 Day 4 手工回归通过。
 - Game.Runtime 引用 Input System；PlayMode Tests asmdef 已引用 Game.Runtime、Unity Test Runner 与 Unity.InputSystem。
-- `PlayerMotorPlayModeTests` 使用虚拟 Keyboard 和真实 `SampleScene`；场景通过 `LoadSceneAsync` 完成初始化。斜向限速与 Sprint 按下/释放/速度恢复断言均有效，连续 5 轮 2/2 PASS。
+- `PlayerMotorPlayModeTests` 使用虚拟 Keyboard 和真实 `SampleScene`；场景通过 `LoadSceneAsync` 完成初始化。当前覆盖斜向限速、Sprint 恢复以及 Dash/冷却结束后的再次释放，3/3 PASS。
 - `DamageInfo`、`IDamageable` 与 `Health` 已实现；Health EditMode 测试 10/10 PASS。
 - `HealthBarPresenter` 已实现并复用于 Player 屏幕空间血条和 Enemy 世界空间血条；它通过显式 Health/Slider 引用监听 `HealthChanged`，启用时主动同步当前状态，不轮询 Player 或 Enemy。
 - `WorldSpaceBillboard` 在 Awake 中通过 `Camera.main` 一次性缓存 Gameplay Camera，解决 Prefab 不能保存场景引用的问题；LateUpdate 只同步旋转，不重复搜索。Play Mode 中 Billboard 与 Main Camera 旋转一致，Console 无游戏 Error。
@@ -99,11 +110,12 @@ PlayerAnimator Attack_01/02/03 + Attack_01/02_Recovery（Current）
 - `PlayerCombat` 已挂载到 Player，显式绑定 Animator 和三个 AttackDefinition；负责 Combo 索引、输入缓存、窗口状态与 CrossFade，不负责命中和生命结算。
 - `PlayerCombatAnimationEvents` 挂在 Imp，只把 UAL2 的 Combo 与伤害窗口 Animation Event 转发给父级 PlayerCombat，不保存 Combo 状态、不查询目标。
 - `PlayerMotor.FaceCameraForward()` 为攻击开始和连段切换提供水平面瞬时朝向；PlayerMotor 仍是位移唯一执行者。
-- 场景中的 `MeleeHitbox` 使用独立中心、0.75 半径和 Enemy LayerMask；候选 Collider 经过前半球过滤，再按父级 `IDamageable` 去重结算。
+- 场景中的 `MeleeHitbox` 使用独立中心、1.2 半径和 Enemy LayerMask；候选 Collider 经过前半球过滤，再按父级 `IDamageable` 去重结算。
 - A/B/C Clip 已持久化伤害窗口事件，三段分别读取 AttackDefinition 的 10/15/20 伤害。
 - MeleeHitbox 命中规则已完成手工功能与边界回归；需要反射配置私有序列化字段的 PlayMode 测试已延期，不计入自动化证据。
 - Enemy AI 当前以单一 enum 管理 Idle、Chase、Attack、Hit、Dead；NavMeshAgent 是 Enemy 位移唯一执行者，EnemyCombat 负责攻击动画与命中结算，Health 的 Damaged/Died 事件驱动受击与死亡。Target 为 null、被销毁或 inactive 时安全回到 Idle。
-- Enemy 自身死亡终态已通过；EnemyStateMachine 缓存 Target Health，并通过成对的 Died 订阅在 Player 死亡时结束攻击和释放目标。Skill 与 GameFlow 尚未实现。
+- Enemy 自身死亡终态已通过；EnemyStateMachine 缓存 Target Health，并通过成对的 Died 订阅在 Player 死亡时结束攻击和释放目标。
+- `SkillController`、`SkillDefinition`、`PlayerMotor` Dash 与 `SkillHitDetector` 已实现；普攻与技能分别使用 `MeleeHitboxCenter` 和 `SkillHitboxCenter`。GameFlow 尚未实现。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -181,7 +193,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 
 ## 7. 核心类型职责（Current / Planned）
 
-`DamageInfo`、`IDamageable`、`Health`、`AttackDefinition`、`PlayerCombat`、`PlayerCombatAnimationEvents`、`MeleeHitbox`、`EnemyCombat` 与 `EnemyStateMachine` 为 Current；其余尚未实现的类型为 Planned。
+`DamageInfo`、`IDamageable`、`Health`、`AttackDefinition`、`PlayerCombat`、`PlayerCombatAnimationEvents`、`MeleeHitbox`、`EnemyCombat`、`EnemyStateMachine`、`SkillDefinition`、`SkillController` 与 `SkillHitDetector` 为 Current；其余尚未实现的类型为 Planned。
 
 | 类型 | 唯一职责 | 允许依赖 | 禁止事项 |
 |---|---|---|---|
@@ -197,7 +209,8 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `AttackDefinition` | 当前保存伤害、攻击 State 与可选收招 State 等静态配置 | ScriptableObject | 保存当前 Combo、缓存输入或命中目标 |
 | `EnemyCombat`（Current） | 启动 Enemy 攻击、在动画命中帧复核范围并通过 `IDamageable` 结算 | Animator、AttackDefinition、IDamageable | 决定 AI 状态；依赖 Player 具体类型 |
 | `SkillDefinition` | 保存伤害、冷却、距离、持续时间和表现资源 | ScriptableObject | 保存剩余冷却或当前释放状态 |
-| `SkillController` | 技能准入、冷却、释放流程和命中去重 | SkillDefinition、PlayerMotor、ObjectPool | 直接写 Transform；修改配置资产 |
+| `SkillController`（Current） | 技能准入、冷却、动画和伤害检测窗口启动 | SkillDefinition、PlayerMotor、SkillHitDetector、Animator | 直接写 Transform；修改配置资产 |
+| `SkillHitDetector`（Current） | Dash 期间收集目标并按 IDamageable 去重结算 | Unity Physics、IDamageable、DamageInfo | 依赖具体 Enemy 类型；跨技能保留旧命中集合 |
 | `EnemyStateMachine` | 统一管理 Idle/Chase/Attack/Hit/Dead 迁移 | NavMeshAgent、Animator、EnemyCombat、Health | 用互相冲突的布尔变量替代状态 |
 | `HealthBarPresenter`（Current） | 订阅 Health 事件并更新 Player/Enemy 血条 | Health、Unity UI Slider | 轮询具体 Player/Enemy 类；持有生命规则 |
 | `WorldSpaceBillboard`（Current） | 实例启动时一次性缓存 Main Camera，并让世界空间 UI 保持同旋转 | `Camera.main`、Main Camera Transform | 每帧查找相机；查找 Player/Enemy；修改 Health 或 Slider |
