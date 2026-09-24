@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [RequireComponent(
-    typeof(PlayerInputReader),
     typeof(PlayerMotor),
-    typeof(SkillHitDetector)
+    typeof(SkillHitDetector),
+    typeof(SkillVfxPool)
     )]
 /// <summary>
 /// 处理技能释放准入和运行时冷却。
@@ -15,6 +15,8 @@ public class SkillController : MonoBehaviour
 
     [SerializeField]
     private Animator animator;
+
+    public float CooldownDuration {get; private set; }
 
     private SkillHitDetector skillHitDetector;
 
@@ -28,6 +30,8 @@ public class SkillController : MonoBehaviour
     public bool CanUse => RemainingCoolDown <= 0f;
 
     private DamageInfo damageInfo;
+
+    private SkillVfxPool vfx;
 
     public void InitializeSkillDefinition(SkillDefinition definition)
     {
@@ -99,6 +103,8 @@ public class SkillController : MonoBehaviour
         inputReader = GetComponent<PlayerInputReader>();
         playerMotor = GetComponent<PlayerMotor>();
         skillHitDetector = GetComponent<SkillHitDetector>();
+        vfx = GetComponent<SkillVfxPool>();
+        CooldownDuration = skillDefinition.Cooldown;
     }
 
     private void Update()
@@ -120,6 +126,8 @@ public class SkillController : MonoBehaviour
                 skillDefinition.SkillStateName,
                 0.05f
             );
+
+            vfx.Play(transform, skillDefinition.DashDuration);
         }
     }
 }
