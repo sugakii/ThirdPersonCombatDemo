@@ -1,6 +1,6 @@
 # Project Architecture
 
-> 最后复核：2026-09-22（Day 18 验收通过；Sword Dash 位移、伤害与去重已实现）
+> 最后复核：2026-09-26（Day 19 核心验收通过；VFX、冷却 UI 与 GameFlow 已实现）
 > 文档状态：目标架构基线  
 > 重要说明：本文的 **Current Architecture** 来自实际工程扫描；**Target Architecture** 是已批准但尚未实现的设计。Planned 类型、接口和依赖不得当作已完成功能。
 
@@ -115,7 +115,8 @@ SkillController（Current：准入、冷却、动画、伤害窗口）
 - MeleeHitbox 命中规则已完成手工功能与边界回归；需要反射配置私有序列化字段的 PlayMode 测试已延期，不计入自动化证据。
 - Enemy AI 当前以单一 enum 管理 Idle、Chase、Attack、Hit、Dead；NavMeshAgent 是 Enemy 位移唯一执行者，EnemyCombat 负责攻击动画与命中结算，Health 的 Damaged/Died 事件驱动受击与死亡。Target 为 null、被销毁或 inactive 时安全回到 Idle。
 - Enemy 自身死亡终态已通过；EnemyStateMachine 缓存 Target Health，并通过成对的 Died 订阅在 Player 死亡时结束攻击和释放目标。
-- `SkillController`、`SkillDefinition`、`PlayerMotor` Dash 与 `SkillHitDetector` 已实现；普攻与技能分别使用 `MeleeHitboxCenter` 和 `SkillHitboxCenter`。GameFlow 尚未实现。
+- `SkillController`、`SkillDefinition`、`PlayerMotor` Dash、`SkillHitDetector`、`SkillVfxPool` 与 `CooldownPresenter` 已实现；普攻与技能分别使用 `MeleeHitboxCenter` 和 `SkillHitboxCenter`。
+- `GameFlowController` 已实现 Player/Enemy 死亡订阅、帧末结果仲裁、GameOver 优先、Victory/GameOver 面板、战斗冻结与按钮重开。结果面板按钮是当前正式重开入口。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
 
 ## 4. 功能需求
@@ -128,7 +129,7 @@ SkillController（Current：准入、冷却、动画、伤害窗口）
 | FR-04 | Enemy AI | Puglin 明确实现 Idle、Chase、Attack、Hit、Dead 状态 |
 | FR-05 | UI | Player/Enemy 血条和技能冷却显示由领域事件驱动 |
 | FR-06 | 火焰突进 | E 触发代码位移、障碍阻挡、多目标去重、伤害、VFX 和冷却 |
-| FR-07 | 游戏流程 | Playing、Victory、GameOver；R 可可靠重开并清理运行时状态 |
+| FR-07 | 游戏流程 | Playing、Victory、GameOver；结果面板按钮可可靠重开并清理运行时状态 |
 
 ## 5. 非功能需求
 
@@ -152,7 +153,8 @@ PlayerInputReader
     ├──────────────► PlayerMotor ─────────► CharacterController
     ├──────────────► PlayerCombat ────────► MeleeHitbox
     ├──────────────► SkillController ─────► PlayerMotor / SkillHitDetector
-    └──────────────► GameFlowController（仅 Restart 意图）
+
+Result UI Button ──────────────► GameFlowController.RestartGame()
 
 AttackDefinition / SkillDefinition（静态配置）
     │
@@ -197,7 +199,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 
 | 类型 | 唯一职责 | 允许依赖 | 禁止事项 |
 |---|---|---|---|
-| `PlayerInputReader` | 将 Input System 转换为 Move、Look、Sprint、Attack、Skill、Restart 意图 | Input Actions | 直接移动角色、扣血或控制 UI |
+| `PlayerInputReader` | 将 Input System 转换为 Move、Look、Sprint、Attack、Skill 意图 | Input Actions | 直接移动角色、扣血或控制 UI |
 | `CameraController` | 消费 Look 意图并旋转 `CameraTarget`，让 Cinemachine 计算最终机位 | PlayerInputReader、CameraTarget | 直接读取具体输入设备；直接写 CinemachineCamera Transform |
 | `PlayerMotor` | CharacterController 位移、重力、面向和所有受控突进位移的唯一入口 | CharacterController、相机朝向、移动配置 | 读取具体键盘按键；直接处理攻击 |
 | `DamageInfo` | 当前携带只读伤害值；来源、命中点和方向在 Combat 确实需要时扩展 | 值类型/Unity 基础类型 | 持有目标行为或产生副作用 |
@@ -214,8 +216,8 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `EnemyStateMachine` | 统一管理 Idle/Chase/Attack/Hit/Dead 迁移 | NavMeshAgent、Animator、EnemyCombat、Health | 用互相冲突的布尔变量替代状态 |
 | `HealthBarPresenter`（Current） | 订阅 Health 事件并更新 Player/Enemy 血条 | Health、Unity UI Slider | 轮询具体 Player/Enemy 类；持有生命规则 |
 | `WorldSpaceBillboard`（Current） | 实例启动时一次性缓存 Main Camera，并让世界空间 UI 保持同旋转 | `Camera.main`、Main Camera Transform | 每帧查找相机；查找 Player/Enemy；修改 Health 或 Slider |
-| `CooldownPresenter` | 订阅技能冷却状态并更新 UI | SkillController、UI | 驱动技能逻辑 |
-| `GameFlowController` | 维护 Playing/Victory/GameOver、冻结战斗并重开 | Player/Enemy 死亡事件、场景加载 | 持有攻击或 AI 的业务细节 |
+| `CooldownPresenter`（Current） | 逐帧读取技能冷却状态并更新填充与倒计时文本 | SkillController、UI | 驱动技能逻辑 |
+| `GameFlowController`（Current） | 维护 Playing/Victory/GameOver、帧末仲裁、冻结战斗并重载场景 | Player/Enemy 死亡事件、场景加载 | 持有伤害或 AI 决策规则 |
 
 ## 8. 运行时规则
 
@@ -224,7 +226,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 - Gameplay 代码不使用 `Keyboard.current` 或 `Mouse.current` 读取具体按键。
 - `PlayerInputReader` 是唯一 Input System 边界；下游只消费意图和值。
 - `CameraController` 属于 Camera 模块，当前位于 `Runtime/Camera`；Input 模块只保留输入读取职责。
-- Input Asset 已有 Move、Look、Attack、Sprint 与 Skill；PlayerInputReader 当前输出 Move、Look、Sprint、单帧 `AttackPressed` 与单帧 `SkillPressed`。Skill 使用 E，Restart(R) 尚待添加。
+- Input Asset 已有 Move、Look、Attack、Sprint 与 Skill；PlayerInputReader 当前输出 Move、Look、Sprint、单帧 `AttackPressed` 与单帧 `SkillPressed`。Skill 使用 E；重开由结果面板按钮直接调用 GameFlow。
 
 ### 位移与动画
 
@@ -302,7 +304,7 @@ Docs/
 
 ### ADR-002：局部 C# 事件，不建全局事件总线
 
-- **状态**：Accepted / Health → HealthBarPresenter 已实现；GameFlow 尚未实现。
+- **状态**：Accepted / Health → HealthBarPresenter 与 Health → GameFlowController 均已实现。
 - **决定**：Health、UI 和 GameFlow 通过显式引用与局部事件连接。
 - **原因**：当前规模小，显式依赖更容易追踪和调试。
 - **收益**：调用链清楚，测试替身简单。

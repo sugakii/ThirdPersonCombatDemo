@@ -1,102 +1,92 @@
 # Current Project Status
 
-> Last Updated：2026-09-22  
-> Current Learning Day：Day 18 验收通过（五日冲刺第 1 天）  
-> Current Phase：Phase B / Skill VFX、Cooldown UI 与 GameFlow  
-> Next Checkpoint：Day 19——火焰表现、冷却 UI、胜负与重开  
+> Last Updated：2026-09-26  
+> Current Learning Day：Day 19 验收通过  
+> Current Phase：Phase B / 最小菜单、暂停与功能冻结  
+> Next Checkpoint：Day 20——开始界面、暂停菜单与庭院有限润色  
 > Source of Truth：当前 Unity 工程 + Git + Docs  
 > Remaining Plan：`Docs/plans/2026-09-21-five-day-sprint.md`
 
 ## 验收结论
 
-**Day 18：PASS。** `Sword_Dash` 已完成代码受控位移、碰撞阻挡、伤害窗口、多目标伤害和同目标多 Collider 去重；`BUG-004` 已通过受限空中控制关闭。EditMode `13/13 PASS`，PlayMode `4/4 PASS`，Console 0 Error。
+**Day 19：PASS。** 火焰突进 VFX、对象池、冷却 UI、Playing/Victory/GameOver、帧末结果仲裁、战斗冻结、结果面板和按钮重开均已落地。用户截图确认 PlayMode `5/5 PASS`；Unity MCP 实测 Victory、GameOver 与场景重载通过，Gameplay Console `0 Error`。可靠重开由结果面板按钮完成，不再要求额外的 R 键入口。
 
 ## Implemented
 
-- E 成功释放后播放 `Sword_Dash`；技能静态参数来自 `FireDash.asset`：Damage=50、Cooldown=3s、DashDistance=1.5m、DashDuration=0.5s。
-- `SkillController` 负责释放准入、冷却、动画和伤害窗口启动，不直接修改 Player Transform。
-- `PlayerMotor.TryStartDash()` 接收位移请求，并由 `CharacterController.Move()` 执行 Dash、重力和碰撞处理。
-- Dash 最后一帧按剩余时间截断，避免不同帧率下累计位移超过配置距离。
-- `PlayerMotor.DashEnded` 通知 `SkillHitDetector` 关闭伤害检测。
-- `SkillHitDetector` 使用独立的 `SkillHitboxCenter`、Radius=1.2、Enemy LayerMask；按 `IDamageable` 去重，同一目标的多个 Collider 每次 Dash 只结算一次。
-- 空中普通移动乘以 `airControlMultiplier=0.25`，不再保留完整地面水平控制，`BUG-004` Closed。
-- Day 18 新增和修改代码已补充职责、边界与原因型注释；测试中由 `RequireComponent` 自动添加的依赖不再重复创建。
+- `SkillVfxPool` 使用 Unity `ObjectPool<GameObject>` 复用 `FireDashVFX`，归还前清理 ParticleSystem、TrailRenderer 与父子关系。
+- 技能成功释放后让粒子从 Imp 武器的 `SkinnedMeshRenderer` 表面发射；当前效果定位为功能版占位，不在 Demo 完成前继续扩展 VFX。
+- `CooldownPresenter` 只读取 `SkillController` 的冷却状态，更新径向填充和向上取整的 `3/2/1` 文本，不参与释放判定。
+- `GameFlowController` 订阅 Player 与三个 Enemy 的 `Health.Died`，在帧末统一判定结果。
+- 同帧 Player 与最后一个 Enemy 死亡时固定 GameOver 优先，不依赖事件触发顺序。
+- Victory/GameOver 后关闭 Player Motor、Combat、Skill、HitDetector 与 CameraController，停止 Enemy StateMachine、NavMeshAgent 和 EnemyCombat。
+- `VictoryPanel`、`GameOverPanel` 默认在运行时隐藏，结果确定后只显示对应面板。
+- 两个结果面板的 Restart Button 均调用 `GameFlowController.RestartGame()` 重载 `SampleScene`。
+- 新增 `GameFlowPlayModeTests.PlayerAndLastEnemyDieInSameFrame_GameOverTakesPriority`。
+- Day 19 涉及的 GameFlow、测试、Cooldown UI 与 VFX Pool 已补充职责和原因型注释。
 
 ## Test Evidence
 
 | 范围 | 结果 |
 |---|---|
-| Sword_Dash 动画与配置 | PASS：Motion 正确、Speed=1.2、Foot IK=false |
-| 受控位移 | PASS：PlayerMotor + CharacterController，未直接修改 Transform |
-| 贴墙 / 墙角 | PASS：受到碰撞阻挡，不穿墙 |
-| 30° / 50°斜坡 | PASS |
-| 平台边缘与空中控制 | PASS：空中水平控制降为地面的 25% |
-| Dash 中重复 E / 冷却输入 | PASS：不会覆盖当前 Dash 或冷却 |
-| 单目标与多目标伤害 | PASS |
-| 同目标多 Collider 去重 | PASS：一次检测只调用一次 TakeDamage |
-| EditMode | **13/13 PASS** |
-| PlayMode | **4/4 PASS**：PlayerMotor 3 条、SkillHitDetector 1 条 |
-| 编译 | Runtime、EditMode、PlayMode 程序集 0 Error / 0 Warning |
-| 场景持久化 | PASS：独立 SkillHitboxCenter、Radius=1.2、Enemy Mask；临时 Cube 已删除，Scene dirty=false |
-| Console | **0 Error** |
+| PlayMode 自动化 | **5/5 PASS**：GameFlow 1、PlayerMotor 3、SkillHitDetector 1（用户截图） |
+| Playing 初始状态 | PASS：Victory/GameOver 面板均隐藏（Unity MCP） |
+| 三个 Enemy 全部死亡 | PASS：只显示 VictoryPanel（Unity MCP） |
+| Player 死亡 | PASS：只显示 GameOverPanel（Unity MCP） |
+| 同帧双方死亡 | PASS：GameOver 优先（PlayMode 自动化） |
+| Restart Button / 场景重载 | PASS：重载后两个面板隐藏、Console 0 Error（Unity MCP） |
+| 场景引用 | PASS：GameFlow 的 Player、Combat、Skill、Camera 与两个 Panel 引用均已持久化 |
+| Scene 状态 | PASS：`SampleScene` 已保存，`isDirty=false` |
+| Gameplay Console | **0 Error** |
 
-详细步骤与结果见 `Docs/TEST_REPORT/TEST_CASE_DAY18.md`。
+详细结果见 `Docs/TEST_REPORT/TEST_CASE_DAY19.md`。
 
 ## Current Architecture
 
 ```text
-PlayerInputReader.SkillPressed
-        ↓
-SkillController
-├─ SkillDefinition（静态伤害、冷却、距离、时长、动画名）
-├─ RemainingCoolDown（运行时状态）
-├─ PlayerMotor.TryStartDash(...)
-└─ SkillHitDetector.BeginDetection(DamageInfo)
-        ↓
-PlayerMotor
-├─ CharacterController.Move
-├─ Dash 生命周期 / 碰撞 / 重力
-└─ DashEnded ──► SkillHitDetector.EndDetection
-                         ↓
-               IDamageable.TakeDamage
+Health.Died（Player / 3 Enemies）
+                ↓
+        GameFlowController
+        ├─ 帧末收集死亡结果
+        ├─ Player 死亡优先 → GameOver
+        ├─ Enemy 全灭 → Victory
+        ├─ FreezeGameplay
+        └─ RestartGame → Reload SampleScene
 ```
 
-- `PlayerMotor` 仍是 Player 唯一位移执行者。
-- `SkillHitDetector` 依赖 `IDamageable`，不依赖 Enemy 或 Health 的具体实现。
-- 普攻和技能分别使用 `MeleeHitboxCenter` 与 `SkillHitboxCenter`，可独立调整范围。
-- 运行时 Dash、冷却和命中集合不写回 ScriptableObject。
+- `GameFlowController` 只协调结果、冻结和重开，不持有伤害或 AI 决策规则。
+- Health 仍不依赖 GameFlow；连接通过局部 `Died` 事件完成。
+- 场景重载作为最小可靠重置方案，一次性清除生命、冷却、命中集合和事件订阅等运行时状态。
+- `CooldownPresenter` 属于表现层，只读取 SkillController 的公开状态。
 
 ## Files
 
-- `Assets/_Game/Runtime/Player/PlayerMotor.cs`
+- `Assets/_Game/Runtime/GameFlow/GameFlowController.cs`
+- `Assets/_Game/Runtime/Skills/SkillVfxPool.cs`
 - `Assets/_Game/Runtime/Skills/SkillController.cs`
-- `Assets/_Game/Runtime/Skills/SkillHitDetector.cs`
-- `Assets/_Game/Data/Skills/FireDash.asset`
-- `Assets/_Game/Animations/Player/PlayerAnimator.controller`
+- `Assets/_Game/Runtime/UI/CooldownPresenter.cs`
+- `Assets/_Game/Tests/PlayMode/GameFlowPlayModeTests.cs`
+- `Assets/_Game/Prefabs/VFX/FireDashVFX.prefab`
 - `Assets/_Game/Scenes/SampleScene.unity`
-- `Assets/_Game/Tests/EditMode/SkillCooldownTests.cs`
-- `Assets/_Game/Tests/PlayMode/PlayerMotorPlayModeTests.cs`
-- `Assets/_Game/Tests/PlayMode/SkillHitDetectorPlayModeTests.cs`
-- `Docs/TEST_REPORT/TEST_CASE_DAY18.md`
+- `Docs/TEST_REPORT/TEST_CASE_DAY19.md`
 
 ## Known Bugs / Risks
 
-1. `Physics.OverlapSphere()` 在技能检测期间会分配数组；留到质量阶段用 Profiler 确认后再决定是否改为 NonAlloc，不提前优化。
-2. `MeleeHitbox` PlayMode 测试仍延期，不能算作已有自动化证据。
-3. `Assets/_Recovery/` 是恢复文件，不纳入正式项目提交。
+1. `RestartGame()` 当前使用场景名 `SampleScene`；Day 20 增加 MainMenu 后复核 Build Settings 与场景切换关系。
+2. `Physics.OverlapSphere()` 仍会分配数组；留到质量阶段用 Profiler 决定是否需要 NonAlloc，不提前优化。
+3. `MeleeHitbox` PlayMode 测试仍延期，不能算作已有自动化证据。
+4. `Assets/_Recovery/` 与 Unity/MCP 自动产生的 ProjectSettings 变化不进入本次提交。
 
 ## Git
 
-- 当前分支：`main`；Day 18 已通过，可以创建 Dash 位移与伤害提交。
-- 默认提交全部自有代码、对应 `.meta`、配置资产、Animator、Scene、测试与 Docs。
-- 排除 Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug/Combat 目录元文件及未经确认的 ProjectSettings 变化。
-- Bestiary 原始 FBX/PNG 不进入公开仓库。
+- 当前分支：`main`；Day 19 GameFlow 与文档可单独提交。
+- 本次提交只包含 GameFlow、自有 VFX 修正、Scene、PlayMode 测试和 Docs。
+- 排除 Render Pipeline/ProjectSettings 自动变化、Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug 元文件和异常临时文件。
 
 ## Next Task
 
-1. Day 19 上午：用 ParticleSystem + TrailRenderer 制作火焰 Dash 表现，并通过 Unity `ObjectPool<T>` 复用。
-2. Day 19 上午：实现 `CooldownPresenter`，只读取技能冷却状态，不决定释放规则。
-3. Day 19 下午：实现 Playing、Victory、GameOver 和 R 重开，补至少 1 条 GameFlow 自动化测试。
+1. 创建 `MainMenu` 场景，只提供开始游戏和退出游戏。
+2. 实现 Esc 暂停菜单：继续、重新开始、返回主菜单，并正确恢复 `Time.timeScale` 与鼠标状态。
+3. 只做少量庭院 Props、构图和基础灯光整理；Day 20 结束后冻结功能。
 
 ## Update Rules
 

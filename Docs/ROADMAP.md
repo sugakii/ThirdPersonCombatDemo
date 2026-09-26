@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-22（Day 18 已完成五日冲刺第 1 天；后续继续使用原学习日序号）
+> 最后复核：2026-09-26（Day 19 验收通过；可靠重开由结果面板按钮完成；继续使用原学习日序号）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：Day 10 于 9/13 完成；剩余日程重排为 9/14 Day 11 至 9/30 Day 27，原 Day 28/29 的交付任务并入 Day 26/27
 > 每日投入：9/21–9/25 调整为约 6–8 小时
@@ -14,7 +14,7 @@
 - Player：红色 `Imp`。
 - Enemy：3 个 `Puglin` 实例。
 - 场景：约 20×20m 中世纪庭院。
-- 操作：WASD、鼠标镜头、Shift 冲刺、左键普攻、E 火焰突进、R 重开。
+- 操作：WASD、鼠标镜头、Shift 冲刺、左键普攻、E 火焰突进、结果面板按钮重开。
 - 系统：第三人称移动、三段普攻、Enemy AI、伤害与生命、血条、技能冷却/VFX、胜负与重开。
 - 求职材料：Windows Build、README、架构说明、40–60 条测试用例、至少 5 份真实 Bug Report、6–10 个自动化测试、90–120 秒视频和简历描述。
 
@@ -62,7 +62,7 @@ Day 7 已通过：`DamageInfo`、`IDamageable` 与通用 `Health` 已实现，He
   - `UAL1_Standard.fbx`；UAL2 延到 Week 2 攻击任务前按需导入验证。
   - 庭院先使用基础体完成碰撞白盒；正式清单中必要的地面/墙/楼梯模型待控制验收后替换，12 件不是本周硬性数量门槛。
 - 配置 Imp Humanoid Avatar、Bake Axis Conversion、非 RM 动画重定向和 `applyRootMotion=false`。
-- 创建/整理 Player Actions：Move、Look、Sprint、Attack、Skill、Restart。
+- 创建/整理 Player Actions：Move、Look、Sprint、Attack、Skill。
 - 实现 `PlayerInputReader`。
 - 实现 `PlayerMotor`、CharacterController 重力、镜头空间移动、转向和冲刺。
 - 建立 Idle/Walk/Jog/Sprint 1D Blend Tree。
@@ -219,7 +219,7 @@ Week 1 全部门槛已经满足，下一学习日进入 Health/Combat，不重�
 - 使用 ParticleSystem、TrailRenderer、Unity `ObjectPool<T>` 完成火焰表现。
 - 实现冷却 UI。
 - 实现 Playing、Victory、GameOver 三个游戏流程状态。
-- R 通过重新加载正式场景实现可靠重开。
+- 结果面板按钮通过重新加载正式场景实现可靠重开。
 - 完成 3 个 Puglin 的共同追击与完整战斗闭环。
 
 ### 工程
@@ -276,8 +276,8 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 
 - **Learning Day 17｜9/20（复验通过）**：SkillDefinition、用户确认的 E 输入、运行时冷却与 Reset 完成；SkillCooldownTests 4/4、EditMode 总计 14/14 PASS，正式场景引用已保存。
 - **Learning Day 18｜完成（五日冲刺第 1 天）**：PlayerMotor 受控 Dash、碰撞、受限空中控制、技能伤害、多目标与单次释放去重；EditMode 13/13、PlayMode 4/4 PASS。
-- **Learning Day 19（五日冲刺第 2 天）**：ParticleSystem、TrailRenderer、Unity ObjectPool、冷却 UI、GameFlow、Victory/GameOver 与 R 重开。
-- **Learning Day 20（五日冲刺第 3 天）**：开始/暂停菜单、庭院润色、完整回归并冻结功能。
+- **Learning Day 19｜9/26 验收通过（五日冲刺第 2 天）**：ParticleSystem、TrailRenderer、Unity ObjectPool、冷却 UI、GameFlow、Victory/GameOver、战斗冻结、结果面板与按钮重开完成；PlayMode 5/5 PASS。
+- **Learning Day 20（五日冲刺第 3 天）**：完成开始/暂停菜单、庭院有限润色、完整回归并冻结功能。
 - **Learning Day 21（五日冲刺第 4 天）**：代码审查、测试扩充、Profiler、GC 与严重缺陷清零。
 - **Learning Day 22（五日冲刺第 5 天）**：Windows Build、README、架构图、演示视频与 Release。
 

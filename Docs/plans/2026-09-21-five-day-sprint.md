@@ -101,7 +101,7 @@
 - 实现 Playing、Victory、GameOver。
 - Player 死亡优先 GameOver；3 个 Enemy 全部死亡进入 Victory。
 - 结果状态冻结 Player 输入、Combat、Skill 和 Enemy AI。
-- R 重新加载当前游戏场景。
+- Victory/GameOver 面板按钮重新加载当前游戏场景。
 
 **当日交付门槛**
 
