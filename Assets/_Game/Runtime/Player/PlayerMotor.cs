@@ -57,6 +57,8 @@ public class PlayerMotor : MonoBehaviour
 
     private float remainingDashTime;
 
+    private bool movementLocked;
+
     /// <summary>
     /// 当前是否仍由 Dash 接管水平位移。
     /// </summary>
@@ -146,6 +148,17 @@ public class PlayerMotor : MonoBehaviour
         CurrentMoveSpeed = actualVelocity.magnitude;
     }
 
+    public void SetMovementLocked(bool locked)
+    {
+        // 只切换移动权限；CharacterController 仍负责重力和所有实际位移。
+        movementLocked = locked;
+    }
+
+    private void OnDisable()
+    {
+        CurrentMoveSpeed = 0f;
+    }
+
     private void Awake()
     {
         // cameraTransform 是 Inspector 引用；缺失时尽早停止，避免每帧刷空引用异常。
@@ -177,6 +190,18 @@ public class PlayerMotor : MonoBehaviour
         {
             TickDash(Time.deltaTime);
             RefreshCurrentMoveSpeed();
+            return;
+        }
+
+        if(movementLocked)
+        {
+            Vector3 verticalMovement = Vector3.up * verticalVelocity;
+
+            controller.Move(verticalMovement * Time.deltaTime);
+
+            CurrentMoveSpeed = 0;
+            isReverseTurning = false;
+
             return;
         }
 

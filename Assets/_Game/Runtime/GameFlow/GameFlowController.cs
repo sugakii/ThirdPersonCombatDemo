@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +35,8 @@ public class GameFlowController : MonoBehaviour
 
     private bool resolveScheduled;
 
+    public bool IsPlaying => currentState == GameState.Playing;
+
     [SerializeField]
     private PlayerMotor playerMotor;
 
@@ -62,8 +63,20 @@ public class GameFlowController : MonoBehaviour
 
     public void RestartGame()
     {
+        Time.timeScale = 1f;
+
         // 重新加载场景可一次性清理生命、冷却、命中集合和事件订阅等运行时状态。
         SceneManager.LoadScene("SampleScene");
+    }
+
+    public void ReturnToMainMenu()
+    {
+        Time.timeScale = 1f;
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void HandlePlayerDied()
@@ -151,6 +164,9 @@ public class GameFlowController : MonoBehaviour
         skillHitDetector.enabled = false;
 
         cameraController.enabled = false;
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
         foreach(EnemyStateMachine enemyStateMachine in enemyStateMachines)
         {

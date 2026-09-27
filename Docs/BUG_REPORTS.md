@@ -558,7 +558,7 @@ Target 为 null、被销毁或未激活时，Enemy 清除旧路径并保持 Idle
 
 - 发现日期：2026-09-19
 - 阶段：Day 15 首轮验收
-- 状态：Open
+- 状态：Closed
 - 严重程度：Major
 - 优先级：High
 - 复现率：1/1
@@ -608,6 +608,80 @@ Player 死亡后，Puglin 应立即结束当前攻击并停止开始新的攻击
 - 持续观察超过两个原攻击周期，没有重新发起攻击。
 - 状态机禁用/重新启用后，受击与死亡回调仍各执行一次；Enemy Death01 终态正常。
 - Unity Console 0 Error / 0 Warning。Bug Closed。
+
+---
+
+## BUG-016：庭院新增 Prop 缺少碰撞体
+
+### 基本信息
+
+- 发现日期：2026-09-27
+- 阶段：Day 20 首轮验收
+- 状态：Closed
+- 严重程度：Minor
+- 优先级：High
+- 场景：`Assets/_Game/Scenes/SampleScene.unity`
+
+### 复现步骤
+
+1. 进入 `SampleScene`。
+2. 让 Player 接近庭院内新增的 Wagon 或 Crate。
+3. 持续向模型方向移动或 Dash。
+
+### 实际结果
+
+Unity MCP 扫描到 13 个 `Prop_Crate` / `Prop_Wagon` 实例，其中带 Collider 的实例为 0；可达装饰不能阻挡 Player。
+
+### 预期结果
+
+可达的实体装饰使用简化碰撞体阻止 Player 穿透；墙外或完全不可达的纯背景装饰可以不加 Collider。
+
+### 修复与回归条件
+
+- 只为可达装饰添加简单 `BoxCollider`，不使用复杂 MeshCollider。
+- Player 普通移动和 Dash 不穿透 Wagon/Crate，也不会在边角卡死。
+- 3 个 Puglin 到 Player 的 NavMesh 路径仍为 PathComplete。
+- Camera 不因近处装饰产生持续严重遮挡。
+
+### 修复与回归结果
+
+- 13/13 Wagon/Crate 实例均配置 enabled、非 Trigger、世界尺寸有效的 BoxCollider。
+- CharacterController Dash 正面撞向 Wagon 后停在碰撞体前，未穿透。
+- 3/3 Puglin 到 Player 的 NavMesh 路径保持 PathComplete。
+- 多角度场景检查确认装饰集中于边缘，战斗中心保持开阔。Bug Closed。
+
+---
+
+## BUG-017：PlayerMotor 禁用回调拼写错误
+
+### 基本信息
+
+- 发现日期：2026-09-27
+- 阶段：Day 20 首轮验收
+- 状态：Closed
+- 严重程度：Minor
+- 优先级：High
+- 脚本：`Assets/_Game/Runtime/Player/PlayerMotor.cs`
+
+### 实际结果
+
+用于禁用时清零 `CurrentMoveSpeed` 的方法被写为 `Onisable()`。该名称不是 Unity 生命周期消息，禁用 `PlayerMotor` 时不会自动调用。
+
+### 预期结果
+
+方法名为 `OnDisable()`；GameFlow 禁用 PlayerMotor 后 `CurrentMoveSpeed` 立即归零，Animator 不继续消费陈旧移动速度。
+
+### 修复与回归条件
+
+- 将方法名修正为 `OnDisable()`。
+- 运行中移动 Player 后禁用 PlayerMotor，确认 `CurrentMoveSpeed=0`。
+- 回归 Pause/Resume、GameOver/Victory 和 Restart，Console 无 Gameplay Error。
+
+### 修复与回归结果
+
+- 方法已更名为 Unity 能识别的 `OnDisable()`。
+- 组件禁用后 `CurrentMoveSpeed=0`。
+- 三轮菜单、Pause/Resume、Victory/GameOver、Restart/ReturnToMainMenu 流程通过，Gameplay Console 0 Error。Bug Closed。
 
 ---
 

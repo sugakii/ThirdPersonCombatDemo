@@ -16,6 +16,8 @@ public class SkillController : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
+    private PlayerCombat playerCombat;
+
     public float CooldownDuration {get; private set; }
 
     private SkillHitDetector skillHitDetector;
@@ -104,6 +106,7 @@ public class SkillController : MonoBehaviour
         playerMotor = GetComponent<PlayerMotor>();
         skillHitDetector = GetComponent<SkillHitDetector>();
         vfx = GetComponent<SkillVfxPool>();
+        playerCombat = GetComponent<PlayerCombat>();
         CooldownDuration = skillDefinition.Cooldown;
     }
 
@@ -117,6 +120,9 @@ public class SkillController : MonoBehaviour
             {
                 return;
             }
+
+            // 技能接管动作前统一结束 Combo，关闭旧伤害窗口并解除攻击移动锁。
+            playerCombat.EndAttack();
 
             damageInfo = new DamageInfo(skillDefinition.Damage);
 

@@ -16,6 +16,8 @@ public class PlayerInputReader : MonoBehaviour
     public bool AttackPressed { get; private set; }
     // 技能同样使用按下边沿，按住按键不会在冷却结束瞬间自动再次释放。
     public bool SkillPressed { get; private set; }
+    // Pause 使用按下边沿，让一次 Esc 只切换一次暂停状态。
+    public bool PausePressed { get; private set; }
 
     private PlayerInput playerInput;
     private InputAction lookAction;
@@ -23,6 +25,7 @@ public class PlayerInputReader : MonoBehaviour
     private InputAction sprintAction;
     private InputAction attackAction;
     private InputAction skillAction;
+    private InputAction pauseAction;
 
     private void Awake()
     {
@@ -34,6 +37,7 @@ public class PlayerInputReader : MonoBehaviour
         sprintAction = playerInput.actions["Sprint"];
         attackAction = playerInput.actions["Attack"];
         skillAction = playerInput.actions["Skill"];
+        pauseAction = playerInput.actions["Pause"];
     }
 
     private void Update()
@@ -49,5 +53,7 @@ public class PlayerInputReader : MonoBehaviour
         AttackPressed = attackAction.WasPressedThisFrame();
 
         SkillPressed = skillAction.WasPressedThisFrame();
+
+        PausePressed = pauseAction.WasPressedThisFrame();
     }
 }

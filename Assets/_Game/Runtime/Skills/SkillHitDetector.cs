@@ -49,7 +49,8 @@ public class SkillHitDetector : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(
             hitboxCenter.position,
             hitboxRadius,
-            targetMask
+            targetMask,
+            QueryTriggerInteraction.Collide
         );
 
         foreach(Collider hitCollider in hitColliders)

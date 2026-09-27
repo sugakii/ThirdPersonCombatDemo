@@ -33,6 +33,15 @@ public class CameraController : MonoBehaviour
         }
 
         inputReader = GetComponent<PlayerInputReader>();
+
+        // 从当前场景姿态初始化累计角度，避免组件重新启用时镜头跳回零角度。
+        yRotation = transform.eulerAngles.y;
+        xRotation = cameraTarget.eulerAngles.x;
+
+        if(xRotation > 180f)
+        {
+            xRotation -= 360f;
+        }
     }
 
     void Update()

@@ -46,7 +46,8 @@ public class MeleeHitbox : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(
             hitboxCenter.position,
             hitboxRadius,
-            targetMask
+            targetMask,
+            QueryTriggerInteraction.Collide
         );
 
         // 物理查询可能返回同一目标的多个 Collider，后续按 IDamageable 去重。

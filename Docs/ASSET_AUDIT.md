@@ -404,6 +404,8 @@ Medieval Village 包有 **176 个唯一模型**，每个又以 FBX、OBJ、glTF/
 - `Prop_WoodenFence_Single.fbx`
 - `Prop_WoodenFence_Extension1.fbx`
 - Crate/Fence 使用 Box Collider；Wagon 使用少量复合 Collider。
+- Day 20 实际导入四个 FBX；当前 `SampleScene` 使用 Crate 与 Wagon，Fence 仅保留为未使用候选。
+- 当前 12 个 Crate 与 1 个 Wagon 实例均使用简化 BoxCollider；Dash 碰撞和 3 个 Enemy NavMesh 路径回归通过。
 
 ### Materials
 

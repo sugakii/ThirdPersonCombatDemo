@@ -153,8 +153,10 @@ PlayerInputReader
     ├──────────────► PlayerMotor ─────────► CharacterController
     ├──────────────► PlayerCombat ────────► MeleeHitbox
     ├──────────────► SkillController ─────► PlayerMotor / SkillHitDetector
+    └──────────────► PauseMenuController ─► Time.timeScale / Gameplay UI
 
 Result UI Button ──────────────► GameFlowController.RestartGame()
+MainMenuController ────────────► SceneManager.LoadScene(SampleScene)
 
 AttackDefinition / SkillDefinition（静态配置）
     │
@@ -218,6 +220,8 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `WorldSpaceBillboard`（Current） | 实例启动时一次性缓存 Main Camera，并让世界空间 UI 保持同旋转 | `Camera.main`、Main Camera Transform | 每帧查找相机；查找 Player/Enemy；修改 Health 或 Slider |
 | `CooldownPresenter`（Current） | 逐帧读取技能冷却状态并更新填充与倒计时文本 | SkillController、UI | 驱动技能逻辑 |
 | `GameFlowController`（Current） | 维护 Playing/Victory/GameOver、帧末仲裁、冻结战斗并重载场景 | Player/Enemy 死亡事件、场景加载 | 持有伤害或 AI 决策规则 |
+| `MainMenuController`（Current） | 提供开始游戏与退出 Build 的最小入口 | SceneManager、Application | 持有 Gameplay 状态 |
+| `PauseMenuController`（Current） | 协调暂停 UI、timeScale、鼠标与输入消费者，并提供继续/重开/返回菜单 | InputReader、GameFlow、Gameplay Controllers、SceneManager | 持有伤害、AI 或冷却规则 |
 
 ## 8. 运行时规则
 

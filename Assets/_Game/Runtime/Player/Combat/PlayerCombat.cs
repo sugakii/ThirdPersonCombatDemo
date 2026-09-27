@@ -60,6 +60,8 @@ public class PlayerCombat : MonoBehaviour
         comboInputOpen = false;
 
         playerMotor.FaceCameraForward();
+        // 攻击期间锁定普通移动，位移所有权仍保留在 PlayerMotor。
+        playerMotor.SetMovementLocked(true);
 
         // 从当前 Animator State 平滑切换到攻击第一段。
         animator.CrossFade(
@@ -160,11 +162,16 @@ public class PlayerCombat : MonoBehaviour
     // 结束一套 Combo 之后，恢复到空闲状态。
     public void EndAttack()
     {
+        meleeHitbox.CloseDamageWindow();
+
         isAttacking = false;
         currentComboIndex = 0;
         bufferedAttack = false;
         comboAdvanceOpen = false;
         comboInputOpen = false;
+
+        // Combo、技能打断或收招结束都通过同一出口恢复移动。
+        playerMotor.SetMovementLocked(false);
     }
 
     private void Update()
