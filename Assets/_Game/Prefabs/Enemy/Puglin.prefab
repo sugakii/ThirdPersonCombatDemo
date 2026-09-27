@@ -303,6 +303,7 @@ GameObject:
   - component: {fileID: 495103052888996180}
   - component: {fileID: 3145861798277062212}
   - component: {fileID: 4105649962871395879}
+  - component: {fileID: 7000750890853013501}
   m_Layer: 3
   m_Name: Puglin
   m_TagString: Untagged
@@ -362,7 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9916f06fd1a1def409d118bae2670946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Health
-  initialMaxHealth: 50
+  initialMaxHealth: 70
 --- !u!195 &3145861798277062212
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -377,7 +378,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -399,6 +400,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Runtime::EnemyStateMachine
   target: {fileID: 0}
   chaseDistance: 6
+  animator: {fileID: 1351356158450748602}
+  attackDefinition: {fileID: 11400000, guid: a0e7cf14066529a4f95670014aaf7f53, type: 2}
+--- !u!114 &7000750890853013501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4199976164983295095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db01de382b47b5428523c165da4168f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::EnemyCombat
+  attackDefinition: {fileID: 11400000, guid: a0e7cf14066529a4f95670014aaf7f53, type: 2}
   animator: {fileID: 1351356158450748602}
 --- !u!1 &6203662129390152014
 GameObject:

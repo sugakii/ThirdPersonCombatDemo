@@ -23,6 +23,7 @@ public class EnemyStateMachine : MonoBehaviour
     }
 
     [SerializeField]
+    // Player 属于场景对象，不能写入 Prefab Asset；由每个场景实例显式绑定。
     private Transform target;
 
     [SerializeField, Min(0f)]
@@ -148,15 +149,26 @@ public class EnemyStateMachine : MonoBehaviour
     private void Awake()
     {
         // Inspector 引用缺失时启动即失败，避免 Update 每帧重复抛出空引用异常。
-        if(target == null || animator == null)
+        if(target == null || animator == null || attackDefinition == null)
         {
-            Debug.LogError("EnemyStateMachine is missing the Target or Animator reference.", this);
+            Debug.LogError(
+                "EnemyStateMachine is missing the Target, Animator, or Attack Definition reference.",
+                this
+            );
 
             enabled = false;
             return;
         }
 
         targetHealth = target.GetComponent<Health>();
+
+        if(targetHealth == null)
+        {
+            Debug.LogError("EnemyStateMachine: Target has no Health component.", this);
+
+            enabled = false;
+            return;
+        }
 
         agent = GetComponent<NavMeshAgent>();
 

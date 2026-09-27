@@ -16,9 +16,14 @@ public class CooldownPresenter : MonoBehaviour
     [SerializeField]
     private TMP_Text cooldownText;
 
+    private int displayedSeconds = -1;
+
+    private bool cooldownVisible;
+
     private void Awake()
     {
         cooldownText.gameObject.SetActive(false);
+        cooldownVisible = false;
     }
 
     private void Update()
@@ -30,16 +35,33 @@ public class CooldownPresenter : MonoBehaviour
         if(skillController.CanUse)
         {
             cooldownFill.fillAmount = 0;
-            cooldownText.gameObject.SetActive(false);
+
+            if(cooldownVisible)
+            {
+                cooldownText.gameObject.SetActive(false);
+                cooldownVisible = false;
+            }
+
+            displayedSeconds = -1;
 
             return;
         }
 
-        cooldownText.gameObject.SetActive(true);
+        if(!cooldownVisible)
+        {
+            cooldownText.gameObject.SetActive(true);
+            cooldownVisible = true;
+        }
+
         cooldownFill.fillAmount = Mathf.Clamp01(remaining / cooldownDuration);
 
         int remainingCoolDown = Mathf.CeilToInt(remaining);
 
-        cooldownText.text = remainingCoolDown.ToString();
+        // 秒数实际变化时才创建新文本，避免冷却期间每帧分配字符串。
+        if(remainingCoolDown != displayedSeconds)
+        {
+            displayedSeconds = remainingCoolDown;
+            cooldownText.text = displayedSeconds.ToString();
+        }
     }
 }

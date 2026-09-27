@@ -22,6 +22,9 @@ public class SkillHitDetector : MonoBehaviour
 
     private DamageInfo currentDamageInfo;
 
+    // ponytail: Demo 只有 3 个 Enemy；目标规模显著增加时再扩大缓冲区。
+    private readonly Collider[] hitBuffer = new Collider[32];
+
     public void Initialize(Transform center, float radius, LayerMask mask)
     {
         hitboxCenter = center;
@@ -31,6 +34,13 @@ public class SkillHitDetector : MonoBehaviour
 
     public void BeginDetection(DamageInfo damageInfo)
     {
+        if(hitboxCenter == null)
+        {
+            Debug.LogError("SkillHitDetector: Hitbox Center is not assigned.", this);
+            detectionActive = false;
+            return;
+        }
+
         currentDamageInfo = damageInfo;
 
         // 每次技能开始都是新的命中周期，上一轮目标不能影响本轮结算。
@@ -46,15 +56,17 @@ public class SkillHitDetector : MonoBehaviour
 
     private void DetectTargets()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(
+        int hitCount = Physics.OverlapSphereNonAlloc(
             hitboxCenter.position,
             hitboxRadius,
+            hitBuffer,
             targetMask,
             QueryTriggerInteraction.Collide
         );
 
-        foreach(Collider hitCollider in hitColliders)
+        for(int i = 0; i < hitCount; i++)
         {
+            Collider hitCollider = hitBuffer[i];
             IDamageable hitTarget = hitCollider.GetComponentInParent<IDamageable>();
 
             if(hitTarget == null)

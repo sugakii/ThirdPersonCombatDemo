@@ -685,6 +685,34 @@ Unity MCP 扫描到 13 个 `Prop_Crate` / `Prop_Wagon` 实例，其中带 Collid
 
 ---
 
+## BUG-018：Puglin Prefab 的共享战斗引用未持久化
+
+### 基本信息
+
+- 发现日期：2026-09-27
+- 阶段：Day 21 代码与引用审查
+- 状态：Closed
+- 严重程度：Minor
+- 优先级：High
+- 资源：`Assets/_Game/Prefabs/Enemy/Puglin.prefab`
+
+### 实际结果
+
+`EnemyStateMachine` 和 `EnemyCombat` 的 `AttackDefinition`、Animator 在 Prefab Asset 中为 None；三个现有场景实例依靠相同的 Override 才能正常运行。把 Prefab 新拖入场景时需要重复配置，否则启动后会发生空引用。
+
+### 预期结果
+
+所有 Puglin 共用的攻击配置与子物体 Animator 应持久化在 Prefab；只有 Player Target 这种场景对象引用由场景实例负责。
+
+### 修复与回归结果
+
+- 从已验收的 `Puglin_01` 把两个组件的 AttackDefinition 和 Animator 属性写回 Prefab。
+- Prefab 复扫确认四个可复用引用均非空。
+- Target 保持为 Prefab 空引用，三个 SampleScene 实例继续显式绑定 Player。
+- SampleScene 36 个自有运行时组件空引用为 0；PlayMode 5/5 PASS，Console 0 Error / 0 Warning。
+
+---
+
 ## 不登记为 Bug 的观察项
 
 ### OBS-001：角色停止时镜头轻微追随

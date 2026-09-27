@@ -1,15 +1,15 @@
 # Current Project Status
 
 > Last Updated：2026-09-27  
-> Current Learning Day：Day 20 验收通过  
+> Current Learning Day：Day 21 验收通过  
 > Current Phase：Phase C / 功能冻结与交付质量  
-> Next Checkpoint：Day 21——代码审查、Profiler、Windows Build 与 README  
+> Next Checkpoint：Day 22——Windows Build、README、架构图与 Release  
 > Source of Truth：当前 Unity 工程 + Git + Docs  
 > Remaining Plan：`Docs/plans/2026-09-21-five-day-sprint.md`
 
 ## 验收结论
 
-**Day 20：PASS。** MainMenu、Pause/Resume、Restart、ReturnToMainMenu、Pause×GameOver 状态仲裁、Build Settings、13/13 Prop BoxCollider、Dash 撞 Wagon、3/3 Enemy NavMesh 路径和三轮完整流程均通过；Gameplay Console `0 Error`。玩法与场景范围从此冻结，进入质量和交付阶段。
+**Day 21：PASS。** 完成运行时代码、场景/Prefab 引用、事件生命周期和物理查询热路径审查；修复 Puglin Prefab 共享引用缺失，普攻/技能检测改用 NonAlloc 固定缓冲；EditMode `14/14`、PlayMode `5/5` 全部通过，Console `0 Error / 0 Warning`，P0/P1 为 0。
 
 ## Implemented
 
@@ -19,6 +19,11 @@
 - Pause 期间发生 GameOver 时，GameFlow 正确接管结果面板并恢复 `timeScale=1`。
 - 庭院已导入并放置 Wagon/Crate；13/13 实例使用简化 BoxCollider，战斗中心保持开阔。
 - `PlayerMotor.OnDisable()` 在组件禁用时清零移动速度，避免终局继续保留陈旧 locomotion 参数。
+- `Puglin.prefab` 已保存共享的 AttackDefinition 与 Animator；Player Target 作为场景对象继续由三个实例显式绑定。
+- `MeleeHitbox` 与 `SkillHitDetector` 使用固定 Collider 缓冲和 `OverlapSphereNonAlloc`，攻击检测热路径不再返回新数组。
+- `CooldownPresenter` 只在倒计时整数变化时更新文本，冷却期间不再逐帧创建字符串。
+- `EnemyStateMachine` 补充 AttackDefinition 与 Target Health 引用验证；技能临时调试日志已移除。
+- 冷却结束自动化测试已恢复，当前稳定自动化总数为 19 条。
 
 - `SkillVfxPool` 使用 Unity `ObjectPool<GameObject>` 复用 `FireDashVFX`，归还前清理 ParticleSystem、TrailRenderer 与父子关系。
 - 技能成功释放后让粒子从 Imp 武器的 `SkinnedMeshRenderer` 表面发射；当前效果定位为功能版占位，不在 Demo 完成前继续扩展 VFX。
@@ -35,7 +40,8 @@
 
 | 范围 | 结果 |
 |---|---|
-| PlayMode 自动化 | **5/5 PASS**：GameFlow 1、PlayerMotor 3、SkillHitDetector 1（用户截图） |
+| EditMode 自动化 | **14/14 PASS**：Health 10、SkillCooldown 4（Day 21 Unity MCP） |
+| PlayMode 自动化 | **5/5 PASS**：GameFlow 1、PlayerMotor 3、SkillHitDetector 1（Day 21 Unity MCP） |
 | Playing 初始状态 | PASS：Victory/GameOver 面板均隐藏（Unity MCP） |
 | 三个 Enemy 全部死亡 | PASS：只显示 VictoryPanel（Unity MCP） |
 | Player 死亡 | PASS：只显示 GameOverPanel（Unity MCP） |
@@ -50,7 +56,7 @@
 | NavMesh | PASS：3/3 Puglin 到 Player 路径完整 |
 | 三轮完整流程 | PASS：Victory→Restart、GameOver→MainMenu、Pause/Resume→Victory→MainMenu |
 
-Day 20 详细结果见 `Docs/TEST_REPORT/TEST_CASE_DAY20.md`。
+Day 21 详细结果见 `Docs/TEST_REPORT/TEST_CASE_DAY21.md`。
 
 ## Current Architecture
 
@@ -79,26 +85,31 @@ Health.Died（Player / 3 Enemies）
 - `Assets/_Game/Tests/PlayMode/GameFlowPlayModeTests.cs`
 - `Assets/_Game/Prefabs/VFX/FireDashVFX.prefab`
 - `Assets/_Game/Scenes/SampleScene.unity`
-- `Docs/TEST_REPORT/TEST_CASE_DAY19.md`
+- `Assets/_Game/Prefabs/Enemy/Puglin.prefab`
+- `Assets/_Game/Runtime/Combat/MeleeHitbox.cs`
+- `Assets/_Game/Runtime/Enemy/EnemyStateMachine.cs`
+- `Assets/_Game/Runtime/Skills/SkillHitDetector.cs`
+- `Assets/_Game/Runtime/UI/CooldownPresenter.cs`
+- `Assets/_Game/Tests/EditMode/SkillCooldownTests.cs`
+- `Docs/TEST_REPORT/TEST_CASE_DAY21.md`
 
 ## Known Bugs / Risks
 
-1. `Physics.OverlapSphere()` 仍会分配数组；Day 21 用 Profiler 决定是否需要 NonAlloc，不提前优化。
-2. `MeleeHitbox` PlayMode 测试仍延期，不能算作已有自动化证据。
-3. 独立 Windows Build 尚未生成和测试。
+1. `MeleeHitbox` 独立 PlayMode 测试仍延期，不能算作已有自动化证据。
+2. 独立 Windows Build 尚未生成和测试。
 
 ## Git
 
-- 当前分支：`main`；Day 19 GameFlow 与文档可单独提交。
-- 本次提交只包含 GameFlow、自有 VFX 修正、Scene、PlayMode 测试和 Docs。
+- 当前分支：`main`；Day 20/21 自有代码、场景、Prefab、测试和文档可提交。
+- 本次提交包含已验收的菜单/场景内容、Day 21 性能修正、Prefab 配置与 Docs。
 - 排除 Render Pipeline/ProjectSettings 自动变化、Unity Assistant Settings、SceneTemplateSettings、`Assets/_Recovery/`、空 Debug 元文件和异常临时文件。
 
 ## Next Task
 
 1. 不再新增玩法或场景内容。
-2. 执行代码审查、Profiler 与核心循环 GC 检查。
-3. 生成 Windows x64 Build 并完成独立运行测试。
-4. 完成 README、Build Test Report 与素材许可说明。
+2. 生成 Windows x64 Build 并完成独立运行专项测试。
+3. 完成 README、架构图、Build Test Report 与素材许可说明。
+4. 整理演示视频和 `v1.0.0` Release 前材料。
 
 ## Update Rules
 

@@ -50,7 +50,6 @@ public class SkillController : MonoBehaviour
         // 冷却未结束时不覆盖剩余时间，调用者可通过返回值判断释放是否成功。
         if(!CanUse)
         {
-            Debug.Log("Skill use rejected: cooldown active.", this);
             return false;
         }
 
@@ -68,8 +67,6 @@ public class SkillController : MonoBehaviour
         }
 
         RemainingCoolDown = skillDefinition.Cooldown;
-
-        Debug.Log("Skill used successfully.", this);
         return true;
     }
 

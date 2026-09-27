@@ -1,6 +1,6 @@
 # Unity 3D 求职项目 Roadmap
 
-> 最后复核：2026-09-27（Day 20 验收通过；功能和场景范围冻结，进入质量与交付阶段）
+> 最后复核：2026-09-27（Day 21 验收通过；P0/P1 清零，进入 Build 与发布阶段）
 > 项目周期：2026-09-02 至 2026-09-30  
 > 学习日编号：Day 10 于 9/13 完成；剩余日程重排为 9/14 Day 11 至 9/30 Day 27，原 Day 28/29 的交付任务并入 Day 26/27
 > 每日投入：9/21–9/25 调整为约 6–8 小时
@@ -278,7 +278,7 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 - **Learning Day 18｜完成（五日冲刺第 1 天）**：PlayerMotor 受控 Dash、碰撞、受限空中控制、技能伤害、多目标与单次释放去重；EditMode 13/13、PlayMode 4/4 PASS。
 - **Learning Day 19｜9/26 验收通过（五日冲刺第 2 天）**：ParticleSystem、TrailRenderer、Unity ObjectPool、冷却 UI、GameFlow、Victory/GameOver、战斗冻结、结果面板与按钮重开完成；PlayMode 5/5 PASS。
 - **Learning Day 20（五日冲刺第 3 天）**：完成开始/暂停菜单、庭院有限润色、完整回归并冻结功能。
-- **Learning Day 21（五日冲刺第 4 天）**：代码审查、测试扩充、Profiler、GC 与严重缺陷清零。
+- **Learning Day 21（五日冲刺第 4 天，验收通过）**：完成代码/引用/生命周期审查、NonAlloc 热路径修正、自动化测试恢复与严重缺陷清零；EditMode 14/14、PlayMode 5/5 PASS。
 - **Learning Day 22（五日冲刺第 5 天）**：Windows Build、README、架构图、演示视频与 Release。
 
 ## 7. Phase C：质量、作品集与发布（9/26–9/30）

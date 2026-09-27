@@ -77,7 +77,7 @@ PlayerCombat.OpenComboInput / OpenComboAdvance / EnterRecovery / EndAttack
         └─ OpenDamageWindow / CloseDamageWindow
                     ↓
               MeleeHitbox（Player）
-              ├─ OverlapSphere + LayerMask + 前半球过滤
+              ├─ OverlapSphereNonAlloc + LayerMask + 前半球过滤
               ├─ HashSet<IDamageable> 单窗口去重
               └─ IDamageable.TakeDamage(DamageInfo)
 
@@ -89,7 +89,7 @@ SkillController（Current：准入、冷却、动画、伤害窗口）
         ├─ PlayerMotor.TryStartDash()
         │      └─ CharacterController.Move + DashEnded
         └─ SkillHitDetector（独立 SkillHitboxCenter）
-               ├─ OverlapSphere + Enemy LayerMask
+               ├─ OverlapSphereNonAlloc + Enemy LayerMask
                ├─ HashSet<IDamageable> 单次 Dash 去重
                └─ IDamageable.TakeDamage(DamageInfo)
 ```
@@ -110,11 +110,11 @@ SkillController（Current：准入、冷却、动画、伤害窗口）
 - `PlayerCombat` 已挂载到 Player，显式绑定 Animator 和三个 AttackDefinition；负责 Combo 索引、输入缓存、窗口状态与 CrossFade，不负责命中和生命结算。
 - `PlayerCombatAnimationEvents` 挂在 Imp，只把 UAL2 的 Combo 与伤害窗口 Animation Event 转发给父级 PlayerCombat，不保存 Combo 状态、不查询目标。
 - `PlayerMotor.FaceCameraForward()` 为攻击开始和连段切换提供水平面瞬时朝向；PlayerMotor 仍是位移唯一执行者。
-- 场景中的 `MeleeHitbox` 使用独立中心、1.2 半径和 Enemy LayerMask；候选 Collider 经过前半球过滤，再按父级 `IDamageable` 去重结算。
+- 场景中的 `MeleeHitbox` 使用独立中心、1.2 半径和 Enemy LayerMask；固定 Collider 缓冲避免攻击窗口数组分配，候选对象再经过前半球过滤并按父级 `IDamageable` 去重结算。
 - A/B/C Clip 已持久化伤害窗口事件，三段分别读取 AttackDefinition 的 10/15/20 伤害。
 - MeleeHitbox 命中规则已完成手工功能与边界回归；需要反射配置私有序列化字段的 PlayMode 测试已延期，不计入自动化证据。
 - Enemy AI 当前以单一 enum 管理 Idle、Chase、Attack、Hit、Dead；NavMeshAgent 是 Enemy 位移唯一执行者，EnemyCombat 负责攻击动画与命中结算，Health 的 Damaged/Died 事件驱动受击与死亡。Target 为 null、被销毁或 inactive 时安全回到 Idle。
-- Enemy 自身死亡终态已通过；EnemyStateMachine 缓存 Target Health，并通过成对的 Died 订阅在 Player 死亡时结束攻击和释放目标。
+- Enemy 自身死亡终态已通过；EnemyStateMachine 缓存 Target Health，并通过成对的 Died 订阅在 Player 死亡时结束攻击和释放目标。Puglin Prefab 保存共享 AttackDefinition/Animator，场景 Player Target 由实例显式绑定。
 - `SkillController`、`SkillDefinition`、`PlayerMotor` Dash、`SkillHitDetector`、`SkillVfxPool` 与 `CooldownPresenter` 已实现；普攻与技能分别使用 `MeleeHitboxCenter` 和 `SkillHitboxCenter`。
 - `GameFlowController` 已实现 Player/Enemy 死亡订阅、帧末结果仲裁、GameOver 优先、Victory/GameOver 面板、战斗冻结与按钮重开。结果面板按钮是当前正式重开入口。
 - 下文 Target Architecture 仍是目标契约，不能作为已实现证据。
@@ -218,7 +218,7 @@ Unity Framework（Input System、CharacterController、NavMesh、ObjectPool）
 | `EnemyStateMachine` | 统一管理 Idle/Chase/Attack/Hit/Dead 迁移 | NavMeshAgent、Animator、EnemyCombat、Health | 用互相冲突的布尔变量替代状态 |
 | `HealthBarPresenter`（Current） | 订阅 Health 事件并更新 Player/Enemy 血条 | Health、Unity UI Slider | 轮询具体 Player/Enemy 类；持有生命规则 |
 | `WorldSpaceBillboard`（Current） | 实例启动时一次性缓存 Main Camera，并让世界空间 UI 保持同旋转 | `Camera.main`、Main Camera Transform | 每帧查找相机；查找 Player/Enemy；修改 Health 或 Slider |
-| `CooldownPresenter`（Current） | 逐帧读取技能冷却状态并更新填充与倒计时文本 | SkillController、UI | 驱动技能逻辑 |
+| `CooldownPresenter`（Current） | 逐帧读取技能冷却状态并更新填充；只在整数秒变化时更新文本 | SkillController、UI | 驱动技能逻辑；逐帧创建倒计时字符串 |
 | `GameFlowController`（Current） | 维护 Playing/Victory/GameOver、帧末仲裁、冻结战斗并重载场景 | Player/Enemy 死亡事件、场景加载 | 持有伤害或 AI 决策规则 |
 | `MainMenuController`（Current） | 提供开始游戏与退出 Build 的最小入口 | SceneManager、Application | 持有 Gameplay 状态 |
 | `PauseMenuController`（Current） | 协调暂停 UI、timeScale、鼠标与输入消费者，并提供继续/重开/返回菜单 | InputReader、GameFlow、Gameplay Controllers、SceneManager | 持有伤害、AI 或冷却规则 |

@@ -75,4 +75,17 @@ public class SkillCooldownTests
 
         Assert.IsTrue(skillController.CanUse);
     }
+
+    [Test]
+    public void TickCooldown_WhenCooldownEnds_SkillCanBeUsedAgain()
+    {
+        bool result = skillController.TryUseSkill();
+
+        Assert.IsTrue(result);
+
+        skillController.TickCooldown(skillDefinition.Cooldown);
+
+        Assert.AreEqual(0f, skillController.RemainingCoolDown);
+        Assert.IsTrue(skillController.CanUse);
+    }
 }

@@ -26,6 +26,9 @@ public class MeleeHitbox : MonoBehaviour
     // 缓存当前伤害窗口的数据，使 Hitbox 不需要依赖 Combo 或 AttackDefinition。
    private DamageInfo currentDamageInfo;
 
+   // ponytail: Demo 只有 3 个 Enemy；目标规模显著增加时再扩大缓冲区。
+   private readonly Collider[] hitBuffer = new Collider[32];
+
    public void OpenDamageWindow(DamageInfo damageInfo)
     {
         currentDamageInfo = damageInfo;
@@ -43,16 +46,18 @@ public class MeleeHitbox : MonoBehaviour
 
     private void DetectTargets()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(
+        int hitCount = Physics.OverlapSphereNonAlloc(
             hitboxCenter.position,
             hitboxRadius,
+            hitBuffer,
             targetMask,
             QueryTriggerInteraction.Collide
         );
 
         // 物理查询可能返回同一目标的多个 Collider，后续按 IDamageable 去重。
-        foreach(Collider hitCollider in hitColliders)
+        for(int i = 0; i < hitCount; i++)
         {
+            Collider hitCollider = hitBuffer[i];
             Vector3 directionToTarget = hitCollider.bounds.center - hitboxCenter.position;
 
             // 球形查询只负责距离筛选，这里再过滤攻击方向后的目标。
