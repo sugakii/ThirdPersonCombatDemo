@@ -5,7 +5,6 @@
 > Current Phase：Phase C / 功能冻结与交付质量  
 > Next Checkpoint：Day 22——Windows Build、README、架构图与 Release  
 > Source of Truth：当前 Unity 工程 + Git + Docs  
-> Remaining Plan：`Docs/plans/2026-09-21-five-day-sprint.md`
 
 ## 验收结论
 
