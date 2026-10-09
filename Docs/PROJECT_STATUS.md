@@ -1,9 +1,9 @@
 # Current Project Status
 
-> Last Updated：2026-09-27  
+> Last Updated：2026-10-09（更新 Editor 补强计划；不代表重新验收 Gameplay）
 > Current Learning Day：Day 21 验收通过  
 > Current Phase：Phase C / 功能冻结与交付质量  
-> Next Checkpoint：Day 22——Windows Build、README、架构图与 Release  
+> Next Checkpoint：Day 23——Combat Config Validator 菜单与配置检查
 > Source of Truth：当前 Unity 工程 + Git + Docs  
 
 ## 验收结论
@@ -105,10 +105,15 @@ Health.Died（Player / 3 Enemies）
 
 ## Next Task
 
-1. 不再新增玩法或场景内容。
-2. 生成 Windows x64 Build 并完成独立运行专项测试。
-3. 完成 README、架构图、Build Test Report 与素材许可说明。
-4. 整理演示视频和 `v1.0.0` Release 前材料。
+README、功能演示 GIF 和 Windows 游戏包已发布至 GitHub `v1.0.0` Release；这项交付记录不替代独立 Build 测试证据。
+
+下一阶段为 Demo 发布后的 Editor 扩展补强，详细范围见 [ROADMAP](ROADMAP.md) 的“Editor 扩展补强”章节。三个学习日均为 Planned，工具尚未实现。
+
+1. Day 23：学习 MenuItem 与 AssetDatabase，完成菜单入口、AttackDefinition / SkillDefinition 扫描和必要配置检查。
+2. Day 24：增加 Player / Enemy Prefab 必要组件、Missing Script、关键必填及失效引用检查，避免误报场景绑定字段。
+3. Day 25：完成正常/异常/边界测试、注释与文档，正式验收并提交工具。
+
+每日预计 2–3 小时；首版使用 MenuItem + Console，EditorWindow 非必做。教学按“API 与小例子 → 自己实现 → 尝试失败后完整代码”推进。
 
 ## Update Rules
 

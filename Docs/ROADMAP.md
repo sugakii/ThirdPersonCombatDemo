@@ -352,6 +352,42 @@ Dash 撞墙保留为高优先级手工物理测试；若能稳定复现，再选
 - Build、视频、README、代码、架构、测试用例和 Bug Report 均可访问。
 - 能解释各核心类职责、依赖方向、命中去重、状态机、冷却、事件生命周期和测试方法。
 
+## Editor 扩展补强：Day 23–25（2026-10-09 新增）
+
+本节是 Demo 发布后的当前学习计划，替代上方历史 Day 23–27 的日程安排。保持现有 Gameplay 架构，增加一个真实可用的 `Combat Config Validator` 编辑器配置检查工具。三个学习日按完成顺序推进，每日预计 2–3 小时，不等同于固定日历日期；当前均为 Planned，尚未实现或验收。
+
+### Day 23：菜单入口与静态配置检查
+
+- 学习 Editor 目录与程序集隔离、`MenuItem`、`AssetDatabase.FindAssets` 和 `LoadAssetAtPath`。
+- 创建 `Tools → Combat → Validate Config` 菜单，查找并列出项目中的 AttackDefinition、SkillDefinition。
+- 根据当前配置字段和玩法约定，逐步检查必要动画名称、伤害及技能配置，不凭空规定哪些数值必须为正。
+- Console 输出资源路径、具体问题和扫描统计，支持通过日志上下文定位资源。
+- 验收：正常配置不误报；人为制造一个漏配后能准确报告；恢复配置后问题消失。
+
+### Day 24：Prefab 组件与引用检查
+
+- 学习 `PrefabUtility.LoadPrefabContents` / `UnloadPrefabContents`、组件遍历及必要的 `SerializedObject` / `SerializedProperty` 用法。
+- 扫描 Player、Enemy Prefab，检查必要组件、Missing Script、关键必填引用和失效引用。
+- 按现有架构列出明确的检查规则：区分有效引用、必填字段为 None、原引用失效，以及允许由场景实例绑定的字段。
+- Enemy 的场景 Player Target 等允许为空的引用不能误报；Animator、Health、LayerMask、VFX 等根据实际组件职责检查。
+- 使用可靠的清理流程释放加载的 Prefab 内容；检查过程不保存或修改资源。
+- 验收：能发现真实漏配和失效引用，正常 Prefab 不误报，扫描结束无遗留加载对象。
+
+### Day 25：测试、说明与交付
+
+- 统一错误/警告描述与资源、组件扫描统计；明确统计单位，不用虚构数量。
+- 验证正常配置、漏配、Missing Script、失效引用、允许为空的引用、重复运行及资源未被修改。
+- 补充职责和原因型注释，在 `Docs/TEST_REPORT/` 记录步骤、预期与实际结果；未执行项写 NOT RUN。
+- 验收后更新 PROJECT_STATUS、README 和必要架构说明，提交 Git。
+- 验收：每条规则均有测试证据；工具可重复运行；学习者能独立解释扫描流程并增加一条校验规则。
+
+### 范围与教学约定
+
+- 首版采用 MenuItem + Console；EditorWindow 在确有结果列表或筛选需求时再增加，不作为三日验收门槛。
+- 不实现自动修复，不为工具改动生产字段可见性，不引入扫描框架或新依赖。
+- 先解释 API、提供必要的小例子，再由学习者完成其余代码；尝试失败后再提供完整实现。
+- 简历仅写实际实现且能解释的接口和能力；完成前不写“熟悉 Unity Editor 扩展”。
+
 ## 9. 范围砍减顺序
 
 只在周验收未通过或累计落后超过一个完整开发日时执行：
