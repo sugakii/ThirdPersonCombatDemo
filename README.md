@@ -8,11 +8,11 @@
 
 ## 功能演示
 
-### 镜头空间移动与场景碰撞
+### 镜头空间移动
 
-角色移动方向由镜头水平朝向决定，并通过 `CharacterController` 统一处理移动、重力、楼梯和障碍碰撞。
+角色移动方向由镜头水平朝向决定，支持鼠标旋转镜头、WASD 移动和 Shift 冲刺。
 
-![镜头空间移动与碰撞](Docs/Images/movement-and-collision.gif)
+![镜头空间移动](Docs/Images/movement-and-collision.gif)
 
 ### 三段普通攻击
 
@@ -32,11 +32,11 @@ Puglin 使用 `Idle / Chase / Attack / Hit / Dead` 状态机，通过 NavMesh �
 
 ![火焰突进技能](Docs/Images/fire-dash-skill.gif)
 
-### 胜利、重开与完整流程
+### 玩家胜利
 
-击败全部敌人后进入 Victory；Player 死亡时进入 Game Over。结算后可通过按钮重开或返回主菜单。
+击败全部 3 只 Puglin 后进入 Victory。结算后冻结战斗，可重新开始或返回标题页。
 
-![胜利与重开](Docs/Images/victory-and-restart.gif)
+![玩家胜利](Docs/Images/victory-and-restart.gif)
 
 ### 游戏内暂停菜单
 
