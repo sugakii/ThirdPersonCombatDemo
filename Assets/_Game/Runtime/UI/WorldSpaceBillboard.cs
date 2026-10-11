@@ -7,10 +7,14 @@ public class WorldSpaceBillboard : MonoBehaviour
 {
     private Transform cameraTransform;
 
+    private Health health;
+
     private void Awake()
     {
         // Prefab 不能保存场景对象引用，因此实例启用时只查找一次 Main Camera，避免在 LateUpdate 重复搜索。
         Camera mainCamera = Camera.main;
+
+        health = GetComponentInParent<Health>();
 
         if(mainCamera == null)
         {
@@ -21,6 +25,14 @@ public class WorldSpaceBillboard : MonoBehaviour
         }
 
         cameraTransform = mainCamera.transform;
+    }
+
+    private void Update()
+    {
+        if(health != null && health.CurrentHealth == 0)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void LateUpdate()
